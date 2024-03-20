@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 manage.py
+healthy_food/food_selection/migrations/
 # C extensions
 *.so
 
