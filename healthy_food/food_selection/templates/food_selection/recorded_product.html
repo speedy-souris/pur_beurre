@@ -1,0 +1,27 @@
+{% extends 'food_selection/base.html' %}
+{% block title %} Produit enregistré {% endblock %}
+{% block content %}
+    <section><h2>[Aliment Cherché]</h2></section>
+    <section>
+        {% load static %}
+        <p>Vous pouvez remplacer cet aliment par :</p>
+        <span>
+            nom aliment 1
+            <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+            nom aliment 2
+            <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+            nom aliment 3
+            <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+        </span>
+        <div>
+            <span>
+                nom aliment 4
+                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+                nom aliment 5
+                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+                nom aliment 6
+                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+            </span>
+        </div>
+    </section>
+{% endblock %}

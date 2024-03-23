@@ -1,9 +1,30 @@
 {% extends 'food_selection/base.html' %}
-{% block title %}
-<title>Accueil</title>
-{% endblock title %}
+{% block title %} Accueil {% endblock %}
 {% block content %}
-<h1>Du gras oui, mais de qualité !</h1>
-<h2>Trouvez un produit de substitution</h2>
-<p>pour ceux que vous consommez tous les jours</p>
-{% endblock content %}
+    <section>
+        <h1>Du gras oui, mais de qualité !</h1>
+        <h2>Trouvez un produit de substitution</h2>
+        <p>pour ceux que vous consommez tous les jours</p>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Chercher">
+        </form>
+    </section>
+    <section>
+        <h2>Colette et Rémy</h2>
+        <span>
+            <span>histoire de colette</span>
+            <span>histoire de rémy</span>
+        </span>
+    </section>
+    <section>
+        {% load static %}
+        <h2>Contactez-nous</h2>
+        <p>Vous pouvez nous contacter par téléphone ou par e-mail</p>
+        <span>
+            <img src="{% static 'food_selection/images/telephone.png' %}" alt="phone icon"> +33 1234567890
+            <img src="{% static 'food_selection/images/email.png' %}" alt="email icon"> mon_mail@mail.com
+        </span>
+    </section>
+{% endblock %}

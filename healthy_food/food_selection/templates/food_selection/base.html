@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="fr">
 
     <head>
+        {% load static %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-        <link rel="icon" type="image/ico" href="{% static 'food_selection/favicon.ico' %}" />
-        {% block title %}{% endblock title %}
+        <link rel="icon" type="image/ico" href="{% static 'food_selection/images/favicon.ico' %}" />
+        <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
         <nav>
-            <p>
-                <img src ="{% static 'food_selection/favicon.ico' %}" alt="logo startup pur beurre"> Pur beurre
-                <img src ="{% static 'food_selection/icon-profile.jpg' %}" alt="logo profil">
-                <img src ="{% static 'food_selection/carrot-29691.png' %}" alt="logo carrot">
-                <img src ="{% static 'food_selection/téléchargement.png' %}" alt="logo deconnection">
-            </p>
+            <span>
+                 <img src="{% static 'food_selection/images/favicon.ico' %}" alt="logo startup pur beurre"> Pur beurre
+                 <img src="{% static 'food_selection/images/loup.png' %}" alt="loup of search">
+                 <a href="../profile"><img src="{% static 'food_selection/images/icon-profile.jpg' %}" alt="logo profil"></a>
+                 <a href="../recorded"><img src="{% static 'food_selection/images/carrot-29691.png' %}" alt="logo carrot"></a>
+                 <a href="../home"><img src="{% static 'food_selection/images/téléchargement.png' %}" alt="logo deconnection"></a>
+            </span>
         </nav>
-        {% block content %}{% endblock content %}
+        {% block content %}{% endblock %}
+        <footer>
+            <span>
+                <a href="../disclaimer">Mentions légales</a>|
+                <a href="../contact-us">Contact</a>
+            </span>
+        </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous">
