@@ -1,36 +1,67 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
-
     <head>
-        {% load static %}
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-        <link rel="icon" type="image/ico" href="{% static 'food_selection/images/favicon.ico' %}" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
         <title>{% block title %}{% endblock %}</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'food_selection/assets/favicon.ico' %}" />
+        <!-- Bootstrap Icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- SimpleLightbox plugin CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'food_selection/css/styles.css' %}" rel="stylesheet" />
     </head>
-    <body>
-        <nav>
-            <span>
-                 <img src="{% static 'food_selection/images/favicon.ico' %}" alt="logo startup pur beurre"> Pur beurre
-                 <img src="{% static 'food_selection/images/loup.png' %}" alt="loup of search">
-                 <a href="../profile"><img src="{% static 'food_selection/images/icon-profile.jpg' %}" alt="logo profil"></a>
-                 <a href="../recorded"><img src="{% static 'food_selection/images/carrot-29691.png' %}" alt="logo carrot"></a>
-                 <a href="../home"><img src="{% static 'food_selection/images/téléchargement.png' %}" alt="logo deconnection"></a>
-            </span>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/favicon.ico' %}" alt="logo startup pur beurre"> Pur beurre</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item">
+                            <form class="text-white" action="" method="post">
+                                {% csrf_token %}
+                                {{ form }}
+                                <input type="submit" value="Chercher">
+                            </form>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'food_selection:profile' %}"><img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil"></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'food_selection:recorded' %}"><img src="{% static 'food_selection/assets/img/portfolio/carrot-29691.png' %}" alt="logo carrot"></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/img/portfolio/téléchargement.png' %}" alt="logo deconnection"></a></li>
+                    </ul>
+                </div>
+            </div>
         </nav>
         {% block content %}{% endblock %}
-        <footer>
-            <span>
-                <a href="../disclaimer">Mentions légales</a>|
-                <a href="../contact-us">Contact</a>
-            </span>
+
+        <!-- Footer-->
+        <footer class="bg-light py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="small text-center text-muted">
+                    <a href="{% url 'food_selection:disclaimer' %}"> Mentions légales</a> |
+                    <a href="{% url 'food_selection:contact' %}"> Contact</a>
+                </div>
+            </div>
         </footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous">
-        </script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SimpleLightbox plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'food_selection/js/scripts.js' %}"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>
