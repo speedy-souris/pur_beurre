@@ -22,21 +22,21 @@
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-            <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/favicon.ico' %}" alt="logo startup pur beurre"> Pur beurre</a>
+            <div class="container px-4 px-lg-5" style="background-color: white">
+                <a class="navbar-brand text-black" href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/favicon.ico' %}" alt="logo startup pur beurre"> Pur beurre</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
+                <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
                         <li class="nav-item">
-                            <form class="text-white" action="" method="post">
+                            <form class="navbar-brand my-3 text-black" action="" method="post">
                                 {% csrf_token %}
                                 {{ form }}
                                 <input type="submit" value="Chercher">
                             </form>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'food_selection:profile' %}"><img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil"></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'food_selection:recorded' %}"><img src="{% static 'food_selection/assets/img/portfolio/carrot-29691.png' %}" alt="logo carrot"></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/img/portfolio/téléchargement.png' %}" alt="logo deconnection"></a></li>
+                        <li class="navbar-brand my-1 nav-item"><a href="{% url 'food_selection:profile' %}"><img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil"></a></li>
+                        <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:recorded' %}"><img src="{% static 'food_selection/assets/img/portfolio/carrot-29691.png' %}" alt="logo carrot"></a></li>
+                        <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/img/portfolio/téléchargement.png' %}" alt="logo deconnection"></a></li>
                     </ul>
                 </div>
             </div>

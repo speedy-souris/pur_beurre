@@ -1,6 +1,13 @@
 {% extends 'food_selection/base.html' %}
+{% load static %}
 {% block title %} Profil utilisateur {% endblock %}
 {% block content %}
-<section><p>[Prénom utilisateur] !</p></section>
-<P>Mail</P>
+    <section class="row h-50 align-items-center justify-content-center text-center"
+             style="background-image: url('{% static 'food_selection/assets/img/photo2.jpg' %}')">
+        <div class="position-absolute top-15 start-15">
+            <p>[Prénom utilisateur] !</p>
+            <P>Mail</P>
+        </div>
+
+    </section>
 {% endblock %}

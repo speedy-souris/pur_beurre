@@ -9,7 +9,9 @@ def home(request):
                   {'form': form})
 
 def recorded(request):
-    return render(request, 'food_selection/recorded_product.html')
+    return render(request,
+                  'food_selection/recorded_product.html',
+                  {'range': [str(i) for i in range(1,7)], 'nom': 'Nutella trouvé'})
 
 def profile(request):
     return render(request, 'food_selection/profile.html')
@@ -22,3 +24,6 @@ def contact(request):
 
 def disclaimer(request):
     return render(request, 'food_selection/legal_disclaimer.html')
+
+
+
