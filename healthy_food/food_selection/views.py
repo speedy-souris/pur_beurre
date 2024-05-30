@@ -5,37 +5,21 @@ from food_selection.models import Product, Category
 
 # Create your views here.
 def home(request):
-    if request.method == 'POST':
-        form = SearchNewFood(request.POST)
-        if form.is_valid():
-            category_1 = form.cleaned_data['product']
-            nutriscore_1 = get_better_nutriscore_list('A')
-            print(f'nutriscore recherché = {nutriscore_1}')
-            context = ''
-            for n in nutriscore_1:
-                print(n)
-                products = Product.objects.all().filter(nutriscore__contains=n, categories__name=category_1)
-                context = {'nom': 'produit recherché', 'products': products, 'form': form}
-                print(f'context = {context}')
-                print(f'products = {products}')
-            return render(request,
-                          'food_selection/recorded_product.html', context)
-    else:
-        form = SearchNewFood()
-        return render(request,
-                      'food_selection/home.html',
-                      {'form': form})
+    form = SearchNewFood()
+    return render(request,
+                  'food_selection/home.html',
+                  {'form': form})
 
 
 def recorded(request):
     category_1 = ''
-    if request.method == 'POST':
-        form = SearchNewFood(request.POST)
+    if request.method == 'GET':
+        form = SearchNewFood(request.GET)
         if form.is_valid():
             category_1 = form.cleaned_data['product']
     else:
         form = SearchNewFood()
-    nutriscore_1 = get_better_nutriscore_list('A')
+    nutriscore_1 = get_better_nutriscore_list('C')
     print(f'nutriscore recherché = {nutriscore_1}')
     context = ''
     for n in nutriscore_1:
