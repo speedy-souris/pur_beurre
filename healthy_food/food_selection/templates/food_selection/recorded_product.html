@@ -12,17 +12,17 @@
                     <p>Vous pouvez remplacer cet aliment par :</p>
                 </div>
                     <ul class="col-lg-4 col-sm-6">
-                        {% for  product in products %}
+                        {% for product in products %}
                             <li><img class="img-fluid" src="{% static 'food_selection/assets/img/portfolio/thumbnails/1.jpg' %}" alt="..." >
                                 <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
                                 {{ product.name }}
                                 {{ product.nutriscore }}
-                                <ul>
-                                    {% for category in product.categories.all %}
-                                        <li>{{ category.name }}</li>
-                                    {% endfor%}
-                                </ul>
                             </li>
+                            <ul>
+                                {% for category in product.categories.all %}
+                                    <li>{{ category.name }}</li>
+                                {% endfor %}
+                            </ul>
                         {% endfor %}
                     </ul>
             </div>
