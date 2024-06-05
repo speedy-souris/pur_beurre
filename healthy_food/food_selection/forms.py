@@ -2,7 +2,7 @@ from django import forms
 
 
 class SearchNewFood(forms.Form):
-    product = forms.CharField(required=True)
+    product = forms.CharField(label='produit recherché', required=True)
 
 
 class ContactUsForm(forms.Form):
