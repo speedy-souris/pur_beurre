@@ -28,13 +28,13 @@
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
                         <li class="nav-item">
-                            <form class="navbar-brand my-3 text-black" action="{% url 'food_selection:recorded' %}" method="get">
+                            <form class="navbar-brand my-3 text-black" action="{% url 'food_selection:found' %}" method="get">
                                 {{ form }}
                                 <input type="submit" value="Chercher">
                             </form>
                         </li>
                         <li class="navbar-brand my-1 nav-item"><a href="{% url 'food_selection:profile' %}"><img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil"></a></li>
-                        <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:recorded' %}"><img src="{% static 'food_selection/assets/img/portfolio/carrot-29691.png' %}" alt="logo carrot"></a></li>
+                        <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:found' %}"><img src="{% static 'food_selection/assets/img/portfolio/carrot-29691.png' %}" alt="logo carrot"></a></li>
                         <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/img/portfolio/téléchargement.png' %}" alt="logo deconnection"></a></li>
                     </ul>
                 </div>

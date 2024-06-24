@@ -11,7 +11,7 @@ def home(request):
                   {'form': form})
 
 
-def recorded(request):
+def found(request):
     product_name, products_finded = '', ''
     if request.method == 'GET':
         form = SearchNewFood(request.GET)
@@ -27,7 +27,11 @@ def recorded(request):
                                               filter(nutriscore__in=better_nutriscores)
     context = {'name': product_name, 'products': products_finded, 'form': form}
     return render(request,
-                  'food_selection/recorded_product.html', context)
+                  'food_selection/popular_products.html', context)
+
+
+def recorded(request):
+    return render(request, 'food_selection/recorded_product.html')
 
 
 def profile(request):
