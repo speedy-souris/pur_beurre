@@ -20,18 +20,20 @@ def found(request):
     else:
         form = get_object_or_404(SearchNewFood)
     products = Product.objects.filter(name__contains=product_name)
+    context = ''
     for product in products:
         better_nutriscores = get_better_nutriscore_list(product.nutriscore)
         for category in product.categories.all():
             products_finded = Product.objects.filter(categories__name=category.name).\
-                                              filter(nutriscore__in=better_nutriscores)
+                                                  filter(nutriscore__in=better_nutriscores)
     context = {'name': product_name, 'products': products_finded, 'form': form}
     return render(request,
                   'food_selection/popular_products.html', context)
 
 
 def recorded(request):
-    return render(request, 'food_selection/recorded_product.html')
+    product_found = found(request)
+    return render(request, 'food_selection/recorded_product.html', {'products': product_found})
 
 
 def profile(request):

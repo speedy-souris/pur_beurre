@@ -12,8 +12,11 @@
                 </div>
                     <ul class="col-lg-4 col-sm-6">
                         {% for product in products %}
-                            <li><img class="img-fluid" src="{% static 'food_selection/assets/img/portfolio/thumbnails/1.jpg' %}" alt="..." >
-                                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon"> Sauvegarde
+                            <li><img class="img-fluid"
+                                     src="{% static 'food_selection/assets/img/portfolio/thumbnails/1.jpg' %}" alt="...">
+                                <a href="{% url 'food_selection:recorded' %}">
+                                    <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">
+                                </a> Sauvegarde
                                 {{ product.name }}
                                 {{ product.nutriscore }}
                             </li>
