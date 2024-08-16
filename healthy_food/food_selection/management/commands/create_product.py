@@ -7,6 +7,7 @@ import requests
 class Command(BaseCommand):
     help = 'registering products from the openfoodfact site to the database '
 
+    @staticmethod
     def create_categories(self, all_categories):
         for category in all_categories:
             try:
@@ -14,18 +15,23 @@ class Command(BaseCommand):
             except Category.DoesNotExist:
                 Category.objects.bulk_create([Category(name=category)])
             else:
-                self.stdout.write('la categorie existe deja')
+                # self.stdout.write('la categorie existe deja')
+                pass
 
+    @staticmethod
     def create_products(self, products):
-        for p in products:
-            if len(p['nutriscore']) > 1: # exempple nutriscore = 'NOT-APPLICABLE'
+        for product in products:
+            if len(product['nutriscore']) > 1:  # exempple nutriscore = 'NOT-APPLICABLE'
                 continue
             try:
-                Product.objects.get(name=p['name'])
+                Product.objects.get(name=product['name'])
             except Product.DoesNotExist:
-                Product.objects.bulk_create([Product(name=p['name'], nutriscore=p['nutriscore'])])
+                Product.objects.bulk_create([Product(name=product['name'],
+                                                     nutriscore=product['nutriscore'],
+                                                     url=product['url'])])
             else:
-                self.stdout.write('le produit existe deja')
+                # self.stdout.write('le produit existe deja')
+                pass
 
     # def create_products(self, products):
     #     for index in range(len(products)):
@@ -38,42 +44,52 @@ class Command(BaseCommand):
 
     @staticmethod
     def create_relation_categories_products(products):
-        name_product = ''
-        for index in range(len(products)):
+        for product in products:
             try:
-                name_product = Product.objects.get(name=products[index]['name'])
+                name_product = Product.objects.get(name=product['name'])
             except Product.DoesNotExist:
-                print("Le produit n'existe pas")
+                # print("Le produit n'existe pas")
+                pass
             else:
-                for category in products[index]['categories']:
+                for category in product['categories']:
                     name_category = Category.objects.get(name=category)
                     name_product.categories.add(name_category)
 
     def handle(self, *args, **options):
-        data = ''
         products = []
         categories_list = ['Pâtes alimentaires de céréales', 'Boissons', 'Mélanges de légumes frais']
         # URL produit openfoodfacts
         for category in categories_list:
+            #  url = f"https://fr.openfoodfacts.org/api/v2/search?categories_tags_fr={category}"\
+                  #  "&fields=product_name_fr,nutriscore_grade,categories,url&page=1&page_size=100"
             url = f"https://fr.openfoodfacts.org/api/v2/search?categories_tags_fr={category}"\
-                  "&fields=product_name,nutriscore_grade,categories&page=100&page_size=100"
+                    "&fields=product_name_fr,nutriscore_grade,categories_tags_fr,url&page=1&page_size=100"
             # product infos
             product_infos = requests.get(url)
             print(product_infos.status_code)
             data = json.loads(product_infos.text)
+            print(f'data = {data}')
+            print()
+            for product in data['products']:
+                print(f'produits = {product}')
+                try:
+                    product3 = {'name': product['product_name_fr'],
+                        'categories': product['categories_tags_fr'].split(', '),
+                        'nutriscore': product['nutriscore_grade'].upper(),
+                        'url': product['url']}
+                except (AttributeError, KeyError):
+                    continue
+                else:
+                    products.append(product3)
+                    print(f'produit final : {products}')
+                    #  print(f'nom : {products["name"]} - url : {products["url"]}')
+                    all_categories = [categories for categories in products for categories in categories['categories_tags_fr']]
+                    # create categories
+                    self.create_categories(all_categories)
+                    # create products
+                    self.create_products(products)
+                    # add relation categories with products
+                    self.create_relation_categories_products(products)
 
-            for index in range(len(data['products'])):
-                product3 = {'name': data['products'][index]['product_name'],
-                            'categories': data['products'][index]['categories'].split(', '),
-                            'nutriscore': data['products'][index]['nutriscore_grade'].upper()}
-                products.append(product3)
-                all_categories = [categories for categories in products for categories in categories['categories']]
-
-                # create categories
-                self.create_categories(all_categories)
-                # create products
-                self.create_products(products)
-                # add relation categories with products
-                self.create_relation_categories_products(products)
 
 
