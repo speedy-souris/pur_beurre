@@ -16,7 +16,6 @@ class Command(BaseCommand):
             except Category.DoesNotExist:
                 categories_object_list.add(Category(name=category_as_json))
             else:
-                # self.stdout.write('la categorie existe deja')
                 pass
         Category.objects.bulk_create(categories_object_list)
 
@@ -97,8 +96,8 @@ class Command(BaseCommand):
                 print(f'produit final : {products_final_json_list[-1]}')
                 counter += 1
         categories_as_final_json_list = [
-                                    categories_as_element for categories_as_json in products_final_json_list
-                                        for categories_as_element in categories_as_json['categories']]
+                                         categories_as_element for categories_as_json in products_final_json_list
+                                            for categories_as_element in categories_as_json['categories']]
         # create categories
         self.create_categories(categories_as_final_json_list)
         # create products
