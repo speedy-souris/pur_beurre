@@ -31,7 +31,8 @@ class Command(BaseCommand):
                 products_object_list.add(Product(name=product_as_json['name'],
                                          product_id=product_as_json['product_id'],
                                          nutriscore=product_as_json['nutriscore'],
-                                         url=product_as_json['url']))
+                                         url=product_as_json['url']),
+                                         image=product_as_json['image_url'])
             else:
                 # self.stdout.write('le produit existe deja')
                 pass
@@ -67,6 +68,7 @@ class Command(BaseCommand):
             print(product_infos.status_code)
             data_as_json = json.loads(product_infos.text)
             for product_as_object in data_as_json['products']:
+                print(f"product_as_object = {product_as_object}")
                 try:
                     if product_as_object['product_name_fr'] == '':
                         continue
@@ -89,8 +91,8 @@ class Command(BaseCommand):
                             'categories': product_as_object['categories_tags_fr'],
                             'nutriscore': product_as_object['nutriscore_grade'].upper(),
                             'url': product_as_object['url'],
-                            'product_id': product_as_object['code']
-                            # 'image': product['image_url']
+                            'product_id': product_as_object['code'],
+                            'image': product_as_object['image_url']
                             }
                 products_final_json_list.append(create_final_product_object)
                 print(f'produit final : {products_final_json_list[-1]}')
