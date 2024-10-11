@@ -17,7 +17,7 @@ class Product(models.Model):
     categories = models.ManyToManyField(Category)
     url = models.fields.URLField(max_length=500)
     # image = models.fields.files.ImageField(upload_to='images')
-    image = models.fields.URLField(max_length=500)
+    image_url = models.fields.URLField(max_length=500)
 
     def __str__(self):
         return f'{self.name}'

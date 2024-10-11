@@ -31,8 +31,8 @@ class Command(BaseCommand):
                 products_object_list.add(Product(name=product_as_json['name'],
                                          product_id=product_as_json['product_id'],
                                          nutriscore=product_as_json['nutriscore'],
-                                         url=product_as_json['url']),
-                                         image=product_as_json['image_url'])
+                                         url=product_as_json['url'],
+                                         image_url=product_as_json['image_url']))
             else:
                 # self.stdout.write('le produit existe deja')
                 pass
@@ -68,14 +68,11 @@ class Command(BaseCommand):
             print(product_infos.status_code)
             data_as_json = json.loads(product_infos.text)
             for product_as_object in data_as_json['products']:
+                if 'image_url' not in product_as_object:
+                    product_as_object['image_url'] = ''
+
                 print(f"product_as_object = {product_as_object}")
-                try:
-                    if product_as_object['product_name_fr'] == '':
-                        continue
-                except KeyError:
-                    continue
-                else:
-                    name_object = product_as_object['product_name_fr']
+                name_object = product_as_object['product_name_fr']
                 print()
                 print(counter)
                 print(f'name = {name_object}')
@@ -92,7 +89,7 @@ class Command(BaseCommand):
                             'nutriscore': product_as_object['nutriscore_grade'].upper(),
                             'url': product_as_object['url'],
                             'product_id': product_as_object['code'],
-                            'image': product_as_object['image_url']
+                            'image_url': product_as_object['image_url']
                             }
                 products_final_json_list.append(create_final_product_object)
                 print(f'produit final : {products_final_json_list[-1]}')
@@ -100,6 +97,7 @@ class Command(BaseCommand):
         categories_as_final_json_list = [
                                          categories_as_element for categories_as_json in products_final_json_list
                                             for categories_as_element in categories_as_json['categories']]
+
         # create categories
         self.create_categories(categories_as_final_json_list)
         # create products
