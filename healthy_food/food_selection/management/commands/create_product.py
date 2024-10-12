@@ -49,7 +49,7 @@ class Command(BaseCommand):
             else:
                 for category_as_json in product_as_json['categories']:
                     category_as_object = Category.objects.get(name=category_as_json)
-                    print(f'produit = {product_as_json}')
+                    # print(f'produit = {product_as_json}')
                     product_as_object.categories.add(category_as_object)
 
     def handle(self, *args, **options):
@@ -57,7 +57,8 @@ class Command(BaseCommand):
         products_final_json_list = []
         categories_object_list = ['Pâtes alimentaires de céréales', 'Boissons',
                            'Mélanges de légumes frais', 'fruits secs', 'poissons',
-                           'biscottes', 'patisseries', 'fromages', 'charcuteries', 'confitures']
+                           'biscottes', 'pâtisseries', 'fromages', 'charcuteries', 'confitures']
+        categories_object_list = [categories.lower() for categories in categories_object_list ]
         counter = 1
         # URL product openfoodfacts
         for category_as_element in categories_object_list:
@@ -65,19 +66,25 @@ class Command(BaseCommand):
                    "&fields=code,product_name_fr,nutriscore_grade,categories_tags_fr,url,image_url&page=1&page_size=100"
             # product infos
             product_infos = requests.get(url)
-            print(product_infos.status_code)
+            # print(product_infos.status_code)
             data_as_json = json.loads(product_infos.text)
             for product_as_object in data_as_json['products']:
                 if 'image_url' not in product_as_object:
                     product_as_object['image_url'] = ''
 
-                print(f"product_as_object = {product_as_object}")
+                # print(f"product_as_object = {product_as_object}")
+                if 'product_name_fr' not in product_as_object or product_as_object['product_name_fr'] == '':
+                    continue
                 name_object = product_as_object['product_name_fr']
-                print()
-                print(counter)
-                print(f'name = {name_object}')
-                print()
-                print(product_as_object['code'])
+                categories_limited = [categories.lower() for categories in product_as_object['categories_tags_fr']
+                                      if categories.lower() in categories_object_list]
+                if not categories_limited:
+                    print()
+                    print(counter)
+                    print(f'name = {name_object}')
+                    print()
+                    print(product_as_object['code'])
+                    print(f'categories limite = {categories_limited}')
                 # image_product_infos = requests.get(product['image_url'])
                 # if  image_product_infos.status_code == 200:
                 #     f = open("food_selection/static/food_selection/images/image.jpg", "wb")
@@ -85,14 +92,14 @@ class Command(BaseCommand):
                 #     f.close()
                 create_final_product_object = {
                             'name': name_object,
-                            'categories': product_as_object['categories_tags_fr'],
+                            'categories': categories_limited,
                             'nutriscore': product_as_object['nutriscore_grade'].upper(),
                             'url': product_as_object['url'],
                             'product_id': product_as_object['code'],
                             'image_url': product_as_object['image_url']
                             }
                 products_final_json_list.append(create_final_product_object)
-                print(f'produit final : {products_final_json_list[-1]}')
+                # print(f'produit final : {products_final_json_list[-1]}')
                 counter += 1
         categories_as_final_json_list = [
                                          categories_as_element for categories_as_json in products_final_json_list
