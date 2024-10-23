@@ -53,7 +53,6 @@ class Command(BaseCommand):
                     product_as_object.categories.add(category_as_object)
 
     def handle(self, *args, **options):
-        image = ''
         products_final_json_list = []
         categories_object_list = ['Pâtes alimentaires de céréales', 'Boissons',
                            'Mélanges de légumes frais', 'fruits secs', 'poissons',
@@ -85,11 +84,6 @@ class Command(BaseCommand):
                     print()
                     print(product_as_object['code'])
                     print(f'categories limite = {categories_limited}')
-                # image_product_infos = requests.get(product['image_url'])
-                # if  image_product_infos.status_code == 200:
-                #     f = open("food_selection/static/food_selection/images/image.jpg", "wb")
-                #     f.write(image_product_infos.content)
-                #     f.close()
                 create_final_product_object = {
                             'name': name_object,
                             'categories': categories_limited,
