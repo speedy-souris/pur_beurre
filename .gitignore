@@ -2,10 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-manage.py
 *.json
-/.gitignore
-healthy_food/food_selection/migrations/
 # C extensions
 *.so
 
