@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 print(type(inst))
                 continue
             if  response.status_code == 200:
-                f = open(f"food_selection/static/food_selection/images/{image_product_id}.jpg", "wb")
+                f =      open(f"food_selection/static/food_selection/images/image_product      {image_product_id}.jpg", "wb")
                 f.write(response.content)
                 f.close()
             counter += 1
