@@ -16,12 +16,11 @@ class Command(BaseCommand):
             except Exception as inst:
                 print(type(inst))
                 continue
-            if  response.status_code == 200:              if not os.path.exists('food_selection/static/images_product'):
-                os.makedirs('food_selection/static/images_product')
-            f = open(f"food_selection/static/food_-selection/images/image_product/ {image_product_id}.jpg", "wb")
-    f.write(response.content)
-    f.close()  
-counter += 1
-if counter % int((len(products)/50)) == 0 :
+            if  response.status_code == 200:
+                f =      open(f"food_selection/static/food_selection/images/image_product      {image_product_id}.jpg", "wb")
+                f.write(response.content)
+                f.close()
+            counter += 1
+            if counter % int((len(products)/50)) == 0 :
               print(f"compteur : {counter}/{len(products)}")
 
