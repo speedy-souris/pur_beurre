@@ -13,9 +13,9 @@
                     <ul class="col-lg-4 col-sm-6">
                         {% for product in products %}
                             <li><img class="img-fluid"
-                                     src="{% static 'food_selection/assets/img/portfolio/thumbnails/1.jpg' %}" alt="...">
+                                     src="{% static 'food_selection/images/image_product/'|add:product.product_id|add:'.jpg' %}" alt="...">
                                 <a href="{% url 'food_selection:recorded' %}">
-                                    <img src="{% static 'food_selection/images/product.product_id|add:jpg' %}" alt="save icon">
+                                    <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">
                                 </a> Sauvegarde
                                 {{ product.name }}
                                 {{ product.nutriscore }}
