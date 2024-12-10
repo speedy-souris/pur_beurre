@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from food_selection.forms import SearchNewFood, ContactUsForm
 from food_selection.models import Product, Category
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -19,14 +20,17 @@ def found(request):
             product_name = form.cleaned_data['product']
     else:
         form = get_object_or_404(SearchNewFood)
-    products = Product.objects.filter(name__contains=product_name)
+    product = Product.objects.filter(name__contains=product_name).first()
     context = ''
-    for product in products:
-        better_nutriscores = get_better_nutriscore_list(product.nutriscore)
-        for category in product.categories.all():
-            products_finded = Product.objects.filter(categories__name=category.name).\
+    better_nutriscores = get_better_nutriscore_list(product.nutriscore)
+    category_list = [category.name for category in product.categories.all()]
+    alternative_products = Product.objects.filter(categories__name__in=category_list).\
                                                   filter(nutriscore__in=better_nutriscores)
-    context = {'name': product_name, 'products': products_finded, 'form': form}
+
+    paginator = Paginator(product, 6)  # Show 6 products per page.
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {'name': product_name, 'products': alternative_products, 'form': form, "page_obj": page_obj}
     return render(request,
                   'food_selection/popular_products.html', context)
 
@@ -64,3 +68,4 @@ def get_better_nutriscore_list(nutriscore):
     else:
         nutriscores_finded = nutriscores[:nutriscores.index(nutriscore)]
     return nutriscores_finded
+
