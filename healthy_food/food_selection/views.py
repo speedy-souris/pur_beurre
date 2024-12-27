@@ -21,16 +21,20 @@ def found(request):
     else:
         form = get_object_or_404(SearchNewFood)
     product = Product.objects.filter(name__contains=product_name).first()
-    context = ''
+    if not product:
+        product_found = False
+        return render(request, 'food_selection/popular_products.html', {'product_found': product_found})
     better_nutriscores = get_better_nutriscore_list(product.nutriscore)
     category_list = [category.name for category in product.categories.all()]
     alternative_products = Product.objects.filter(categories__name__in=category_list).\
                                                   filter(nutriscore__in=better_nutriscores)
 
-    paginator = Paginator(product, 6)  # Show 6 products per page.
-    page_number = request.GET.get("page")
+    paginator = Paginator(alternative_products, 6)  # Show 6 products per page.
+    page_number = request.GET.get("page", 1)
+
+    print(f'page number = {page_number}')
     page_obj = paginator.get_page(page_number)
-    context = {'name': product_name, 'products': alternative_products, 'form': form, "page_obj": page_obj}
+    context = {'name': product_name, 'products': alternative_products, 'form': form, "page_obj": page_obj, 'product_found': True}
     return render(request,
                   'food_selection/popular_products.html', context)
 

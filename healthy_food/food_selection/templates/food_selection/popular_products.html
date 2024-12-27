@@ -1,31 +1,56 @@
 {% extends 'food_selection/base.html' %}
 {% load static %}
 {% block title %} RESULTATS {% endblock %}
+
 {% block content %}
+    {% if not product_found %}
+        <p class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">il n'y aucun produit dans la base de données</p>
+    {% else %}
      <!-- Portfolio-->
     <div id="portfolio">
         <div class="container-fluid p-0 ">
             <div class="row g-0">
-                <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                <div class="gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                     <h2>[{{ name }}]</h2>
                     <p>Vous pouvez remplacer cet aliment par :</p>
                 </div>
-                    <ul class="col-lg-4 col-sm-6">
+                    <div class="container-fluid p-0 ">
+                    <ul class="row">
                         {% for alternative_product in page_obj %}
-                            <li><img class="img-fluid"
+                            <li class="col-sm-6"><img class="img-fluid"
                                      src="{% static 'food_selection/images/image_product/'|add:alternative_product.product_id|add:'.jpg' %}" alt="...">
                                 <a href="{% url 'food_selection:recorded' %}">
                                     <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">
                                 </a> Sauvegarde
                                 {{ alternative_product.name }}
                                 {{ alternative_product.nutriscore }}
+                                <ul>
+                                    {% for category in alternative_product.categories.all %}
+                                        <li>{{ category.name }}</li>
+                                    {% endfor %}
+                                </ul>
                             </li>
-                            {% for category in alternative_product.categories.all %}
-                                <li>{{ category.name }}</li>
-                            {% endfor %}
                         {% endfor %}
                     </ul>
+                   </div>
+            <div class="text-center">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo;</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
             </div>
         </div>
     </div>
+{% endif %}
 {% endblock %}
