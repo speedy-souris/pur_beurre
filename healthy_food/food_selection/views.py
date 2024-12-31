@@ -7,9 +7,7 @@ from django.core.paginator import Paginator
 # Create your views here.
 def home(request):
     form = SearchNewFood()
-    return render(request,
-                  'food_selection/home.html',
-                  {'form': form})
+    return render(request,'food_selection/home.html',{'form': form})
 
 
 def found(request):
@@ -26,15 +24,20 @@ def found(request):
         return render(request, 'food_selection/popular_products.html', {'product_found': product_found})
     better_nutriscores = get_better_nutriscore_list(product.nutriscore)
     category_list = [category.name for category in product.categories.all()]
-    alternative_products = Product.objects.filter(categories__name__in=category_list).\
-                                                  filter(nutriscore__in=better_nutriscores)
-
+    alternative_products = Product.objects.filter(categories__name__in=category_list,
+                                                  nutriscore__in=better_nutriscores).order_by('nutriscore')
     paginator = Paginator(alternative_products, 6)  # Show 6 products per page.
     page_number = request.GET.get("page", 1)
-
     print(f'page number = {page_number}')
     page_obj = paginator.get_page(page_number)
-    context = {'name': product_name, 'products': alternative_products, 'form': form, "page_obj": page_obj, 'product_found': True}
+    context = {
+        'name': product_name,
+        'products': alternative_products,
+        'form': form,
+        "page_obj": page_obj,
+        'product_found': True,
+        'required_product': product
+    }
     return render(request,
                   'food_selection/popular_products.html', context)
 
