@@ -19,23 +19,23 @@
                     <p>Vous pouvez remplacer cet aliment par :</p>
                 </div>
                     <div class="container-fluid p-0 ">
-                    <ul class="row">
-                        {% for alternative_product in page_obj %}
-                            <li class="col-sm-6"><img class="img-fluid"
-                                     src="{% static 'food_selection/images/image_product/'|add:alternative_product.product_id|add:'.jpg' %}" alt="...">
-                                <a href="{% url 'food_selection:recorded' %}">
-                                    <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">
-                                </a> Sauvegarde
-                                {{ alternative_product.name }}
-                                {{ alternative_product.nutriscore }}
-                                <ul>
-                                    {% for category in alternative_product.categories.all %}
-                                        <li>{{ category.name }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                        <ul class="row">
+                            {% for alternative_product in page_obj %}
+                                <li class="col-sm-6"><img class="img-fluid"
+                                         src="{% static 'food_selection/images/image_product/'|add:alternative_product.product_id|add:'.jpg' %}" alt="...">
+                                    <a href="{% url 'food_selection:recorded' %}">
+                                        <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon" >
+                                    </a>
+                                    {{ alternative_product.name }}
+                                    {{ alternative_product.nutriscore }}
+                                    <ul>
+                                        {% for category in alternative_product.categories.all %}
+                                            <li>{{ category.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
                    </div>
             <div class="text-center">
                 <span class="step-links">
