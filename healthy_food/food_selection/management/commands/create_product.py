@@ -95,8 +95,7 @@ class Command(BaseCommand):
                 products_final_json_list.append(create_final_product_object)
                 # print(f'produit final : {products_final_json_list[-1]}')
                 counter += 1
-        categories_as_final_json_list = [
-                                         categories_as_element for categories_as_json in products_final_json_list
+        categories_as_final_json_list = [categories_as_element for categories_as_json in products_final_json_list
                                             for categories_as_element in categories_as_json['categories']]
 
         # create categories

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Produit enregistre</title>
+    </head>
+    <body>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field.label_tag }} {{ field }}
+                {% if field.errors %}
+                    <small class="">{{ field.errors|striptags }}</small>
+                {% endif %}
+            {% endfor %}
+            <input type="submit" value="Register" >
+        </form>
+    </body>
+</html>
+
+
+

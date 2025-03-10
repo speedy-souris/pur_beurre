@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Model
+
 # Create your models here.
 
 
@@ -18,6 +19,7 @@ class Product(models.Model):
     url = models.fields.URLField(max_length=500)
     # image = models.fields.files.ImageField(upload_to='images')
     image_url = models.fields.URLField(max_length=500)
+    saved = models.fields.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name}'
