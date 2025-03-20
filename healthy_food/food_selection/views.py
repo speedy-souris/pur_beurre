@@ -117,10 +117,10 @@ class SavedProductsListView(ListView):
     model = Product
     paginate_by = 10
     template_name = 'food_selection/products.html'
-    def get_context_data(self, **kwargs):
 
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["object_list"] = Product.objects.filter(saved=True)
-        context['product_found'] = bool(context["object_list"])
+        context['object_list'] = Product.objects.filter(saved=True)
+        # context['product_id'] = Product.objects.all('product_id')
         print(context['object_list'])
         return context

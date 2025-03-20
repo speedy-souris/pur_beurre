@@ -1,18 +1,18 @@
-{% extends 'food_selection/base.html' %}
+product{% extends 'food_selection/base.html' %}
 {% load static %}
 {% block title %} RESULTATS {% endblock %}
-{% if not required_product %}
-    {% include 'food_selection/saved_products.html' %}
-{% else %}
+
 
     {% block content %}
-        {% if not product_found %}
-            <p class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">il n'y a aucun produit dans la base de données</p>
-        {% else %}
-             <!-- Portfolio-->
-            <div id="portfolio">
-                <div class="container-fluid p-5 ">
-                    <div class="row g-0">
+        {% if not product_id %}
+            {% include 'food_selection/saved_products.html' %}
+        {% endif %}
+
+       <!-- Portfolio-->
+        <div id="portfolio">
+            <div class="container-fluid p-5 ">
+                <div class="row g-0">
+                    {% if required_product %}
                         <div class="mt-5 gx-5 gx-lg-3 h-100 align-items-center justify-content-center text-center">
                             <h2>[{{ name }}]</h2>
                             <div>
@@ -21,53 +21,52 @@
                             </div>
                             <p>Vous pouvez remplacer cet aliment par :</p>
                         </div>
-                            <div class="container-fluid p-0 ">
-                                <ul class="row">
-                                    {% for alternative_product in page_obj %}
-                                        <li class="col-sm-6"><img class="img-fluid"
-                                                                  src="{% static 'food_selection/images/image_product/'|add:alternative_product.product_id|add:'.jpg' %}" alt="...">
-                                            <form method="post">
-                                                {% csrf_token %}
-                                                {{ form.as_p }}
-                                                <input type="submit" value='{{ alternative_product.product_id }}'>
-    <!--                                            <button type="submit">-->
-    <!--                                                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">-->
-    <!--                                            </button>-->
-                                            </form>
-                                            {{ alternative_product.name }}
-                                            {{ alternative_product.nutriscore }}
-                                            <ul>
-                                                {% for category in alternative_product.categories.all %}
-                                                    <li>{{ category.name }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                           </div>
-                    {% if 'product' in request.GET %}
-                        <div class="text-center">
-                            <span class="step-links">
-                                {% with searched_product='product='|add:request.GET.product %}
-                                    {% if page_obj.has_previous %}
-                                        <a href="?{{ searched_product }}&page=1">&laquo;</a>
-                                        <a href="?{{ searched_product }}&page={{ page_obj.previous_page_number }}">&lt;</a>
-                                    {% endif %}
-                                    <span class="current">
-                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                                    </span>
-
-                                    {% if page_obj.has_next %}
-                                        <a href="?{{ searched_product }}&page={{ page_obj.next_page_number }}">&gt;</a>
-                                        <a href="?{{ searched_product }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
-                                    {% endif %}
-                                {% endwith %}
-                            </span>
-                        </div>
                     {% endif %}
+                    <div class="container-fluid p-0 ">
+                        <ul class="row">
+                            {% for alternative_product in page_obj %}
+                                <li class="col-sm-6"><img class="img-fluid"
+                                                          src="{% static 'food_selection/images/image_product/'|add:alternative_product.product_id|add:'.jpg' %}" alt="...">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <input type="submit" value='{{ alternative_product.product_id }}'>
+<!--                                            <button type="submit">-->
+<!--                                                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">-->
+<!--                                            </button>-->
+                                    </form>
+                                    {{ alternative_product.name }}
+                                    {{ alternative_product.nutriscore }}
+                                    <ul>
+                                        {% for category in alternative_product.categories.all %}
+                                            <li>{{ category.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                   </div>
+                {% if 'product' in request.GET %}
+                    <div class="text-center">
+                        <span class="step-links">
+                            {% with searched_product='product='|add:request.GET.product %}
+                                {% if page_obj.has_previous %}
+                                    <a href="?{{ searched_product }}&page=1">&laquo;</a>
+                                    <a href="?{{ searched_product }}&page={{ page_obj.previous_page_number }}">&lt;</a>
+                                {% endif %}
+                                <span class="current">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                </span>
+
+                                {% if page_obj.has_next %}
+                                    <a href="?{{ searched_product }}&page={{ page_obj.next_page_number }}">&gt;</a>
+                                    <a href="?{{ searched_product }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                                {% endif %}
+                            {% endwith %}
+                        </span>
                     </div>
+                {% endif %}
                 </div>
             </div>
-        {% endif %}
+        </div>
     {% endblock %}
-{% endif %}

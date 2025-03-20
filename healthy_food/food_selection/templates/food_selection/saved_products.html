@@ -1,1 +1,8 @@
-{{ object_list }}
+<ul>
+    {% for product in object_list %}
+        <li>Nom du produit : {{product.name}} avec son nutriscore de {{product.nutriscore}}</li>
+    {% empty %}
+        <li class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            il n'y a aucun produit dans la base de données</li>
+    {% endfor %}
+</ul>
