@@ -41,6 +41,7 @@ def found(request):
         'search_form': search_form,
         "page_obj": page_obj,
         'product_found': True,
+        'page_name': 'RESULTATS',
         'required_product': product
     }
     return render(request,
@@ -120,8 +121,11 @@ class SavedProductsListView(ListView):
     template_name = 'food_selection/products.html'
 
     def get_context_data(self, **kwargs):
+        search_form = SearchNewFood()
         context = super().get_context_data(**kwargs)
         context['object_list'] = Product.objects.filter(saved=True)
-        # context['product_id'] = Product.objects.all('product_id')
+        context['page_name'] = 'FAVORIS'
+        context['search_form'] = search_form
+
         print(context['object_list'])
         return context
