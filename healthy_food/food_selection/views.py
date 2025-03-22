@@ -1,3 +1,4 @@
+# noinspection PyInterpreter
 from django.contrib.admin.templatetags.admin_list import search_form
 from django.shortcuts import render, get_object_or_404
 from food_selection.forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
