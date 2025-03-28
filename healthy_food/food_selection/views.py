@@ -11,8 +11,10 @@ from django.views.generic.list import ListView
 
 # Create your views here.
 def home(request):
-    search_form = SearchNewFood()
-    return render(request,'food_selection/home.html',{'search_form': search_form})
+    context = {'search_form': SearchNewFood(),
+               'page_name': 'Accueil'
+                }
+    return render(request,'food_selection/home.html',context)
 
 
 def found(request):
@@ -41,11 +43,10 @@ def found(request):
         'search_form': search_form,
         "page_obj": page_obj,
         'product_found': True,
-        'page_name': 'RESULTATS',
+        'page_name': 'Résultats',
         'required_product': product
     }
-    return render(request,
-                  'food_selection/products.html', context)
+    return render(request,'food_selection/products.html', context)
 
 
 def recorded(request):
@@ -55,23 +56,23 @@ def recorded(request):
 
 
 def profile(request):
-    search_form = SearchNewFood()
-    return render(request, 'food_selection/profile.html',
-                  {'search_form': search_form})
-
+    context = {'page_name': 'Mon compte',
+               'search_form': SearchNewFood(),
+               }
+    return render(request, 'food_selection/profile.html', context)
 
 def contact(request):
-    search_form = SearchNewFood()
-    contact_form = ContactUsForm()
-    return render(request,
-                  'food_selection/contact.html',
-                  {'search_form': search_form, 'contact_form': contact_form})
+    context = {'search_form': SearchNewFood(),
+               'contact_form': ContactUsForm(),
+               'page_name': 'Contact'}
+    return render(request,'food_selection/contact.html', context)
 
 
-def disclaimer(request):
-    search_form = SearchNewFood()
-    return render(request, 'food_selection/legal_disclaimer.html',
-                  {'search_form': search_form})
+def disclaimer(request):                         
+    context = {'search_form': SearchNewFood(),
+               'page_name': 'Mentions légales'
+               }
+    return render(request, 'food_selection/legal_disclaimer.html', context)
 
 
 def get_better_nutriscore_list(nutriscore):
@@ -85,12 +86,12 @@ def get_better_nutriscore_list(nutriscore):
 
 
 class SaveProductFormView(FormView):
-    template_name = "popular_product.html"
+    template_name = "products.html"
     form_class = SaveProductForm
-    success_url = reverse_lazy("saved")
+    success_url = "/saved_products_list/"
 
     def form_valid(self, form):
-        product_id = form.product_id.value
+        product_id = form.cleaned_data.get('product_id')
         # saved = Product.objets.get(pk=product_id)
         print(f'produit enregistre dans vue  = {product_id}')
         return super().form_valid(form)
@@ -98,7 +99,7 @@ class SaveProductFormView(FormView):
 class TestFormView(FormView):
     template_name = "test_form.html"
     form_class = TestForm
-    success_url = '/saved_products/'
+    success_url = '/saved_products_list/'
     # success_url = reverse_lazy("saved")
 
     def form_valid(self,form):
@@ -121,11 +122,10 @@ class SavedProductsListView(ListView):
     template_name = 'food_selection/products.html'
 
     def get_context_data(self, **kwargs):
-        search_form = SearchNewFood()
         context = super().get_context_data(**kwargs)
         context['object_list'] = Product.objects.filter(saved=True)
-        context['page_name'] = 'FAVORIS'
-        context['search_form'] = search_form
+        context['page_name'] = 'Mes Aliments'
+        context['search_form'] = SearchNewFood()
 
         print(context['object_list'])
         return context
