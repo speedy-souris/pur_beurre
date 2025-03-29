@@ -31,7 +31,20 @@ dans un terminal (hors de l'environnement virtuel) installer le serveur de la ba
 (commandes dans un environnement "DEBIAN")
 ```shell
 sudo apt update # (pour mettre a jour la liste des dépots de linux)
-```
-```shell
 sudo apt install postgresql
+```
+
+demarrer le shell postgresql
+```shell
+sudo -u postgres psql
+```
+
+dans le terminal postgres# 
+creer un utilisateur et une base de données
+```shell
+CREATE USER nom_utilisateur WITH SUPERUSER CREATEDB PASSWORD 'mot_de_passe';
+CREATE DATABASE nom_bd WITH OWNER = nom_utilisateur;
+\du # controle utilisateur
+\l # controle base de donnée
+\q # quitter le shell postgres
 ```
