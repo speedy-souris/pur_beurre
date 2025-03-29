@@ -23,16 +23,21 @@ def found(request):
         search_form = SearchNewFood(request.GET)
         if search_form.is_valid():
             product_name = search_form.cleaned_data['product']
+            print('nom produit')
     else:
         search_form = get_object_or_404(SearchNewFood)
     product = Product.objects.filter(name__contains=product_name).first()
+    print(f"produit trouvé = {product}")
     if not product:
         product_found = False
         return render(request, 'food_selection/products.html', {'product_found': product_found})
     better_nutriscores = get_better_nutriscore_list(product.nutriscore)
+    print(f'nutriscore = {better_nutriscores} ')
     category_list = [category.name for category in product.categories.all()]
+    print(f'categorie = {category_list}')
     alternative_products = Product.objects.filter(categories__name__in=category_list,
                                                   nutriscore__in=better_nutriscores).order_by('nutriscore')
+    print(f'produits alternatif ={alternative_products}')
     paginator = Paginator(alternative_products, 6)  # Show 6 products per page.
     page_number = request.GET.get("page", 1)
     print(f'page number = {page_number}')
@@ -46,6 +51,7 @@ def found(request):
         'page_name': 'Résultats',
         'required_product': product
     }
+    print(f'context ={context}')
     return render(request,'food_selection/products.html', context)
 
 

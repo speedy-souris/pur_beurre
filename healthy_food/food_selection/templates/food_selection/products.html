@@ -1,9 +1,8 @@
 {% extends 'food_selection/base.html' %}
 {% load static %}
-{% block title %} {{ page_name }} {% endblock %}
 
 {% block content %}
-    {% if not product_id %}
+    {% if not product_found %}
         <div class="container px-4 px-lg-5 h-100">
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center">
                 <div class="col-lg-8 align-self-end">
