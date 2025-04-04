@@ -133,5 +133,5 @@ class SavedProductsListView(ListView):
         context['page_name'] = 'Mes Aliments'
         context['search_form'] = SearchNewFood()
 
-        print(context['object_list'])
+        print(f"object_list = {context['object_list']}")
         return context

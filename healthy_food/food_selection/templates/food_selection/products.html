@@ -2,13 +2,24 @@
 {% load static %}
 
 {% block content %}
+<!--safeguarded products-->
     {% if not product_found %}
         <div class="container px-4 px-lg-5 h-100">
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center">
                 <div class="col-lg-8 align-self-end">
                     <ul>
                         {% for product in object_list %}
-                            <li>Nom du produit : {{ product.name }} avec son nutriscore de {{ product.nutriscore }}</li>
+                            <li class="col-sm-6"><img class="img-fluid"
+                                                          src="{% static 'food_selection/images/image_product/'|add:product.product_id|add:'.jpg' %}" alt="...">
+                                    {{ product.product_id }}
+                                    {{ product.name }}
+                                    {{ product.nutriscore }}
+                                    <ul>
+                                        {% for category in product.categories.all %}
+                                            <li>{{ category.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                            </li>
                         {% empty %}
                             <li class="row gx-4 gx-lg-5 h-100 ">
                                 il n'y a aucun produit dans la base de données</li>
@@ -17,6 +28,7 @@
                 </div>
             </div>
         </div>
+<!--substitute products-->
     {% else %}
        <!-- Portfolio-->
         <div id="portfolio">
@@ -55,7 +67,7 @@
                                 </li>
                             {% endfor %}
                         </ul>
-                   </div>
+                    </div>
                 {% if 'product' in request.GET %}
                     <div class="text-center">
                         <span class="step-links">
@@ -65,7 +77,7 @@
                                     <a href="?{{ searched_product }}&page={{ page_obj.previous_page_number }}">&lt;</a>
                                 {% endif %}
                                 <span class="current">
-                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                    Page {{ page_obj.number }} à {{ page_obj.paginator.num_pages }}.
                                 </span>
                                 {% if page_obj.has_next %}
                                     <a href="?{{ searched_product }}&page={{ page_obj.next_page_number }}">&gt;</a>
