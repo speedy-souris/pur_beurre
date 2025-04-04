@@ -46,21 +46,21 @@
                     {% endif %}
                     <div class="container-fluid p-0 ">
                         <ul class="row">
-                            {% for alternative_product in page_obj %}
+                            {% for general_product in page_obj %}
                                 <li class="col-sm-6"><img class="img-fluid"
-                                                          src="{% static 'food_selection/images/image_product/'|add:alternative_product.product_id|add:'.jpg' %}" alt="...">
+                                                          src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
                                     <form method="post">
                                         {% csrf_token %}
                                         {{ form.as_p }}
-                                        <input type="submit" value='{{ alternative_product.product_id }}'>
+                                        <input type="submit" value='{{ general_product.product_id }}'>
     <!--                                            <button type="submit">-->
     <!--                                                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">-->
     <!--                                            </button>-->
                                     </form>
-                                    {{ alternative_product.name }}
-                                    {{ alternative_product.nutriscore }}
+                                    {{ general_product.name }}
+                                    {{ general_product.nutriscore }}
                                     <ul>
-                                        {% for category in alternative_product.categories.all %}
+                                        {% for category in general_product.categories.all %}
                                             <li>{{ category.name }}</li>
                                         {% endfor %}
                                     </ul>
@@ -71,17 +71,17 @@
                 {% if 'product' in request.GET %}
                     <div class="text-center">
                         <span class="step-links">
-                            {% with searched_product='product='|add:request.GET.product %}
+                            {% with selected_product='product='|add:request.GET.product %}
                                 {% if page_obj.has_previous %}
-                                    <a href="?{{ searched_product }}&page=1">&laquo;</a>
-                                    <a href="?{{ searched_product }}&page={{ page_obj.previous_page_number }}">&lt;</a>
+                                    <a href="?{{ selected_product }}&page=1">&laquo;</a>
+                                    <a href="?{{ selected_product }}&page={{ page_obj.previous_page_number }}">&lt;</a>
                                 {% endif %}
                                 <span class="current">
                                     Page {{ page_obj.number }} à {{ page_obj.paginator.num_pages }}.
                                 </span>
                                 {% if page_obj.has_next %}
-                                    <a href="?{{ searched_product }}&page={{ page_obj.next_page_number }}">&gt;</a>
-                                    <a href="?{{ searched_product }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                                    <a href="?{{ selected_product }}&page={{ page_obj.next_page_number }}">&gt;</a>
+                                    <a href="?{{ selected_product }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
                                 {% endif %}
                             {% endwith %}
                         </span>

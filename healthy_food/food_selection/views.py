@@ -98,8 +98,14 @@ class SaveProductFormView(FormView):
 
     def form_valid(self, form):
         product_id = form.cleaned_data.get('product_id')
-        # saved = Product.objets.get(pk=product_id)
-        print(f'produit enregistre dans vue  = {product_id}')
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            pass
+        else:
+            print(f'product_id = {product}')
+            product.saved = True
+            product.save()
         return super().form_valid(form)
 
 class TestFormView(FormView):

@@ -48,3 +48,10 @@ CREATE DATABASE nom_bd WITH OWNER = nom_utilisateur;
 \l # controle base de donnée
 \q # quitter le shell postgres
 ```
+
+dans le terminal Django 
+dans l'environement virtuel 
+creer un administrateur pour la base de données
+```shell
+python manage.py createsuperuser
+```
