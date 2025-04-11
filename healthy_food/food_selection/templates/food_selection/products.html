@@ -2,10 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <!-- Portfolio-->
+<!-- Display Products-->
     <div id="portfolio">
         <div class="container-fluid p-5 ">
             <div class="row g-0">
+                <!--display specific to products searched for-->
                 {% if product_found %}
                     {% if required_product %}
                         <div class="mt-5 gx-5 gx-lg-3 h-100 align-items-center justify-content-center text-center">
@@ -18,11 +19,13 @@
                         </div>
                     {% endif %}
                 {% endif %}
+                <!--common display for searched and favourite products-->
                 <div class="container-fluid p-0 ">
                     <ul class="row">
                         {% for general_product in page_obj %}
                             <li class="col-sm-6"><img class="img-fluid"
                                                       src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
+                                <!--form to register the products you are looking for with the reference-->
                                 {% if product_found %}
                                     <form method="post">
                                         {% csrf_token %}
@@ -33,10 +36,8 @@
                                             {% endif %}
                                         {% endfor %}
                                         <input type="submit" value="{{ general_product.product_id }}" >
-        <!--                                            <button type="submit">-->
-        <!--                                                <img src="{% static 'food_selection/images/sauver.png' %}" alt="save icon">-->
-        <!--                                            </button>-->
                                     </form>
+                                <!-------------------------------------------------------------------------->
                                 {% else %}
                                     {{ general_product.product_id }}
                                 {% endif %}

@@ -136,8 +136,13 @@ class SavedProductsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = Product.objects.filter(saved=True)
+        paginator = Paginator(context['object_list'], 6)  # Show 6 products per page.
+        page_number = self.request.GET.get("page", 1)
+        print(f'page number = {page_number}')
+        page_obj = paginator.get_page(page_number)
         context['page_name'] = 'Mes Aliments'
         context['search_form'] = SearchNewFood()
+        context['page_obj'] = page_obj
 
         print(f"object_list = {context['object_list']}")
         return context
