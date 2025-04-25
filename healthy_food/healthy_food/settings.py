@@ -55,7 +55,10 @@ ROOT_URLCONF = 'healthy_food.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            # new code that points to the location of the templates
+            BASE_DIR / 'food_selection' / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
