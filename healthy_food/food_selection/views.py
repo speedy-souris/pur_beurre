@@ -30,7 +30,11 @@ def found(request):
     print(f"produit trouvé = {product}")
     if not product:
         product_found = False
-        return render(request, 'food_selection/products.html', {'product_found': product_found})
+        context = {
+            'product_found': product_found,
+            'search_form': SearchNewFood(),
+        }
+        return render(request, 'food_selection/products.html', context)
     better_nutriscores = get_better_nutriscore_list(product.nutriscore)
     print(f'nutriscore = {better_nutriscores} ')
     category_list = [category.name for category in product.categories.all()]

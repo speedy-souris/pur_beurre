@@ -32,7 +32,7 @@ class Command(BaseCommand):
                                          product_id=product_as_json['product_id'],
                                          nutriscore=product_as_json['nutriscore'],
                                          url=product_as_json['url'],
-                                         image_url=product_as_json['image_url']))
+                                         image_url=product_as_json['image_url'],))
             else:
                 # self.stdout.write('le produit existe deja')
                 pass
@@ -90,7 +90,7 @@ class Command(BaseCommand):
                             'nutriscore': product_as_object['nutriscore_grade'].upper(),
                             'url': product_as_object['url'],
                             'product_id': product_as_object['code'],
-                            'image_url': product_as_object['image_url']
+                            'image_url': product_as_object['image_url'],
                             }
                 products_final_json_list.append(create_final_product_object)
                 # print(f'produit final : {products_final_json_list[-1]}')
