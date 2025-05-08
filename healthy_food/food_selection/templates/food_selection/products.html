@@ -27,7 +27,7 @@
                                                       src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
                                 <!--form to register the products you are looking for with the reference-->
                                 {% if product_found %}
-                                    <form method="post" action="{% url 'food_selection:recorded' %}">
+                                    <form method="post" action="{% url 'food_selection:save_products' %}">
                                         {% csrf_token %}
                                         {% for field in general_products.product_id %}
                                             {{ field.label_tag }} {{ field }}
@@ -53,6 +53,7 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% include 'food_selection/recorded_product.html' %}
                 {% if 'product' in request.GET %}
                     <div class="text-center">
                         <span class="step-links">
