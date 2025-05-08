@@ -23,7 +23,7 @@ def found(request):
         search_form = SearchNewFood(request.GET)
         if search_form.is_valid():
             product_name = search_form.cleaned_data['product']
-            print('nom produit')
+            print(f'nom produit = {product_name}')
     else:
         search_form = get_object_or_404(SearchNewFood)
     product = Product.objects.filter(name__contains=product_name).first()
@@ -42,6 +42,9 @@ def found(request):
     page_number = request.GET.get("page", 1)
     print(f'page number = {page_number}')
     page_obj = paginator.get_page(page_number)
+    for general_product in page_obj:
+        general_product.form = SaveProductForm(initial={'product_id': general_product.product_id})
+
     context = {
         'name': product_name,
         'products': alternative_products,
@@ -49,16 +52,23 @@ def found(request):
         "page_obj": page_obj,
         'product_found': True,
         'page_name': 'Résultats',
-        'required_product': product
+        'required_product': product,
     }
     print(f'context ={context}')
     return render(request,'food_selection/products.html', context)
 
 
 def recorded(request):
-    product_found = Product.objects.filter(name__in=product_id)
-    print(f'produit trouver = {product_found}')
-    return render(request, 'food_selection/recorded_product.html', {'product': product_found})
+    product_id = request.POST.get('product_id')
+    product = Product.objects.get(pk=product_id)
+    product.saved = True
+    product.save()
+    context = {
+        'product': product,
+        'page_name': 'Enregistrement',
+    }
+    print(f'produit enregistré')
+    return render(request, 'food_selection/recorded_product.html', context)
 
 
 def profile(request):
@@ -92,7 +102,7 @@ def get_better_nutriscore_list(nutriscore):
 
 
 class SaveProductFormView(FormView):
-    template_name = "products.html"
+    template_name = "food_selection/products.html"
     form_class = SaveProductForm
     success_url = "/saved_products_list/"
 
@@ -109,7 +119,7 @@ class SaveProductFormView(FormView):
         return super().form_valid(form)
 
 class TestFormView(FormView):
-    template_name = "test_form.html"
+    template_name = "food_selection/test_form.html"
     form_class = TestForm
     success_url = '/saved_products_list/'
     # success_url = reverse_lazy("saved")

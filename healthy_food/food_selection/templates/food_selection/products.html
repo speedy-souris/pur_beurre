@@ -27,7 +27,7 @@
                                                       src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
                                 <!--form to register the products you are looking for with the reference-->
                                 {% if product_found %}
-                                    <form method="post">
+                                    <form method="post" action="{% url 'food_selection:recorded' %}">
                                         {% csrf_token %}
                                         {% for field in general_products.product_id %}
                                             {{ field.label_tag }} {{ field }}
@@ -35,7 +35,8 @@
                                                 <small class="">{{ field.errors|striptags }}</small>
                                             {% endif %}
                                         {% endfor %}
-                                        <input type="submit" value="{{ general_product.product_id }}" >
+                                        {{ general_product.form.as_p }}
+                                        <input type="submit" >
                                     </form>
                                 <!-------------------------------------------------------------------------->
                                 {% else %}
