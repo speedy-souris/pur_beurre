@@ -41,19 +41,18 @@
                                 <!-------------------------------------------------------------------------->
                                 {% else %}
                                     {{ general_product.product_id }}
+                                    {{ general_product.name }}
+                                    {{ general_product.nutriscore }}
+                                    <ul>
+                                        {% for category in general_product.categories.all %}
+                                            <li>{{ category.name }}</li>
+                                        {% endfor %}
+                                    </ul>
                                 {% endif %}
-                                {{ general_product.name }}
-                                {{ general_product.nutriscore }}
-                                <ul>
-                                    {% for category in general_product.categories.all %}
-                                        <li>{{ category.name }}</li>
-                                    {% endfor %}
-                                </ul>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
-                {% include 'food_selection/recorded_product.html' %}
                 {% if 'product' in request.GET %}
                     <div class="text-center">
                         <span class="step-links">

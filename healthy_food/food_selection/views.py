@@ -23,7 +23,7 @@ def found(request):
         search_form = SearchNewFood(request.GET)
         if search_form.is_valid():
             product_name = search_form.cleaned_data['product']
-            print(f'nom produit = {product_name}')
+            print(f'nom produit recherché = {product_name}')
     else:
         search_form = get_object_or_404(SearchNewFood)
     product = Product.objects.filter(name__contains=product_name).first()
@@ -36,15 +36,15 @@ def found(request):
         }
         return render(request, 'food_selection/products.html', context)
     better_nutriscores = get_better_nutriscore_list(product.nutriscore)
-    print(f'nutriscore = {better_nutriscores} ')
+    print(f'nutriscore du produit trouvé = {better_nutriscores} ')
     category_list = [category.name for category in product.categories.all()]
-    print(f'categorie = {category_list}')
+    print(f'categorie du produit trouvé = {category_list}')
     alternative_products = Product.objects.filter(categories__name__in=category_list,
                                                   nutriscore__in=better_nutriscores).order_by('nutriscore')
-    print(f'produits alternatif ={alternative_products}')
+    print(f'produits alternatif trouvé ={alternative_products}')
     paginator = Paginator(alternative_products, 6)  # Show 6 products per page.
     page_number = request.GET.get("page", 1)
-    print(f'page number = {page_number}')
+    print(f'page number des produits trouvés = {page_number}')
     page_obj = paginator.get_page(page_number)
     for general_product in page_obj:
         general_product.form = SaveProductForm(initial={'product_id': general_product.product_id})
@@ -58,21 +58,19 @@ def found(request):
         'page_name': 'Résultats',
         'required_product': product,
     }
-    print(f'context ={context}')
+    print(f'context des produits trouvés ={context}')
     return render(request,'food_selection/products.html', context)
 
 
 def recorded(request):
-    product_id = request.POST.get('product_id')
-    product = Product.objects.get(pk=product_id)
-    product.saved = True
-    product.save()
+    print('je suis dans les produits favories')
     context = {
-        'product': product,
+        'search_form': SearchNewFood(),
+        'product': SaveProductForm(),
         'page_name': 'Enregistrement',
     }
-    print(f'produit enregistré')
-    return render(request, 'food_selection/recorded_product.html', context)
+    print(f"context des produits enregistrés = {context}")
+    return render(request, 'food_selection/products.html', context)
 
 
 def profile(request):
@@ -108,7 +106,7 @@ def get_better_nutriscore_list(nutriscore):
 class SaveProductFormView(FormView):
     template_name = "food_selection/products.html"
     form_class = SaveProductForm
-    success_url = "/saved_products_list/"
+    success_url = "/recorded/"
 
     def form_valid(self, form):
         product_id = form.cleaned_data.get('product_id')
@@ -117,9 +115,10 @@ class SaveProductFormView(FormView):
         except Product.DoesNotExist:
             pass
         else:
-            print(f'product_id = {product}')
+            print(f'product_id formView = {product_id}')
             product.saved = True
             product.save()
+            print(f'produit enregistré')
         return super().form_valid(form)
 
 class TestFormView(FormView):
@@ -145,18 +144,16 @@ class TestFormView(FormView):
 class SavedProductsListView(ListView):
     model = Product
     paginate_by = 10
-    template_name = 'food_selection/products.html'
+    template_name = 'food_selection/saved_products.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = Product.objects.filter(saved=True)
         paginator = Paginator(context['object_list'], 6)  # Show 6 products per page.
         page_number = self.request.GET.get("page", 1)
-        print(f'page number = {page_number}')
         page_obj = paginator.get_page(page_number)
         context['page_name'] = 'Mes Aliments'
         context['search_form'] = SearchNewFood()
         context['page_obj'] = page_obj
-
-        print(f"object_list = {context['object_list']}")
+        print(f'page_obj = {context["page_obj"]}')
         return context

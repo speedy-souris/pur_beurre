@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <title>{{ page_name }}</title>
-    </head>
+{% extends 'food_selection/base.html' %}
+{% load static %}
+{% block content %}
+    <title>{{ page_name }}</title>
     <p>Produit enregistré en favoris</p>
     {{ product }}
-</html>
+{% endblock %}
