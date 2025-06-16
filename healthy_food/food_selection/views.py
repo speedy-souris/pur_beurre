@@ -106,7 +106,7 @@ def get_better_nutriscore_list(nutriscore):
 class SaveProductFormView(FormView):
     template_name = "food_selection/products.html"
     form_class = SaveProductForm
-    success_url = "/recorded/"
+    success_url = "/saved_products_list/"
 
     def form_valid(self, form):
         product_id = form.cleaned_data.get('product_id')
@@ -152,8 +152,11 @@ class SavedProductsListView(ListView):
         paginator = Paginator(context['object_list'], 6)  # Show 6 products per page.
         page_number = self.request.GET.get("page", 1)
         page_obj = paginator.get_page(page_number)
-        context['page_name'] = 'Mes Aliments'
-        context['search_form'] = SearchNewFood()
-        context['page_obj'] = page_obj
+        context = {
+            page_obj.number: page_obj.number,
+            'search_form': SearchNewFood(),
+            'page_obj': page_obj,
+            'page_name': 'Mes Favoris',
+        }
         print(f'page_obj = {context["page_obj"]}')
         return context

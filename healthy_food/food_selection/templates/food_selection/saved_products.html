@@ -12,52 +12,33 @@
                             <li class="col-sm-6"><img class="img-fluid"
                                                       src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
                                 <!--form to register the products you are looking for with the reference-->
-                                {% if product_found %}
-                                    <form method="post" action="{% url 'food_selection:save_products' %}">
-                                        {% csrf_token %}
-                                        {% for field in general_products.product_id %}
-                                            {{ field.label_tag }} {{ field }}
-                                            {% if field.errors %}
-                                                <small class="">{{ field.errors|striptags }}</small>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {{ general_product.form.as_p }}
-                                        <input type="submit" >
-                                    </form>
-                                <!-------------------------------------------------------------------------->
-                                {% else %}
-                                    {{ general_product.product_id }}
-                                    {{ general_product.name }}
-                                    {{ general_product.nutriscore }}
-                                    <ul>
-                                        {% for category in general_product.categories.all %}
-                                            <li>{{ category.name }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
+                                {{ general_product.product_id }}
+                                {{ general_product.name }}
+                                {{ general_product.nutriscore }}
+                                <ul>
+                                    {% for category in general_product.categories.all %}
+                                        <li>{{ category.name }}</li>
+                                    {% endfor %}
+                                </ul>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
-                {% if 'product' in request.GET %}
-                    <div class="text-center">
-                        <span class="step-links">
-                            {% with selected_product='product='|add:request.GET.product %}
-                                {% if page_obj.has_previous %}
-                                    <a href="?{{ selected_product }}&page=1">&laquo;</a>
-                                    <a href="?{{ selected_product }}&page={{ page_obj.previous_page_number }}">&lt;</a>
-                                {% endif %}
-                                <span class="current">
-                                    Page {{ page_obj.number }} à {{ page_obj.paginator.num_pages }}.
-                                </span>
-                                {% if page_obj.has_next %}
-                                    <a href="?{{ selected_product }}&page={{ page_obj.next_page_number }}">&gt;</a>
-                                    <a href="?{{ selected_product }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
-                                {% endif %}
-                            {% endwith %}
+                <div class="text-center">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo;</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                        {% endif %}
+                        <span class="current">
+                            Page {{ page_obj.number }} à {{ page_obj.paginator.num_pages }}.
                         </span>
-                    </div>
-                {% endif %}
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
