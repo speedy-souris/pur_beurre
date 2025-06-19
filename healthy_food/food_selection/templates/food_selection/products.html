@@ -24,28 +24,30 @@
                     <ul class="row">
                         {% for general_product in page_obj %}
                             <li class="col-sm-6"><img class="img-fluid"
-                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
-                                <!--form to register the products you are looking for with the reference-->
-                                <form method="post" action="{% url 'food_selection:save_products' %}">
-                                    {% csrf_token %}
-                                    {% for field in general_products.product_id %}
-                                        {{ field.label_tag }} {{ field }}
-                                        {% if field.errors %}
-                                            <small class="">{{ field.errors|striptags }}</small>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {{ general_product.form.as_p }}
-                                    <input type="submit" >
-                                </form>
-                                <!-------------------------------------------------------------------------->
-                                {{ general_product.product_id }}
-                                {{ general_product.name }}
-                                {{ general_product.nutriscore }}
-                                <ul>
-                                    {% for category in general_product.categories.all %}
-                                        <li>{{ category.name }}</li>
-                                    {% endfor %}
-                                </ul>
+                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}">
+
+                                    <!--form to register the products you are looking for with the reference-->
+                                    {% if general_product.saved == False %}
+                                        <form method="post" action="{% url 'food_selection:save_products' %}">
+                                            {% csrf_token %}
+                                            {% for field in general_products.product_id %}
+                                                {{ field.label_tag }} {{ field }}
+                                                {% if field.errors %}
+                                                    <small class="">{{ field.errors|striptags }}</small>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {{ general_product.form.as_p }}
+                                            <input type="submit" >
+                                        </form>
+                                    {% endif %}
+                                    {{ general_product.product_id }}
+                                    {{ general_product.name }}
+                                    {{ general_product.nutriscore }}
+                                        <ul>
+                                            {% for category in general_product.categories.all %}
+                                                <li>{{ category.name }}</li>
+                                            {% endfor %}
+                                        </ul>
                             </li>
                         {% endfor %}
                     </ul>
