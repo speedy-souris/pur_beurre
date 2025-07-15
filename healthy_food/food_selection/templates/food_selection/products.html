@@ -27,7 +27,7 @@
                                                       src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}">
 
                                     <!--form to register the products you are looking for with the reference-->
-                                    {% if general_product.saved == False %}
+                                    {% if not general_product.saved %}
                                         <form method="post" action="{% url 'food_selection:save_products' %}">
                                             {% csrf_token %}
                                             {% for field in general_products.product_id %}
@@ -39,13 +39,15 @@
                                             {{ general_product.form.as_p }}
                                             <input type="submit" >
                                         </form>
+                                        <p>IDentifiant de Produit = {{ general_product.product_id }}</p>
+                                    {% else %}
+                                        <p>IDentifiant de Produit Sauvegardé = {{ general_product.product_id }}</p>
                                     {% endif %}
-                                    {{ general_product.product_id }}
-                                    {{ general_product.name }}
-                                    {{ general_product.nutriscore }}
+                                    <p>Nom de Produit = {{ general_product.name }}</p>
+                                    <p>Nutrisore du produit = {{ general_product.image_nutrition_score }}</p>
                                         <ul>
                                             {% for category in general_product.categories.all %}
-                                                <li>{{ category.name }}</li>
+                                                <li><p>Catégorie Produit = {{ category.name }}</p></li>
                                             {% endfor %}
                                         </ul>
                             </li>

@@ -17,7 +17,6 @@ class Product(models.Model):
     product_id = models.fields.CharField(max_length=25, primary_key=True)
     categories = models.ManyToManyField(Category)
     url = models.fields.URLField(max_length=500)
-    # image = models.fields.files.ImageField(upload_to='images')
     image_url = models.fields.URLField(max_length=500)
     saved = models.fields.BooleanField(default=False)
 

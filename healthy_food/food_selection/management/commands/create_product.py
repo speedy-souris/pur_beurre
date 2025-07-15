@@ -32,8 +32,8 @@ class Command(BaseCommand):
                                          product_id=product_as_json['product_id'],
                                          nutriscore=product_as_json['nutriscore'],
                                          url=product_as_json['url'],
-                                         image_url=product_as_json['image_url'],))
-            else:
+                                         image_url=product_as_json['image_url'],
+                                         ))
                 # self.stdout.write('le produit existe deja')
                 pass
         Product.objects.bulk_create(products_object_list)
