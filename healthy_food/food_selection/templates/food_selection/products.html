@@ -9,12 +9,19 @@
                 <!--display specific to products searched for-->
                 {% if product_found %}
                     {% if required_product %}
-                        <div class="mt-5 gx-5 gx-lg-3 h-100 align-items-center justify-content-center text-center">
+                        <div class="text-center">
                             <h2>[{{ name }}]</h2>
-                            <div>
-                                <img class="img-fluid" src="{% static 'food_selection/images/image_product/'|add:required_product.product_id|add:'.jpg' %}" alt="...">
-                                {{ required_product.nutriscore }}
+                            <div class="position-relative"><img class="img-fluid" style="width: 280px; height: 450px;"
+                                 src="{% static 'food_selection/images/image_product/'|add:required_product.product_id|add:'.jpg' %}" alt="image produit recherché">
+                                                           <img class="position-absolute top-o end-60" style="width: 80px; height: 80px;"
+                                                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:required_product.nutriscore|add:'.png' %}" alt="nutriscore du produit de substitution">
                             </div>
+                            <p>Nom de Produit = {{ required_product.name }}</p>
+                                        <ul>
+                                            {% for category in required_product.categories.all %}
+                                                <li><p>Catégorie Produit = {{ category.name }}</p></li>
+                                            {% endfor %}
+                                        </ul>
                             <p>Vous pouvez remplacer cet aliment par :</p>
                         </div>
                     {% endif %}
@@ -23,9 +30,11 @@
                 <div class="container-fluid p-0 ">
                     <ul class="row">
                         {% for general_product in page_obj %}
-                            <li class="col-sm-6"><img class="img-fluid"
-                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}">
-
+                            <li class="col-sm-4"><div class="position-relative"><img style="width: 250px; height: 450px;"
+                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="image produit de substitution">
+                                                                                <img class="position-absolute top-o end-50" style="width: 80px; height: 80px;"
+                                                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}" alt="nutriscore du produit de substitution">
+                                                </div>
                                     <!--form to register the products you are looking for with the reference-->
                                     {% if not general_product.saved %}
                                         <form method="post" action="{% url 'food_selection:save_products' %}">
@@ -44,7 +53,6 @@
                                         <p>IDentifiant de Produit Sauvegardé = {{ general_product.product_id }}</p>
                                     {% endif %}
                                     <p>Nom de Produit = {{ general_product.name }}</p>
-                                    <p>Nutrisore du produit = {{ general_product.image_nutrition_score }}</p>
                                         <ul>
                                             {% for category in general_product.categories.all %}
                                                 <li><p>Catégorie Produit = {{ category.name }}</p></li>
