@@ -10,18 +10,23 @@
                 {% if product_found %}
                     {% if required_product %}
                         <div class="text-center">
-                            <h2>[{{ name }}]</h2>
-                            <div class="position-relative"><img class="img-fluid" style="width: 280px; height: 450px;"
-                                 src="{% static 'food_selection/images/image_product/'|add:required_product.product_id|add:'.jpg' %}" alt="image produit recherché">
-                                                           <img class="position-absolute top-o end-60" style="width: 80px; height: 80px;"
-                                                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:required_product.nutriscore|add:'.png' %}" alt="nutriscore du produit de substitution">
+                            <h2>{{ required_product.name }}</h2>
+                            <div class="position-relative d-inline-block">
+                                <img class="img-fluid" style="width: 280px; height: 450px;"
+                                     src="{% static '' %}{% with required_product.product_id|stringformat:'s' as pid %}food_selection/images/image_product/{{ pid }}.jpg{% endwith %}"
+                                     alt="Image du produit : {{ required_product.name }}" />
+
+                                <img class="position-absolute top-0 end-0" style="width: 80px; height: 80px;"
+                                     src="{% static '' %}{% with required_product.nutriscore|stringformat:'s' as ns %}food_selection/images/image_nutriscore/{{ ns }}.png{% endwith %}"
+                                     alt="Nutriscore du produit : {{ required_product.name }}" />
                             </div>
-                            <p>Nom de Produit = {{ required_product.name }}</p>
-                                        <ul>
-                                            {% for category in required_product.categories.all %}
-                                                <li><p>Catégorie Produit = {{ category.name }}</p></li>
-                                            {% endfor %}
-                                        </ul>
+
+                            <p>Nom du produit : {{ required_product.name }}</p>
+                            <ul>
+                                {% for category in required_product.categories.all %}
+                                    <li><p>Catégorie du produit : {{ category.name }}</p></li>
+                                {% endfor %}
+                            </ul>
                             <p>Vous pouvez remplacer cet aliment par :</p>
                         </div>
                     {% endif %}
@@ -31,9 +36,9 @@
                     <ul class="row">
                         {% for general_product in page_obj %}
                             <li class="col-sm-4"><div class="position-relative"><img style="width: 250px; height: 450px;"
-                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="image produit de substitution">
-                                                                                <img class="position-absolute top-o end-50" style="width: 80px; height: 80px;"
-                                                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}" alt="nutriscore du produit de substitution">
+                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="image produit de substitution" />
+                                                                                <img class="position-absolute top-0 end-50" style="width: 80px; height: 80px;"
+                                                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}" alt="nutriscore du produit de substitution" />
                                                 </div>
                                     <!--form to register the products you are looking for with the reference-->
                                     {% if not general_product.saved %}

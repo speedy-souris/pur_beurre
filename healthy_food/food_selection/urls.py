@@ -1,5 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 from food_selection import views
 from food_selection.views import  SavedProductsListView
 
@@ -15,4 +17,4 @@ urlpatterns = [
     path('test_form/', views.TestFormView.as_view(), name='test-form'),
     path("save_products/", views.SaveProductFormView.as_view(), name="save_products"),
     path("saved_products_list/", SavedProductsListView.as_view(), name="saved-list"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from food_selection.models import Product, Category
 import json
 import requests
@@ -69,7 +70,7 @@ class Command(BaseCommand):
             data_as_json = json.loads(product_infos.text)
             for product_as_object in data_as_json['products']:
                 if 'image_url' not in product_as_object:
-                    product_as_object['image_url'] = ''
+                    product_as_object['image_url'] = settings.MEDIA_URL + 'image_vide.png'
 
                 # print(f"product_as_object = {product_as_object}")
                 if 'product_name_fr' not in product_as_object or product_as_object['product_name_fr'] == '':

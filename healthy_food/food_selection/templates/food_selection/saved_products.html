@@ -9,7 +9,7 @@
                 <div class="container-fluid p-0 ">
                     <ul class="row">
                         {% for general_product in page_obj %}
-                            <li class="col-sm-6"><img class="img-fluid"
+                            <li class="col-sm-4"><img class="img-fluid"
                                                       src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="...">
                                 <!--form to register the products you are looking for with the reference-->
                                 {{ general_product.product_id }}
