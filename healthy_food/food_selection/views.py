@@ -1,5 +1,6 @@
 # noinspection PyInterpreter
 from django.contrib.admin.templatetags.admin_list import search_form
+from django.views.generic.detail import DetailView
 from django.shortcuts import render, get_object_or_404
 from food_selection.forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
 from django.views.generic.edit import FormView
@@ -62,15 +63,10 @@ def found(request):
     return render(request,'food_selection/products.html', context)
 
 
-def recorded(request):
-    print('je suis dans les produits favories')
-    context = {
-        'search_form': SearchNewFood(),
-        'product': SaveProductForm(),
-        'page_name': 'Enregistrement',
-    }
-    print(f"context des produits enregistrés = {context}")
-    return render(request, 'food_selection/products.html', context)
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'food_selection/product_detail.html'
+    context_object_name = 'product'
 
 
 def profile(request):
