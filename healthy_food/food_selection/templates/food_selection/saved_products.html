@@ -7,13 +7,15 @@
                 <!--display specific to products searched for-->
                 <!--common display for searched and favourite products-->
                 <div class="container-fluid p-0 ">
-                    <ul class="row">
+                    <div class="row">
                         {% for general_product in page_obj %}
-                            <li class="col-sm-4">
+                            <div class="col-sm-4">
                                 <div class="position-relative d-inline-block mt-5">
-                                    <img style="width: 250px; height: 450px;"
-                                         src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}"
-                                         alt="image produit de substitution" />
+                                    <a href="{% url 'food_selection:product' general_product.product_id %}">
+                                        <img style="width: 250px; height: 450px;"
+                                             src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}"
+                                             alt="image produit de substitution" />
+                                    </a>
                                     <img class="position-absolute top-0 end-0" style="width: 80px; height: 80px;"
                                      src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
                                      alt="Nutriscore du produit : {{ required_product.name }}" />
@@ -28,9 +30,9 @@
                                         <li>{{ category.name }}</li>
                                     {% endfor %}
                                 </ul>
-                            </li>
+                            </div>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </div>
                 <div class="text-center">
                     <span class="step-links">

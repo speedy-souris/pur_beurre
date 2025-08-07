@@ -2,14 +2,14 @@
 {% load static %}
 {% block content %}
     <title>{{ page_name }}</title>
-    <p>Infos Produit</p>
-    <div class="position-relative d-inline-block">
+    <p class="mt-5">Infos Produit</p>
+    <div class="position-relative d-inline-block mt-6">
         <img style="width: 250px; height: 450px;"
              src="{% static 'food_selection/images/image_product/'|add:product.product_id|add:'.jpg' %}"
              alt="image produit selectionné" />
     </div>
     <div> {{ product.name }} </div>
-    <div class="position-relative d-inline-block">
+    <div class="position-relative d-inline-block mt-5">
         <img style="width: 100px; height: 50px;"
              src="{% static 'food_selection/images/image_nutriscore/'|add:'Nutriscore_'|add:product.nutriscore|add:'.jpg' %}"
              alt="nutriscore du produit selectionné" />
