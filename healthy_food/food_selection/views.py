@@ -70,7 +70,7 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_name'] = 'Détails du produi
+        context['page_name'] = 'Détails du produit'
         return context
 
 
@@ -149,7 +149,7 @@ class SavedProductsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object_list'] = Product.objects.filter(saved=True)
+        context['object_list'] = Product.objects.filter(saved=True).order_by('name')
         paginator = Paginator(context['object_list'], 6)  # Show 6 products per page.
         page_number = self.request.GET.get("page", 1)
         page_obj = paginator.get_page(page_number)
