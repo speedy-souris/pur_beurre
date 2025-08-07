@@ -1,7 +1,7 @@
 {% extends 'food_selection/base.html' %}
 {% load static %}
 {% block content %}
-   <div id="portfolio">
+    <div id="portfolio">
         <div class="container-fluid p-5 ">
             <div class="row g-0">
                 <!--display specific to products searched for-->
@@ -9,11 +9,15 @@
                 <div class="container-fluid p-0 ">
                     <ul class="row">
                         {% for general_product in page_obj %}
-                            <li class="col-sm-4"><div class="position-relative d-inline-block"><img style="width: 250px; height: 450px;"
-                                                      src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}" alt="image produit de substitution" />
-                                                                                <img class="position-absolute top-0 end-0" style="width: 80px; height: 80px;"
-                                                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}" alt="nutriscore du produit de substitution" />
-                                                </div>
+                            <li class="col-sm-4">
+                                <div class="position-relative d-inline-block">
+                                    <img style="width: 250px; height: 450px;"
+                                         src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}"
+                                         alt="image produit de substitution" />
+                                    <img class="position-absolute top-0 end-0" style="width: 80px; height: 80px;"
+                                         src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
+                                         alt="nutriscore du produit de substitution" />
+                                </div>
                                 <!--form to register the products you are looking for with the reference-->
                                 <p>IDentifiant de Produit Sauvegardé = {{ general_product.product_id }}</p>
                                 <p>Nom du Produit Sauvegardé = {{ general_product.name }}</p>
