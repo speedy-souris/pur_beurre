@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <div id="portfolio">
-        <div class="container-fluid p-5 ">
+        <div class="container-fluid p-5">
             <div class="row g-0">
                 <!--display specific to products searched for-->
                 <!--common display for searched and favourite products-->
@@ -20,8 +20,6 @@
                                      src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
                                      alt="Nutriscore du produit : {{ required_product.name }}" />
                                 </div>
-
-
                                 <!--form to register the products you are looking for with the reference-->
                                 <p>IDentifiant de Produit Sauvegardé = {{ general_product.product_id }}</p>
                                 <p>Nom du Produit Sauvegardé = {{ general_product.name }}</p>

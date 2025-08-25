@@ -1,48 +1,44 @@
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from food_selection.models import Product
-import requests
 import os
+import requests
 
 class Command(BaseCommand):
-    help = 'Télécharge les images des produits et les stocke localement.'
+    help = "Télécharge les images produit dans static/food_selection/images/image_product"
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--silent',
+            action='store_true',
+            help='Mode silencieux, supprime les logs détaillés'
+        )
 
     def handle(self, *args, **options):
-        products = Product.objects.all()
-        counter = 0
-        images_folder_path = "food_selection/static/food_selection/images/image_product"
+        silent = options['silent']
 
-        # Création du dossier s'il n'existe pas
-        if not os.path.exists(images_folder_path):
-            os.makedirs(images_folder_path)
+        image_dir = os.path.join(settings.BASE_DIR, 'food_selection', 'static', 'food_selection', 'images', 'image_product')
+        os.makedirs(image_dir, exist_ok=True)
 
-        for product in products:
-            counter += 1
+        products = Product.objects.exclude(image_url__isnull=True).exclude(image_url__exact='')
 
-            if counter % max(1, len(products) // 50) == 0:
-                print(f"Téléchargement en cours... {counter}/{len(products)} produits traités")
+        if not silent:
+            self.stdout.write(f"🔄 Démarrage du téléchargement de {products.count()} images produit...")
 
-            image_product_id = product.product_id
-            image_file_path = os.path.join(images_folder_path, f"{image_product_id}.jpg")
-
-            # Ne pas re-télécharger si l'image existe déjà
-            if os.path.exists(image_file_path):
-                continue
-
-            image_url = product.image_url
-
-            # Vérification de l'URL
-            if not image_url or not isinstance(image_url, str) or not image_url.startswith("http"):
-                print(f"URL invalide pour le produit {product.product_id} : {image_url or 'N/A'}")
-                continue
-
+        for i, product in enumerate(products, 1):
             try:
-                response = requests.get(image_url, timeout=10)
-            except requests.exceptions.RequestException as e:
-                print(f"Erreur lors de la récupération de l'image pour {product.product_id} : {e}")
-                continue
+                response = requests.get(product.image_url, timeout=10)
+                response.raise_for_status()
 
-            if response.status_code == 200 and response.content:
-                with open(image_file_path, "wb") as f:
+                file_path = os.path.join(image_dir, f"{product.product_id}.jpg")
+                with open(file_path, 'wb') as f:
                     f.write(response.content)
-            else:
-                print(f"Image non disponible pour le produit {product.product_id} (status {response.status_code})")
+
+                if not silent and i % 50 == 0:
+                    self.stdout.write(f"✅ Images produit téléchargées : {i}/{products.count()}")
+
+            except Exception as e:
+                self.stderr.write(f"❌ Erreur téléchargement image produit {product.product_id} : {e}")
+
+        if not silent:
+            self.stdout.write(self.style.SUCCESS(f"✅ Téléchargement des images produit terminé, {products.count()} images traitées."))

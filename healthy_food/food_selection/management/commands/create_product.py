@@ -1,112 +1,145 @@
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from food_selection.models import Product, Category
-import json
 import requests
 
 class Command(BaseCommand):
-    help = 'Create product and categories for registering products from the openfoodfact site to the database '
+    help = 'Importe les produits et catégories depuis OpenFoodFacts dans la base de données'
+
+    # Catégories au format API (remplace espaces/accents par tirets)
+    CATEGORIES_TO_FETCH = [
+        'pates-alimentaires-de-cereales', 'boissons', 'melanges-de-legumes-frais',
+        'fruits-secs', 'poissons', 'biscottes', 'patisseries', 'fromages',
+        'charcuteries', 'confitures'
+    ]
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--silent',
+            action='store_true',
+            help='Mode silencieux, supprime les logs détaillés'
+        )
 
     @staticmethod
-    def create_categories(categories_as_final_json_list):
-        categories_object_list = set()
-        for category_as_json in categories_as_final_json_list:
-            try:
-                Category.objects.get(name=category_as_json)
-            except Category.DoesNotExist:
-                categories_object_list.add(Category(name=category_as_json))
-            else:
-                pass
-        Category.objects.bulk_create(categories_object_list)
+    def create_categories(categories_list):
+        existing_categories = set(Category.objects.filter(name__in=categories_list).values_list('name', flat=True))
+        new_categories = [Category(name=cat) for cat in set(categories_list) if cat not in existing_categories]
+        Category.objects.bulk_create(new_categories)
 
     @staticmethod
-    def create_products(products_final_json_list):
-        products_object_list = set()
-        for product_as_json in products_final_json_list:
-            if len(product_as_json['nutriscore']) > 1:  # exempple nutriscore = 'NOT-APPLICABLE'
+    def create_products(products_list):
+        existing_product_ids = set(
+            Product.objects.filter(product_id__in=[p['product_id'] for p in products_list]).values_list('product_id', flat=True)
+        )
+        new_products = []
+        for prod in products_list:
+            if len(prod['nutriscore']) != 1:
                 continue
-            try:
-                Product.objects.get(product_id=product_as_json['product_id'])
-            except Product.DoesNotExist:
-                products_object_list.add(Product(name=product_as_json['name'],
-                                         product_id=product_as_json['product_id'],
-                                         nutriscore=product_as_json['nutriscore'],
-                                         url=product_as_json['url'],
-                                         image_url=product_as_json['image_url'],
-                                         image_nutrition_url=product_as_json['image_nutrition_url']
-                                         ))
-                # self.stdout.write('le produit existe deja')
-                pass
-        Product.objects.bulk_create(products_object_list)
+            if prod['product_id'] in existing_product_ids:
+                continue
+            new_products.append(Product(
+                name=prod['name'],
+                product_id=prod['product_id'],
+                nutriscore=prod['nutriscore'],
+                nutriments=prod['nutriments'],
+                url=prod['url'],
+                image_url=prod['image_url'],
+            ))
+            print(f'nutriments = {prod["nutriments"]}')
+        Product.objects.bulk_create(new_products)
 
     @staticmethod
-    def create_relation_categories_products(products_final_json_list):
-        for product_as_json in products_final_json_list:
+    def create_relations(products_list):
+        for prod in products_list:
             try:
-                product_as_object = Product.objects.get(product_id=product_as_json['product_id'])
+                product_obj = Product.objects.get(product_id=prod['product_id'])
             except Product.DoesNotExist:
-                # print("Le produit n'existe pas")
-                pass
-            else:
-                for category_as_json in product_as_json['categories']:
-                    category_as_object = Category.objects.get(name=category_as_json)
-                    # print(f'produit = {product_as_json}')
-                    product_as_object.categories.add(category_as_object)
+                continue
+            for category_name in prod['categories']:
+                try:
+                    category_obj = Category.objects.get(name=category_name)
+                    product_obj.categories.add(category_obj)
+                except Category.DoesNotExist:
+                    pass
 
     def handle(self, *args, **options):
-        products_final_json_list = []
-        categories_object_list = ['pâtes alimentaires de céréales', 'boissons',
-                                  'mélanges de légumes frais', 'fruits secs', 'poissons',
-                                  'biscottes', 'pâtisseries', 'fromages', 'charcuteries', 'confitures']
-        counter = 1
-        for category_as_element in categories_object_list:
-            url = f"https://fr.openfoodfacts.org/api/v1/search?categories_tags_fr={category_as_element}" \
-                  "&fields=code,product_name_fr,nutriscore_grade,categories_tags_fr,url,image_url,image_nutrition_url&page=1&page_size=100"
+        silent = options['silent']
 
-            product_infos = requests.get(url)
-            data_as_json = json.loads(product_infos.text)
-            for product_as_object in data_as_json['products']:
-                # Filtrage produit minimal
-                if 'product_name_fr' not in product_as_object or not product_as_object['product_name_fr']:
-                    continue
-                if 'nutriscore_grade' not in product_as_object or len(product_as_object['nutriscore_grade']) != 1:
+        if not silent:
+            self.stdout.write("🚀 Démarrage de l'importation des produits...")
+
+        products_final = []
+        total_count = 0
+
+        for category_name in self.CATEGORIES_TO_FETCH:
+            url = (
+                f"https://fr.openfoodfacts.org/api/v1/search?categories_tags_fr={category_name}"
+                 "&fields=code,product_name_fr,nutriscore_grade,categories_tags_fr,url,image_url,nutriments"
+                 "&page=1&page_size=100"
+            )
+
+            try:
+                response = requests.get(url, timeout=15)
+                response.raise_for_status()
+                data = response.json()
+            except requests.RequestException as e:
+                if not silent:
+                    self.stderr.write(f"❌ Erreur API pour la catégorie '{category_name}': {e}")
+                continue
+
+            products = data.get('products', [])
+
+            if not silent:
+                self.stdout.write(f"📦 {len(products)} produits trouvés dans la catégorie '{category_name}'")
+
+            for item in products:
+                if not item.get('product_name_fr'):
                     continue
 
-                # Validation des URLs d'images
+                nutriscore = item.get('nutriscore_grade', '').upper()
+                if len(nutriscore) != 1 or nutriscore not in ['A', 'B', 'C', 'D', 'E']:
+                    continue
+
+                nutriments = item.get('nutriments')
+                keys_to_keep = {"sugars_100g", "salt_100g"}
+                nutriments = {key: value for key, value in nutriments.items() if key in keys_to_keep}
+                # print(f' nutriments = {nutriments}')
                 def valid_url(url):
                     return isinstance(url, str) and url.startswith('http')
 
-                image_url = product_as_object.get('image_url')
-                image_nutrition_url = product_as_object.get('image_nutrition_url')
+                image_url = item.get('image_url') if valid_url(item.get('image_url')) else None
 
-                if not valid_url(image_url):
-                    image_url = None
-                if not valid_url(image_nutrition_url):
-                    image_nutrition_url = None
+                categories_filtered = [
+                    c.lower() for c in item.get('categories_tags_fr', [])
+                    if c.lower() in self.CATEGORIES_TO_FETCH
+                ]
 
-                # Filtrer uniquement ceux avec nutriscore correct
-                nutriscore = product_as_object['nutriscore_grade'].upper()
-                if nutriscore not in ['A', 'B', 'C', 'D', 'E']:
-                    continue
-
-                name_object = product_as_object['product_name_fr']
-                categories_limited = [c.lower() for c in product_as_object.get('categories_tags_fr', [])
-                                      if c.lower() in categories_object_list]
-
-                create_final_product_object = {
-                    'name': name_object,
-                    'categories': categories_limited,
+                products_final.append({
+                    'name': item['product_name_fr'],
+                    'product_id': item['code'],
                     'nutriscore': nutriscore,
-                    'url': product_as_object.get('url', ''),
-                    'product_id': product_as_object['code'],
+                    'nutriments': nutriments,
+                    'url': item.get('url', ''),
                     'image_url': image_url,
-                    'image_nutrition_url': image_nutrition_url,
-                }
-                products_final_json_list.append(create_final_product_object)
-                counter += 1
+                    'categories': categories_filtered,
+                })
 
-        categories_as_final_json_list = [cat for prod in products_final_json_list for cat in prod['categories']]
+                total_count += 1
+                if not silent and total_count % 50 == 0:
+                    self.stdout.write(f"➡️ {total_count} produits récupérés...")
 
-        self.create_categories(categories_as_final_json_list)
-        self.create_products(products_final_json_list)
-        self.create_relation_categories_products(products_final_json_list)
+        all_categories = set(cat for prod in products_final for cat in prod['categories'])
+
+        if not silent:
+            self.stdout.write(f"📁 Création de {len(all_categories)} catégories uniques...")
+        self.create_categories(list(all_categories))
+
+        if not silent:
+            self.stdout.write(f"🛒 Création de {len(products_final)} produits...")
+        self.create_products(products_final)
+
+        if not silent:
+            self.stdout.write(f"🔗 Création des relations catégories-produits...")
+        self.create_relations(products_final)
+
+        if not silent:
+            self.stdout.write(self.style.SUCCESS("✅ Importation des produits terminée avec succès !"))

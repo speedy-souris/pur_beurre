@@ -9,3 +9,4 @@ class Command(BaseCommand):
         all_products_db = Product.objects.all()
         for product in all_products_db:
             print(f"effacement de {product.product_id}.jpg")
+

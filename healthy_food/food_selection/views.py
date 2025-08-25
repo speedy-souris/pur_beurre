@@ -70,7 +70,11 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.get_object()  # Récupère l'objet actuel
         context['page_name'] = 'Détails du produit'
+        context['nutriments'] = product.nutriments  # Utilise l'instance
+        context['search_form'] = SearchNewFood()
+        print(context)
         return context
 
 
@@ -122,6 +126,7 @@ class SaveProductFormView(FormView):
             print(f'produit enregistré')
         return super().form_valid(form)
 
+
 class TestFormView(FormView):
     template_name = "food_selection/test_form.html"
     form_class = TestForm
@@ -141,6 +146,7 @@ class TestFormView(FormView):
             product.save()
 
         return super().form_valid(form)
+
 
 class SavedProductsListView(ListView):
     model = Product
