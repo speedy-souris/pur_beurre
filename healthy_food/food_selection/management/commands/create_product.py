@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 url=prod['url'],
                 image_url=prod['image_url'],
             ))
-            print(f'nutriments = {prod["nutriments"]}')
+            # print(f'nutriments = {prod["nutriments"]}')
         Product.objects.bulk_create(new_products)
 
     @staticmethod
@@ -100,7 +100,12 @@ class Command(BaseCommand):
                     continue
 
                 nutriments = item.get('nutriments')
-                keys_to_keep = {"sugars_100g", "salt_100g"}
+                keys_to_keep = {
+                    "sugars_100g", "salt_100g",
+                    "energy_100g", "proteins_100g",
+                    "carbohydrates_100g", "fiber_100g",
+                    "fat_100g", "satured_fat_100g"
+                }
                 nutriments = {key: value for key, value in nutriments.items() if key in keys_to_keep}
                 # print(f' nutriments = {nutriments}')
                 def valid_url(url):
