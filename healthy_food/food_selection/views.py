@@ -18,6 +18,13 @@ def home(request):
     return render(request,'food_selection/home.html',context)
 
 
+def profile(request):
+    context = {'search_form': SearchNewFood(),
+               'page_name': 'Profile'
+                }
+    return render(request,'food_selection/profile.html',context)
+
+
 def found(request):
     product_name = ''
     if request.method == 'GET':
@@ -78,12 +85,6 @@ class ProductDetailView(DetailView):
         return context
 
 
-def profile(request):
-    context = {'page_name': 'Mon compte',
-               'search_form': SearchNewFood(),
-               }
-    return render(request, 'food_selection/profile.html', context)
-
 def contact(request):
     context = {'search_form': SearchNewFood(),
                'contact_form': ContactUsForm(),
@@ -101,11 +102,7 @@ def disclaimer(request):
 def get_better_nutriscore_list(nutriscore):
     """replace a bad nutriscore with better nutriscores (e.g. nutriscore D replaced with nutriscore list A, B, C)"""
     nutriscores = ['A', 'B', 'C', 'D', 'E']
-    if nutriscores.index(nutriscore) == 0:
-        nutriscores_finded = nutriscores[0]
-    else:
-        nutriscores_finded = nutriscores[:nutriscores.index(nutriscore)]
-    return nutriscores_finded
+    return nutriscores[:max(1,nutriscores.index(nutriscore))]
 
 
 class SaveProductFormView(FormView):
