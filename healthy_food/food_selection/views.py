@@ -132,18 +132,18 @@ class TestFormView(FormView):
 
 class SavedProductsListView(ListView):
     model = Product
-    paginate_by = 10
+    paginate_by = 6  # directly here, no need to recreate the paginator
     template_name = 'food_selection/saved_products.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        # Returns only saved products, sorted by name
+        return Product.objects.filter(saved=True).order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object_list'] = Product.objects.filter(saved=True).order_by('name')
-        paginator = Paginator(context['object_list'], 6)  # Show 6 products per page.
-        page_number = self.request.GET.get("page", 1)
-        page_obj = paginator.get_page(page_number)
         context.update({
             'search_form': SearchNewFood(),
-            'page_obj': page_obj,
             'page_name': 'Mes Favoris',
         })
         return context
