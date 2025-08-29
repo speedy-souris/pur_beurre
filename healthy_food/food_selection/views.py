@@ -1,10 +1,8 @@
 # noinspection PyInterpreter
-from django.contrib.admin.templatetags.admin_list import search_form
 from django.views.generic.detail import DetailView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from food_selection.forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
 from django.views.generic.edit import FormView
-from django.urls import reverse_lazy
 from food_selection.models import Product, Category
 from django.core.paginator import Paginator
 from django.views.generic.list import ListView
@@ -26,20 +24,18 @@ def profile(request):
 
 
 def found(request):
-    product_name = ''
-    if request.method == 'GET':
-        search_form = SearchNewFood(request.GET)
-        if search_form.is_valid():
-            product_name = search_form.cleaned_data['product']
-            print(f'nom produit recherché = {product_name}')
-    else:
-        search_form = get_object_or_404(SearchNewFood)
-    product = Product.objects.filter(name__contains=product_name).first()
+    # Instantiate the form with GET data if present
+    search_form = SearchNewFood(request.GET or None)
+    # Retrieve the product name if the form is valid
+    product_name = search_form.cleaned_data['product'] if search_form.is_valid() else ''
+    print(f'nom produit recherché = {product_name}')
+    # Search for the corresponding product
+    product = Product.objects.filter(name__icontains=product_name).first()
     print(f"produit trouvé = {product}")
+    # If no products found
     if not product:
-        product_found = False
         context = {
-            'product_found': product_found,
+            'product_found': False,
             'search_form': SearchNewFood(),
         }
         return render(request, 'food_selection/products.html', context)
@@ -74,12 +70,14 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'food_selection/product_detail.html'
     context_object_name = 'product'
+    slug_field = "product_id"  # field used
+    slug_url_kwarg = "product_id"  # URL parameter
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        product = self.get_object()  # Récupère l'objet actuel
+        product = self.get_object()  # Retrieves the current object
         context['page_name'] = 'Détails du produit'
-        context['nutriments'] = product.nutriments  # Utilise l'instance
+        context['nutriments'] = product.nutriments  # Use the instance
         context['search_form'] = SearchNewFood()
         print(context)
         return context

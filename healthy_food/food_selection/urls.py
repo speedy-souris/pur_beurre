@@ -8,11 +8,12 @@ from food_selection.views import  SavedProductsListView, ProductDetailView
 
 app_name = 'food_selection'
 urlpatterns = [
+    path('', views.home, name='home'),
     path('home/', views.home, name='home'),
     path('found/', views.found, name='found'),
-    path('product/<int:pk>/', ProductDetailView.as_view(), name='product'),
+    path('product/<str:product_id>/', ProductDetailView.as_view(), name='product'),
     path('profile/', views.profile, name='profile'),
-    path('contact-us/', views.contact, name='contact'),
+    path('contact-us/', views.contact, name='contact-us'),
     path('disclaimer/', views.disclaimer, name='disclaimer'),
     path('test_form/', views.TestFormView.as_view(), name='test-form'),
     path("save_products/", views.SaveProductFormView.as_view(), name="save_products"),
