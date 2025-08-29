@@ -14,11 +14,13 @@ class ProductDetailViewTest(TestCase):
         )
 
     def test_product_detail_view_status_code(self):
+        # status 200 on the found page
         url = reverse("food_selection:product", args=[self.product.product_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_product_detail_view_context(self):
+        # view context content ==> search_form & page_name ...
         url = reverse("food_selection:product", args=[self.product.product_id])
         response = self.client.get(url)
 

@@ -29,6 +29,7 @@ class FoundViewTest(TestCase):
         self.assertEqual(response.context['name'], 'TestProduct')
 
     def test_found_view_alternative_products(self):
+        # view alternative_product
         response = self.client.get(reverse('food_selection:found'), {'product': 'TestProduct'})
         alternative_products = response.context['products']
         # Check that alternative products have better Nutriscores than D.
