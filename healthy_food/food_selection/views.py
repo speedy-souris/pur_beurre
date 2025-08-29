@@ -76,9 +76,11 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.get_object()  # Retrieves the current object
-        context['page_name'] = 'Détails du produit'
-        context['nutriments'] = product.nutriments  # Use the instance
-        context['search_form'] = SearchNewFood()
+        context.update({
+            'page_name': 'Détails du produit',
+            'nutriments': product.nutriments,  # Use the instance
+            'search_form': SearchNewFood(),
+        })
         print(context)
         return context
 
