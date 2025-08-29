@@ -13,7 +13,7 @@ class ContactUsForm(forms.Form):
 
 class SaveProductForm(forms.Form):
     product_id = forms.CharField(widget=forms.HiddenInput(), required=True)
-    # product_id = forms.CharField(required=True)
+
 
 class TestForm(forms.Form):
     product_id = forms.CharField(required=True)
