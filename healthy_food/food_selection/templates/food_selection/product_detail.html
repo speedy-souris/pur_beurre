@@ -29,35 +29,35 @@
                     <tbody>
                       <tr>
                         <td>Énergie</td>
-                        <td>{{ product.nutriments.energy_100g }} kcal</td>
+                        <td>{{ product.nutriments.energy_100g|default:"0.00" }} kcal</td>
                       </tr>
                       <tr>
                         <td>Protéines</td>
-                        <td>{{ product.nutriments.proteins_100g }} g</td>
+                        <td>{{ product.nutriments.proteins_100g|default:"0.00" }} g</td>
                       </tr>
                       <tr>
                         <td>Glucides</td>
-                        <td>{{ product.nutriments.carbohydrates_100g }} g</td>
+                        <td>{{ product.nutriments.carbohydrates_100g|default:"0.00" }} g</td>
                       </tr>
                       <tr>
                         <td>Dont sucres</td>
-                        <td>{{ product.nutriments.sugars_100g }} g</td>
+                        <td>{{ product.nutriments.sugars_100g|default:"0.00" }} g</td>
                       </tr>
                       <tr>
                         <td>Fibres</td>
-                        <td>{{ product.nutriments.fiber_100g }} g</td>
+                        <td>{{ product.nutriments.fiber_100g|default:"0.00" }} g</td>
                       </tr>
                       <tr>
                         <td>Sel</td>
-                        <td>{{ product.nutriments.salt_100g }} g</td>
+                        <td>{{ product.nutriments.salt_100g|default:"0.00" }} g</td>
                       </tr>
                       <tr>
                         <td>Matières grasses</td>
-                        <td>{{ product.nutriments.fat_100g }} g</td>
+                        <td>{{ product.nutriments.fat_100g|default:"0.00" }} g</td>
                       </tr>
                       <tr>
                         <td>Dont acides gras saturés</td>
-                        <td>{{ product.nutriments.saturated_fat_100g }} g</td>
+                        <td>{{ product.nutriments.saturated_fat_100g|default:"0.00" }} g</td>
                       </tr>
                     </tbody>
                   </table>
