@@ -154,11 +154,10 @@ class SavedProductsListView(ListView):
         paginator = Paginator(context['object_list'], 6)  # Show 6 products per page.
         page_number = self.request.GET.get("page", 1)
         page_obj = paginator.get_page(page_number)
-        context = {
-            page_obj.number: page_obj.number,
+        context.update({
             'search_form': SearchNewFood(),
             'page_obj': page_obj,
             'page_name': 'Mes Favoris',
-        }
+        })
         print(f'page_obj = {context["page_obj"]}')
         return context
