@@ -4,7 +4,7 @@ from food_selection.models import Product
 
 class SavedProductsListViewTest(TestCase):
     def setUp(self):
-        # Produit sauvegardé
+        # Saved product
         self.saved_product = Product.objects.create(
             name="Riz complet",
             product_id="111111",
@@ -15,7 +15,7 @@ class SavedProductsListViewTest(TestCase):
             saved=True,
         )
 
-        # Produit NON sauvegardé
+        # Product NOT saved
         self.unsaved_product = Product.objects.create(
             name="Chips",
             product_id="222222",
@@ -27,20 +27,16 @@ class SavedProductsListViewTest(TestCase):
         )
 
     def test_only_saved_products_listed(self):
-        """
-        Vérifie que seuls les produits avec saved=True apparaissent
-        """
+        # Verify that only products with saved=True appear
         url = reverse("food_selection:saved-list")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Riz complet")   # doit apparaître
-        self.assertNotContains(response, "Chips")      # ne doit PAS apparaître
+        self.assertContains(response, "Riz complet")   # must appear
+        self.assertNotContains(response, "Chips")      # should NOT appear
 
     def test_context_contains_expected_keys(self):
-        """
-        Vérifie que le contexte contient search_form, page_obj et page_name
-        """
+           # Verify that the context contains search_form, page_obj, and page_name.
         url = reverse("food_selection:saved-list")
         response = self.client.get(url)
 
@@ -49,10 +45,8 @@ class SavedProductsListViewTest(TestCase):
         self.assertEqual(response.context["page_name"], "Mes Favoris")
 
     def test_pagination_limit(self):
-        """
-        Vérifie que la pagination limite à 6 produits par page
-        """
-        # On crée 12 produits sauvegardés
+        # Verify that pagination is limited to 6 products per page
+        # We create 12 saved products.
         for i in range(12):
             Product.objects.create(
                 name=f"Produit {i}",
@@ -68,5 +62,5 @@ class SavedProductsListViewTest(TestCase):
         response = self.client.get(url)
 
         page_obj = response.context["page_obj"]
-        self.assertEqual(len(page_obj.object_list), 6)  # doit être limité à 6
-        self.assertTrue(page_obj.has_next())  # doit avoir une 2ème page
+        self.assertEqual(len(page_obj.object_list), 6)  # must be limited to 6
+        self.assertTrue(page_obj.has_next())  # must have a second page
