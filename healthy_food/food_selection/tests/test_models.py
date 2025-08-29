@@ -53,3 +53,22 @@ class ProductModelTest(TestCase):
                 image_url="https://example.com/biscuits.jpg",
                 saved=False
             )
+
+
+class CategoryModelTest(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name="Snacks")
+
+    def test_category_creation(self):
+        # Verify that the category has been created
+        self.assertEqual(self.category.name, "Snacks")
+        self.assertTrue(isinstance(self.category, Category))
+
+    def test_str_method(self):
+        # Verify that __str__ returns the name
+        self.assertEqual(str(self.category), "Snacks")
+
+    def test_unique_name_constraint(self):
+        # Verify that two categories cannot be created with the same name
+        with self.assertRaises(IntegrityError):
+            Category.objects.create(name="Snacks")  # same PK ==> error
