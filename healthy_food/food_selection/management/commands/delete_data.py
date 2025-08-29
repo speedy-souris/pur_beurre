@@ -1,14 +1,26 @@
 from django.core.management.base import BaseCommand
 from food_selection.models import Product, Category
 
-
 class Command(BaseCommand):
-    help = 'deleting data from the database'
+    help = "Supprime toutes les données de la base"
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--silent',
+            action='store_true',
+            help='Mode silencieux, supprime les logs détaillés'
+        )
 
     def handle(self, *args, **options):
+        silent = options['silent']
         all_products_db = Product.objects.all()
-        print(f'effacement de {len(all_products_db)} produits')
-        all_products_db.delete()
         all_categories_db = Category.objects.all()
-        print(f'effacement de {len(all_categories_db)} categories')
+
+        if not silent:
+            self.stdout.write("🚀 Suppression des produits et catégories...")
+
+        all_products_db.delete()
         all_categories_db.delete()
+
+        if not silent:
+            self.stdout.write(self.style.SUCCESS("✅ Suppression terminée"))
