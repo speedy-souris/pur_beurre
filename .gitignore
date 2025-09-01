@@ -57,4 +57,5 @@ Thumbs.db
 # .gitignore
 db.json
 db2.json
-**/images/
+healthy_food/food_selection/static/food_selection/images/
+
