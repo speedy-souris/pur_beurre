@@ -7,8 +7,8 @@ class Command(BaseCommand):
 
     # Catégories au format API (remplace espaces/accents par tirets)
     CATEGORIES_TO_FETCH = [
-        'pates-alimentaires-de-cereales', 'boissons', 'melanges-de-legumes-frais',
-        'fruits-secs', 'poissons', 'biscottes', 'patisseries', 'fromages',
+        'pâtes alimentaires  de céréales', 'boissons', 'mélanges de légumes frais',
+        'fruits secs', 'poissons', 'biscottes', 'pâtisseries', 'fromages',
         'charcuteries', 'confitures'
     ]
 
