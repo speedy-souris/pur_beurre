@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from food_selection.models import Product, Category
 
 class Command(BaseCommand):
-    help = "Supprime toutes les données de la base"
+    help = "Deletes all data from the database"
 
     def add_arguments(self, parser):
         parser.add_argument(

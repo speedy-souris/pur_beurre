@@ -5,7 +5,7 @@ import os
 import requests
 
 class Command(BaseCommand):
-    help = "Télécharge les images produit dans static/food_selection/images/image_product"
+    help = "Download the product images in static/food_selection/images/image_product"
 
     def add_arguments(self, parser):
         parser.add_argument(

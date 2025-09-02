@@ -1,5 +1,5 @@
 from django.test import TestCase
-from food_selection.views import get_better_nutriscore_list  # adapte le chemin si nécessaire
+from food_selection.views import get_better_nutriscore_list
 
 class NutriscoreUtilsTest(TestCase):
 

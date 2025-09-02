@@ -3,9 +3,9 @@ from food_selection.models import Product, Category
 import requests
 
 class Command(BaseCommand):
-    help = 'Importe les produits et catégories depuis OpenFoodFacts dans la base de données'
+    help = 'Imports products and categories from OpenFoodFacts into the database'
 
-    # Catégories au format API (remplace espaces/accents par tirets)
+    # Categories in API format (replace spaces/accents with hyphens)
     CATEGORIES_TO_FETCH = [
         'pâtes alimentaires  de céréales', 'boissons', 'mélanges de légumes frais',
         'fruits secs', 'poissons', 'biscottes', 'pâtisseries', 'fromages',
@@ -64,10 +64,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         silent = options['silent']
 
+        # Set the default image path once
+        DEFAULT_IMAGE_PATH = 'food_selection/images/image_vide.png'
+
         if not silent:
             self.stdout.write("🚀 Démarrage de l'importation des produits...")
 
         products_final = []
+        seen_product_ids = set()  # <--- ADDITION: To track IDs already processed
         total_count = 0
 
         for category_name in self.CATEGORIES_TO_FETCH:
@@ -92,6 +96,12 @@ class Command(BaseCommand):
                 self.stdout.write(f"📦 {len(products)} produits trouvés dans la catégorie '{category_name}'")
 
             for item in products:
+                product_id = item.get('code')
+
+                # ADDITION: Check whether the product has already been processed in this run.
+                if not product_id or product_id in seen_product_ids:
+                    continue
+
                 if not item.get('product_name_fr'):
                     continue
 
@@ -107,11 +117,14 @@ class Command(BaseCommand):
                     "fat_100g", "satured_fat_100g"
                 }
                 nutriments = {key: value for key, value in nutriments.items() if key in keys_to_keep}
-                # print(f' nutriments = {nutriments}')
                 def valid_url(url):
                     return isinstance(url, str) and url.startswith('http')
 
-                image_url = item.get('image_url') if valid_url(item.get('image_url')) else None
+                # We retrieve the image URL from the API.
+                image_url = item.get('image_url')
+                # If the URL is invalid, we assign our default path.
+                if not valid_url(image_url):
+                    image_url = DEFAULT_IMAGE_PATH
 
                 categories_filtered = [
                     c.lower() for c in item.get('categories_tags_fr', [])
@@ -120,13 +133,15 @@ class Command(BaseCommand):
 
                 products_final.append({
                     'name': item['product_name_fr'],
-                    'product_id': item['code'],
+                    'product_id': product_id, # Use the variable
                     'nutriscore': nutriscore,
                     'nutriments': nutriments,
                     'url': item.get('url', ''),
                     'image_url': image_url,
                     'categories': categories_filtered,
                 })
+
+                seen_product_ids.add(product_id)  # <--- ADDITION: Mark this ID as processed
 
                 total_count += 1
                 if not silent and total_count % 50 == 0:
