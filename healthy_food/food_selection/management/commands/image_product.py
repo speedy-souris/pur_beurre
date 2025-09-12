@@ -38,7 +38,8 @@ class Command(BaseCommand):
                     self.stdout.write(f"✅ Images produit téléchargées : {i}/{products.count()}")
 
             except Exception as e:
-                self.stderr.write(f"❌ Erreur téléchargement image produit {product.product_id} : {e}")
+                if not silent:
+                    self.stderr.write(f"❌ Erreur téléchargement image produit {product.product_id} : {e}")
 
         if not silent:
             self.stdout.write(self.style.SUCCESS(f"✅ Téléchargement des images produit terminé, {products.count()} images traitées."))
