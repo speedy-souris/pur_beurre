@@ -1,38 +1,58 @@
 {% extends 'food_selection/base.html' %}
 {% load static %}
+
 {% block content %}
     <div id="portfolio">
         <div class="container-fluid p-5">
             <div class="row g-0">
-                <!--display specific to products searched for-->
-                <!--common display for searched and favourite products-->
-                <div class="container-fluid p-0 ">
-                    <div class="row">
+                <!-- common display for searched and favourite products -->
+                <div class="container-fluid p-0">
+                    <div class="row mt-5">
+                        <h1 class="text-warning text-center mb-4">Produits Sauvegardés</h1>
                         {% for general_product in page_obj %}
-                            <div class="col-sm-4">
-                                <div class="position-relative d-inline-block mt-5">
-                                    <a href="{% url 'food_selection:product' general_product.product_id %}">
-                                        <img style="width: 250px; height: 450px;"
-                                             src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}"
-                                             alt="image produit de substitution" />
-                                    </a>
-                                    <img class="position-absolute top-0 end-0" style="width: 80px; height: 80px;"
-                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
-                                     alt="Nutriscore du produit : {{ required_product.name }}" />
+                            <!-- Add mb-4 for vertical spacing between lines -->
+                            <div class="col-sm-4 mb-4">
+                                <!-- 1. Using a Bootstrap Card for uniform structure and height -->
+                                <div class="card h-100 d-flex flex-column">
+
+                                    <!-- 2. Fixed height container (e.g., 300px) with Flexbox to center the image -->
+                                    <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 300px;">
+
+                                        <!-- 3. The <a> link is the relative wrapper that adapts to the size of the image -->
+                                        <a href="{% url 'food_selection:product' general_product.product_id %}" class="position-relative d-inline-block">
+
+                                            <!-- 4. The product image, undistorted, never exceeds its container -->
+                                            <img src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}"
+                                                 style="max-width: 100%; max-height: 300px; display: block;"
+                                                 alt="Image du produit : {{ general_product.name }}" />
+
+                                            <!-- 5. Nutri-Score, positioned in relation to the actual image -->
+                                            <img class="position-absolute top-0 end-0 m-2" style="width: 60px; height: auto; z-index: 10;"
+                                                 src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
+                                                 alt="Nutriscore du produit : {{ general_product.name }}" />
+                                        </a>
+                                    </div>
+
+                                    <!-- 6. Text content is placed in the body of the card for proper alignment -->
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ general_product.name }}</h5>
+                                        <p class="card-text"><small class="text-muted">ID du Produit : {{ general_product.product_id }}</small></p>
+
+                                        <!-- Using an unordered list for categories -->
+                                        <ul class="list-unstyled">
+                                            {% for category in general_product.categories.all %}
+                                                <li>{{ category.name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                 </div>
-                                <!--form to register the products you are looking for with the reference-->
-                                <p>IDentifiant de Produit Sauvegardé = {{ general_product.product_id }}</p>
-                                <p>Nom du Produit Sauvegardé = {{ general_product.name }}</p>
-                                <ul>
-                                    {% for category in general_product.categories.all %}
-                                        <li>{{ category.name }}</li>
-                                    {% endfor %}
-                                </ul>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
-                <div class="text-center">
+
+                <!-- Pagination remains unchanged -->
+                <div class="text-center mt-4"> <!-- Adding a margin above the pagination -->
                     <span class="step-links">
                         {% if page_obj.has_previous %}
                             <a href="?page=1">&laquo;</a>
