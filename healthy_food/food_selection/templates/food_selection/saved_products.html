@@ -39,9 +39,9 @@
                                         <p class="card-text"><small class="text-muted">ID du Produit : {{ general_product.product_id }}</small></p>
 
                                         <!-- Using an unordered list for categories -->
-                                        <ul class="list-unstyled">
+                                        <ul class="list-inline">
                                             {% for category in general_product.categories.all %}
-                                                <li>{{ category.name }}</li>
+                                                <li class="list-inline-item"><small class="text-muted">{{ category.name }},</small></li>
                                             {% endfor %}
                                         </ul>
                                     </div>

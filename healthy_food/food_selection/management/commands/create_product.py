@@ -1,16 +1,10 @@
 from django.core.management.base import BaseCommand
 from food_selection.models import Product, Category
+from django.conf import settings
 import requests
 
 class Command(BaseCommand):
     help = 'Imports products and categories from OpenFoodFacts into the database'
-
-    # Categories in API format (replace spaces/accents with hyphens)
-    CATEGORIES_TO_FETCH = [
-        'pâtes alimentaires  de céréales', 'boissons', 'mélanges de légumes frais',
-        'fruits secs', 'poissons', 'biscottes', 'pâtisseries', 'fromages',
-        'charcuteries', 'confitures'
-    ]
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -73,8 +67,8 @@ class Command(BaseCommand):
         products_final = []
         seen_product_ids = set()  # <--- ADDITION: To track IDs already processed
         total_count = 0
-
-        for category_name in self.CATEGORIES_TO_FETCH:
+        # Use the list of settings
+        for category_name in settings.MAIN_PRODUCT_CATEGORIES:
             url = (
                 f"https://fr.openfoodfacts.org/api/v1/search?categories_tags_fr={category_name}"
                  "&fields=code,product_name_fr,nutriscore_grade,categories_tags_fr,url,image_url,nutriments"
@@ -125,10 +119,9 @@ class Command(BaseCommand):
                 # If the URL is invalid, we assign our default path.
                 if not valid_url(image_url):
                     image_url = DEFAULT_IMAGE_PATH
-
-                categories_filtered = [
-                    c.lower() for c in item.get('categories_tags_fr', [])
-                    if c.lower() in self.CATEGORIES_TO_FETCH
+                # The rest of your filter code now also uses the list of settings.
+                categories_filtered = [c.lower() for c in item.get('categories_tags_fr', [])
+                                       if c.lower() in settings.MAIN_PRODUCT_CATEGORIES
                 ]
 
                 products_final.append({

@@ -70,7 +70,7 @@ class ImportProductsCommandTest(TestCase):
         # We configure the mock to behave like a successful API response.
         mock_response = Mock()
         mock_response.raise_for_status.return_value = None  # Simulates an HTTP 200 OK response
-        mock_response.json.return_value = MOCK_API_RESPONSE # Retourne nos données de test
+        mock_response.json.return_value = MOCK_API_RESPONSE # Return our test data
         mock_get.return_value = mock_response
 
         # --- Execution ---
@@ -108,7 +108,7 @@ class ImportProductsCommandTest(TestCase):
         self.assertEqual(mock_get.call_count, 10)
         # You can even check the URL of the first call.
         first_call_url = mock_get.call_args_list[0][0][0] # Extract the URL from the first call
-        self.assertIn("pâtes alimentaires  de céréales", first_call_url)
+        self.assertIn("pâtes alimentaires de céréales", first_call_url)
 
     @patch('requests.get')
     def test_handle_command_api_error(self, mock_get):

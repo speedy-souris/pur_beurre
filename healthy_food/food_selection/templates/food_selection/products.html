@@ -29,13 +29,14 @@
                                 </a>
                             </div>
                             <p>Nom du produit : {{ required_product.name }}</p>
-                            <ul style="text-align: center; list-style-position: inside;">
-                                {% for category in required_product.categories.all %}
-                                    <li>
-                                        Catégorie du produit : {{ category.name }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            <div class="text-center">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><strong>Catégories :</strong></li>
+                                    {% for category in required_product.categories.all %}
+                                        <li class="list-inline-item">{{ category.name }}{% if not forloop.last %},{% endif %}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                             <p>Vous pouvez remplacer cet aliment par :</p>
 
                         </div>
@@ -60,9 +61,9 @@
                                     </div>
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">{{ general_product.name }}</h5>
-                                        <ul class="list-unstyled">
+                                        <ul class="list-inline">
                                             {% for category in general_product.categories.all %}
-                                                <li><small class="text-muted">{{ category.name }}</small></li>
+                                                <li class="list-inline-item"><small class="text-muted">{{ category.name }}, </small></li>
                                             {% endfor %}
                                         </ul>
                                         <div class="mt-auto">

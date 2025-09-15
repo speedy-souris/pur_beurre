@@ -133,3 +133,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Default image root
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 MEDIA_URL = '/images/'
+
+# ==================================================================
+# CUSTOM PROJECT SETTINGS
+# ==================================================================
+
+# List of main categories used for searching for substitutes
+MAIN_PRODUCT_CATEGORIES = [
+    'pâtes alimentaires de céréales', 'boissons', 'mélanges de légumes frais',
+    'fruits secs', 'poissons', 'biscottes', 'pâtisseries', 'fromages',
+    'charcuteries', 'confitures'
+]
