@@ -7,13 +7,14 @@ class FoundViewTest(TestCase):
 
     def setUp(self):
         # Create a category and product for testing
-        self.category = Category.objects.create(name="TestCategory")
+        self.category1 = Category.objects.create(name="TestCategory1")
+        self.category2 = Category.objects.create(name="TestCategory2")
         self.product = Product.objects.create(
             name="TestProduct",
             nutriscore="D",
             pk='1',
         )
-        self.product.categories.add(self.category)
+        self.product.categories.add(self.category1)
 
     def test_found_view_status_code(self):
         # status 200 on the found page
@@ -34,3 +35,19 @@ class FoundViewTest(TestCase):
         alternative_products = response.context['products']
         # Check that alternative products have better Nutriscores than D.
         self.assertTrue(all(p.nutriscore in ['A', 'B', 'C'] for p in alternative_products))
+
+    def test_found_view_with_multiple_categories(self):
+        # Add a second category to the product for this specific test
+        self.product.categories.add(self.category2)
+        # Make a request to the found view
+        response = self.client.get(reverse('food_selection:found'), {'product': 'TestProduct'})
+        # Check that the response is successful
+        self.assertEqual(response.status_code, 200)
+        # Get the product from the context
+        product_in_context = response.context['required_product']
+        # Check that the product in the context has the correct number of categories
+        self.assertEqual(product_in_context.categories.count(), 2)
+        # Check that the product's categories are the ones we assigned
+        categories_in_context = list(product_in_context.categories.all())
+        self.assertIn(self.category1, categories_in_context)
+        self.assertIn(self.category2, categories_in_context)
