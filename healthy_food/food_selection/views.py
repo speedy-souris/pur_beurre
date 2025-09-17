@@ -1,5 +1,4 @@
 # noinspection PyInterpreter
-from django.conf import settings
 from django.views.generic.detail import DetailView
 from django.shortcuts import render
 from food_selection.forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
@@ -42,15 +41,13 @@ def found(request):
     # 1. We retrieve all product categories.
     all_product_categories = [category.name for category in product.categories.all()]
     # 2. On ne garde QUE les catégories qui sont dans notre liste principale des settings
-    relevant_categories = [
-        cat for cat in all_product_categories #if cat in settings.MAIN_PRODUCT_CATEGORIES
-    ]
+    relevant_categories = [cat for cat in all_product_categories]
     # 3. Fallback plan: if no main category is found,
     # We use all categories to at least get some results.
     if not relevant_categories:
         relevant_categories = all_product_categories
     alternative_products = Product.objects.filter(categories__name__in=relevant_categories,
-                                                  nutriscore__in=better_nutriscores).order_by('nutriscore')#.distinct()
+                                                  nutriscore__in=better_nutriscores).order_by('nutriscore').distinct()
     paginator = Paginator(alternative_products, 6)  # Show 6 products per page.
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)

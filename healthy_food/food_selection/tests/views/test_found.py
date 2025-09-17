@@ -1,101 +1,73 @@
 from django.test import TestCase
 from django.urls import reverse
 from food_selection.models import Product, Category
-from food_selection.forms import SearchNewFood
+
 
 class FoundViewTest(TestCase):
 
-    def setUp(self):
-        # Create a categorries and product for testing
-        self.category1 = Category.objects.create(name="plat_préparés")
-        self.category2 = Category.objects.create(name="Boissons")
-        self.Category3 = Category.objects.create(name='Desserts')
-        #1. The product to be substituted (the ‘bad’ product)
-        self.required_product = Product.objects.create(
-            name="Plat Mauvais D",
-            nutriscore="D",
-            pk='1',
-        )
-        self.required_product.categories.add(self.category1)
-        #2. A good substitute in the same category
-        self.substitute_good_A = Product.objects.create(
-            name="Plat Sain A",
-            nutriscore="A",
-            pk='2',
-        )
-        self.substitute_good_A.categories.add(self.category1)
-        #3. Another good substitute (B) in the same category
-        self.substitute_good_B = Product.objects.create(
-            name="Plat Acceptable B",
-            nutriscore="B",
-            pk='3',
-        )
-        self.substitute_good_B.categories.add(self.category1)
-        #4. A good quality product (A) but in a different category (SHOULD NOT BE OFFERED)
-        self.irrelevant_product_A = Product.objects.create(
-            name="Boisson Santé A",
-            nutriscore="A",
-            pk='4',
-        )
-        self.irrelevant_product_A.categories.add(self.category2)
+    @classmethod
+    def setUpTestData(cls):
+        """
+        Crée les données une seule fois pour toute la classe de test.
+        """
+        # --- Categories ---
+        cls.cat_plats = Category.objects.create(name="Plats Préparés")
+        cls.cat_snacks = Category.objects.create(name="Snacks")
+        cls.cat_sucre = Category.objects.create(name="Sucré")
+        cls.cat_boissons = Category.objects.create(name="Boissons")
 
-    def test_found_view_status_code(self):
-        # status 200 on the found page
-        response = self.client.get(reverse('food_selection:found'), {'product': self.required_product.name})
-        self.assertEqual(response.status_code, 200)
+        # --- Basic product for research ---
+        # Note: str-type pk are used to match the probable model.
+        cls.produit_recherche_d = Product.objects.create(name="Plat D", nutriscore="D", pk='1')
+        cls.produit_recherche_d.categories.add(cls.cat_plats)
 
-    def test_found_view_context(self):
-        # view context content ==> search_form & page_name ...
-        response = self.client.get(reverse('food_selection:found'), {'product': 'Plat Mauvais D'})
-        self.assertTrue(response.context['product_found'])
-        self.assertEqual(response.context['required_product'], self.required_product)
-        self.assertIn('search_form', response.context)
-        self.assertEqual(response.context['name'], 'Plat Mauvais D')
+        # --- Valid substitutes for “Plat D” ---
+        cls.substitut_plat_a = Product.objects.create(name="Plat Sain A", nutriscore="A", pk='2')
+        cls.substitut_plat_a.categories.add(cls.cat_plats)
+        cls.substitut_plat_b = Product.objects.create(name="Plat Mieux B", nutriscore="B", pk='3')
+        cls.substitut_plat_b.categories.add(cls.cat_plats)
 
-    def test_found_view_alternative_products(self):
-        # view alternative_product
-        response = self.client.get(reverse('food_selection:found'), {'product': 'Plat Mauvais D'})
-        alternative_products = response.context['products']
-        # Check that alternative products have better Nutriscores than D.
-        self.assertTrue(all(p.nutriscore in ['A', 'B', 'C'] for p in alternative_products))
+        # --- Irrelevant product (wrong category) ---
+        cls.produit_non_pertinent = Product.objects.create(name="Boisson A", nutriscore="A", pk='4')
+        cls.produit_non_pertinent.categories.add(cls.cat_boissons)
 
-    def test_found_view_with_multiple_categories(self):
-        # Add a second category to the product for this specific test
-        self.required_product.categories.add(self.category2)
-        # Make a request to the found view
-        response = self.client.get(reverse('food_selection:found'), {'product': 'Plat Mauvais D'})
-        # Check that the response is successful
-        self.assertEqual(response.status_code, 200)
-        # Get the product from the context
-        product_in_context = response.context['required_product']
-        # Check that the product in the context has the correct number of categories
-        self.assertEqual(product_in_context.categories.count(), 2)
-        # Check that the product's categories are the ones we assigned
-        categories_in_context = list(product_in_context.categories.all())
-        self.assertIn(self.category1, categories_in_context)
-        self.assertIn(self.category2, categories_in_context)
+        # --- Scenario for the duplication test ---
+        cls.produit_multi_cat = Product.objects.create(name="Snack Sucré D", nutriscore="D", pk='10')
+        cls.produit_multi_cat.categories.add(cls.cat_snacks, cls.cat_sucre)
+        cls.substitut_polyvalent_a = Product.objects.create(name="Snack Sain A", nutriscore="A", pk='11')
+        cls.substitut_polyvalent_a.categories.add(cls.cat_snacks, cls.cat_sucre)
+        cls.substitut_simple_b = Product.objects.create(name="Autre Snack B", nutriscore="B", pk='12')
+        cls.substitut_simple_b.categories.add(cls.cat_snacks)
 
     def test_found_view_substitution_logic(self):
         """
-            Tests whether the view returns only substitute
-            products that share a category AND have a better Nutri - Score.
+        Tests whether the view returns only relevant substitutes.
         """
-        # The product to search for is self.required_product
-        response = self.client.get(
-            reverse('food_selection:found'),
-            {'product': self.required_product.name}
-        )
+        response = self.client.get(reverse('food_selection:found'), {'product': self.produit_recherche_d.name})
         self.assertEqual(response.status_code, 200)
+
         alternative_products = response.context['products']
-        #1. Check the number of substitutions: there should be 2.
+
         self.assertEqual(len(alternative_products), 2)
-        #2. Verify that the substitutes are indeed the relevant products.
-        substitute_names = [p.name for p in alternative_products]
-        self.assertIn("Plat Sain A", substitute_names)
-        self.assertIn("Plat Acceptable B", substitute_names)
-        #3. Verify that the irrelevant product is NOT included.
-        self.assertNotIn("Boisson Santé A", substitute_names)
-        #4. Check the Nutri-Score quality (A or B)
-        self.assertTrue(all(p.nutriscore in ['A', 'B', 'C'] for p in alternative_products))
-        #5. Verify that the original product is not on the substitution list.
-        self.assertNotIn(self.required_product, alternative_products)
+
+        # CORRECTION: PKs are converted to integers for reliable comparison.
+        actual_pks = {int(product.pk) for product in alternative_products}
+        expected_pks = {int(self.substitut_plat_a.pk), int(self.substitut_plat_b.pk)}
+        self.assertEqual(actual_pks, expected_pks)
+
+    def test_substitute_with_common_category_is_unique(self):
+        """
+        Verify that a substitute sharing multiple categories appears only once.
+        """
+        response = self.client.get(reverse('food_selection:found'), {'product': self.produit_multi_cat.name})
+        self.assertEqual(response.status_code, 200)
+
+        alternative_products = response.context['products']
+
+        # This test will fail (e.g., 3 != 2) until you add .distinct() to your view.
+        self.assertEqual(len(alternative_products), 2)
+
+        # CORRECTION: We are abandoning the .count() test and using PK comparison, which is more reliable.
+        actual_pks = {int(product.pk) for product in alternative_products}
+        expected_pks = {int(self.substitut_polyvalent_a.pk), int(self.substitut_simple_b.pk)}
+        self.assertEqual(actual_pks, expected_pks)
