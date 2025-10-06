@@ -1,14 +1,19 @@
-# Installation du projet pur_beurre sur PC équipé de linux a partir de github 
+# Installation du projet pur_beurre sur PC équipé de linux a partir de github
+## I. Créé un environnement de travail pour ce projet
 Dans un terminal (console pour ligne de commande)
 créer un environement virtuel avec la commande :
 ```shell
 python3 -m venv env
 ```
 
-activer l'environement virtuel avec la commande :
+Dans le répertoire de l'environnement virtuel, activer l'environement virtuel avec la commande :
 
 ```shell
 source env/bin/activate
+```
+ou
+```shell
+. env/bin/activate
 ```
 
 installer git avec la commande : (hors de l`environnement virtuel)
@@ -20,9 +25,8 @@ git init
 ensuite taper la commande :
 ```shell
 git clone https://github.com/YOUR_USER_NAME/projet_purBeurre.git pour une connexion HTTPS
- ```
+```
 ou
-
 ```shell
 git clone git@github.com:YOUR_USER_NALE/projet_purBeurre.git pour une connexion SSH
 ```
@@ -54,4 +58,24 @@ dans l'environement virtuel
 creer un administrateur pour la base de données
 ```shell
 python manage.py createsuperuser
+```
+## II. Création de la base donnée de deux manières distincts
+### 1. Initialisé chaque commande dans l'ordre
+```shell
+# 1. Effacer les anciennes données
+python manage.py delete_all_data
+
+# 2. Effacer le repertoire image_product avec toutes les anciennes images produits
+python manage.py delete_image_dir
+
+# 3. Creation de la nouvelle base de données de produits
+python manage.py create_product
+
+# 4. Creation du nouveau répertoire image_product avec les nouvelles images de chaque produit
+python manage.py image_product
+```
+### 2. Initialisé une unique commande
+```shell
+# 1. Réalise toutes les commandes de la méthode 1 dans l'ordre
+python manage.py full_import
 ```
