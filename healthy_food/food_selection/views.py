@@ -24,45 +24,48 @@ def profile(request):
 
 
 def found(request):
-    # Instantiate the form with GET data if present
     search_form = SearchNewFood(request.GET or None)
-    # Retrieve the product name if the form is valid
-    product_name = search_form.cleaned_data['product'] if search_form.is_valid() else ''
-    # Search for the corresponding product
-    product = Product.objects.filter(name__icontains=product_name).first()
-    # If no products found
-    if not product:
-        context = {
-            'product_found': False,
-            'search_form': SearchNewFood(),
-        }
+    context = {'search_form': search_form, 'page_name': 'Résultats', 'page_obj': []}
+
+    if not search_form.is_valid() or not search_form.cleaned_data.get('product'):
         return render(request, 'food_selection/products.html', context)
-    better_nutriscores = get_better_nutriscore_list(product.nutriscore)
-    # 1. We retrieve all product categories.
-    all_product_categories = [category.name for category in product.categories.all()]
-    # 2. On ne garde QUE les catégories qui sont dans notre liste principale des settings
-    relevant_categories = [cat for cat in all_product_categories]
-    # 3. Fallback plan: if no main category is found,
-    # We use all categories to at least get some results.
-    if not relevant_categories:
-        relevant_categories = all_product_categories
-    alternative_products = Product.objects.filter(categories__name__in=relevant_categories,
-                                                  nutriscore__in=better_nutriscores).order_by('nutriscore').distinct()
-    paginator = Paginator(alternative_products, 6)  # Show 6 products per page.
-    page_number = request.GET.get("page", 1)
-    page_obj = paginator.get_page(page_number)
-    for general_product in page_obj:
-        general_product.form = SaveProductForm(initial={'product_id': general_product.product_id})
-    context = {
-        'name': product_name,
-        'products': alternative_products,
-        'search_form': search_form,
-        "page_obj": page_obj,
-        'product_found': True,
-        'page_name': 'Résultats',
-        'required_product': product,
-    }
-    return render(request,'food_selection/products.html', context)
+
+    product_name = search_form.cleaned_data['product']
+    context['name'] = product_name
+
+    possible_products = Product.objects.filter(name__icontains=product_name)
+
+    if possible_products.exists():
+        original_product = possible_products.first()
+
+        context.update({
+            'product_found': True,
+            'required_product': original_product,
+        })
+
+        original_product_categories = original_product.categories.all()
+
+        if original_product_categories.exists():
+            alternative_products = Product.objects.filter(
+                categories__in=original_product_categories,
+                nutriscore__lt=original_product.nutriscore
+            ).exclude(pk=original_product.pk).distinct().order_by('nutriscore')
+
+            paginator = Paginator(alternative_products, 6)
+            page_number = request.GET.get("page", 1)
+            page_obj = paginator.get_page(page_number)
+
+            for product_in_page in page_obj:
+                initial_data = {'product_id': product_in_page.pk}
+                product_in_page.form = SaveProductForm(initial=initial_data)
+
+            context['page_obj'] = page_obj
+
+    else:
+        context['product_found'] = False
+        context['error_message'] = f"Aucun produit ne correspond à votre recherche '{product_name}'."
+
+    return render(request, 'food_selection/products.html', context)
 
 
 class ProductDetailView(DetailView):
@@ -95,12 +98,6 @@ def disclaimer(request):
                'page_name': 'Mentions légales'
                }
     return render(request, 'food_selection/legal_disclaimer.html', context)
-
-
-def get_better_nutriscore_list(nutriscore):
-    """replace a bad nutriscore with better nutriscores (e.g. nutriscore D replaced with nutriscore list A, B, C)"""
-    nutriscores = ['A', 'B', 'C', 'D', 'E']
-    return nutriscores[:max(1,nutriscores.index(nutriscore))]
 
 
 class SaveProductFormView(FormView):

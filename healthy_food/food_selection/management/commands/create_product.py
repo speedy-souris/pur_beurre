@@ -1,10 +1,15 @@
 from django.core.management.base import BaseCommand
 from food_selection.models import Product, Category
-from django.conf import settings
 import requests
 
 class Command(BaseCommand):
     help = 'Imports products and categories from OpenFoodFacts into the database'
+    # List of main categories used for searching for substitutes
+    MAIN_PRODUCT_CATEGORIES = [
+        'pâtes alimentaires de céréales', 'boissons', 'mélanges de légumes frais',
+        'fruits secs', 'poissons', 'biscottes', 'pâtisseries', 'fromages',
+        'charcuteries', 'confitures'
+    ]
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -68,7 +73,7 @@ class Command(BaseCommand):
         seen_product_ids = set()  # <--- ADDITION: To track IDs already processed
         total_count = 0
         # Use the list of settings
-        for category_name in settings.MAIN_PRODUCT_CATEGORIES:
+        for category_name in self.MAIN_PRODUCT_CATEGORIES:
             url = (
                 f"https://fr.openfoodfacts.org/api/v1/search?categories_tags_fr={category_name}"
                  "&fields=code,product_name_fr,nutriscore_grade,categories_tags_fr,url,image_url,nutriments"
@@ -121,7 +126,7 @@ class Command(BaseCommand):
                     image_url = DEFAULT_IMAGE_PATH
                 # The rest of your filter code now also uses the list of settings.
                 categories_filtered = [c.lower() for c in item.get('categories_tags_fr', [])
-                                       if c.lower() in settings.MAIN_PRODUCT_CATEGORIES
+                                       if c.lower() in self.MAIN_PRODUCT_CATEGORIES
                 ]
 
                 products_final.append({

@@ -46,13 +46,12 @@ class FoundViewTest(TestCase):
         response = self.client.get(reverse('food_selection:found'), {'product': self.produit_recherche_d.name})
         self.assertEqual(response.status_code, 200)
 
-        alternative_products = response.context['products']
+        alternative_products = response.context['page_obj'].object_list
 
         self.assertEqual(len(alternative_products), 2)
 
-        # CORRECTION: PKs are converted to integers for reliable comparison.
-        actual_pks = {int(product.pk) for product in alternative_products}
-        expected_pks = {int(self.substitut_plat_a.pk), int(self.substitut_plat_b.pk)}
+        actual_pks = {product.pk for product in alternative_products}
+        expected_pks = {self.substitut_plat_a.pk, self.substitut_plat_b.pk}
         self.assertEqual(actual_pks, expected_pks)
 
     def test_substitute_with_common_category_is_unique(self):
@@ -62,12 +61,36 @@ class FoundViewTest(TestCase):
         response = self.client.get(reverse('food_selection:found'), {'product': self.produit_multi_cat.name})
         self.assertEqual(response.status_code, 200)
 
-        alternative_products = response.context['products']
+        alternative_products = response.context['page_obj'].object_list
 
         # This test will fail (e.g., 3 != 2) until you add .distinct() to your view.
         self.assertEqual(len(alternative_products), 2)
 
         # CORRECTION: We are abandoning the .count() test and using PK comparison, which is more reliable.
-        actual_pks = {int(product.pk) for product in alternative_products}
-        expected_pks = {int(self.substitut_polyvalent_a.pk), int(self.substitut_simple_b.pk)}
+        actual_pks = {product.pk for product in alternative_products}
+        expected_pks = {self.substitut_polyvalent_a.pk, self.substitut_simple_b.pk}
         self.assertEqual(actual_pks, expected_pks)
+
+class EmptyDBFoundViewTest(TestCase):
+    """
+    Cette classe de test est dédiée à la vérification du comportement
+    de la vue 'found' lorsque la base de données est vide.
+    """
+
+    def test_search_on_empty_database(self):
+        """
+        Vérifie que la recherche d'un produit sur une base de données vide
+        se déroule sans erreur et ne retourne aucun résultat.
+        """
+        # On effectue une requête GET pour un produit quelconque
+        response = self.client.get(reverse('food_selection:found'), {'product': 'confiture de fraise'})
+
+        # 1. On vérifie que la page est accessible et ne génère pas d'erreur serveur (ex: Erreur 500)
+        self.assertEqual(response.status_code, 200)
+
+        # 2. On s'assure qu'aucun produit initial n'a été trouvé et passé au contexte
+        # (Cette assertion dépend de l'implémentation de votre vue)
+        self.assertIsNone(response.context.get('product'))
+
+        # 3. On vérifie que la liste des substituts est vide
+        self.assertEqual(len(response.context['page_obj']), 0)
