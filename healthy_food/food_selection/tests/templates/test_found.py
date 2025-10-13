@@ -50,10 +50,7 @@ class FoundTemplateWithSubstitutesTest(TestCase):
         Vérifie que la page affiche bien 6 produits de substitution (la limite par page).
         """
         # Étape 1: Simuler la requête GET de l'utilisateur
-        response = self.client.get(
-            reverse('food_selection:found'),
-            {'product': self.product_to_find.name}
-        )
+        response = self.client.get(reverse('food_selection:found'), {'product': self.product_to_find.name})
 
         # Étape 2: Vérifications du bon template
         self.assertEqual(response.status_code, 200)
@@ -61,9 +58,25 @@ class FoundTemplateWithSubstitutesTest(TestCase):
 
         # Étape 3: response.content contient le HTML brut de la page rendue
         soup = BeautifulSoup(response.content, 'html.parser')
-
         # Étape 4: Compter les éléments qui correspondent à un produit de substitution
-        substitute_products_divs = soup.select('div.col-sm-4.mb-4')
-
+        substitute_products_divs = soup.select('div.substitute_products')
         # Étape 5: Affirmer que le nombre d'éléments trouvés est bien 6
         self.assertEqual(len(substitute_products_divs), 6)
+
+    def test_count_substitute_products_on_page2(self):
+        """
+        Vérifie que la page affiche bien 6 produits de substitution (la limite par page).
+        """
+        # Étape 1: Simuler la requête GET de l'utilisateur
+        response = self.client.get(reverse('food_selection:found'), {'product': self.product_to_find.name,
+                                                                     'page': 2})
+        # Étape 2: Vérifications du bon template
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'food_selection/products.html')
+
+        # Étape 3: response.content contient le HTML brut de la page rendue
+        soup = BeautifulSoup(response.content, 'html.parser')
+        # Étape 4: Compter les éléments qui correspondent à un produit de substitution
+        substitute_products_divs = soup.select('div.substitute_products')
+        # Étape 5: Affirmer que le nombre d'éléments trouvés est bien 1
+        self.assertEqual(len(substitute_products_divs), 1)

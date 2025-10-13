@@ -46,7 +46,7 @@
                     <div class="container-fluid p-0 mt-5">
                         <div class="row">
                             {% for general_product in page_obj %}
-                                <div class="col-sm-4 mb-4">
+                                <div class="substitute_products col-sm-4 mb-4">
                                     <div class="card h-100 d-flex flex-column">
                                         <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 250px;">
                                             <a href="{% url 'food_selection:product' general_product.pk %}" class="position-relative d-inline-block">
