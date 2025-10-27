@@ -17,3 +17,4 @@ class SaveProductForm(forms.Form):
 
 class TestForm(forms.Form):
     product_id = forms.CharField(required=True)
+

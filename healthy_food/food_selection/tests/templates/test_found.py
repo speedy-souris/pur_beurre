@@ -36,7 +36,7 @@ class FoundTemplateWithSubstitutesTest(TestCase):
         )
         cls.product_to_find.categories.add(category_confiture)
 
-        # 3. Création de 7 produits de substitution pour tester la pagination qui de 6 produits
+        # 3. Création de 7 produits de substitution pour tester la pagination qui est de 6 produits par page
         for i in range(7):
             product = Product.objects.create(
                 product_id=f"0000{i}",
