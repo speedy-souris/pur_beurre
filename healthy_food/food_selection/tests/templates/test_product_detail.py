@@ -53,7 +53,7 @@ class ProductDetailViewTest(TestCase):
         page_title = self.soup.find('title')
 
         self.assertIsNotNone(page_title, "Pas de Titre")
-        self.assertEqual(page_title.string.strip(), expected_title, "titre inconnu")
+        self.assertEqual(page_title.string, expected_title, "titre inconnu")
 
     def test_view_uses_the_correct_template(self):
         """
