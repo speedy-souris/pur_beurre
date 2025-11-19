@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'authentification',
     'food_selection',
 ]
 
@@ -134,6 +135,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 MEDIA_URL = '/images/'
 
+# authenfication settings
+AUTH_USER_MODEL = 'authentification.User'
 # ==================================================================
 # CUSTOM PROJECT SETTINGS
 # ==================================================================
