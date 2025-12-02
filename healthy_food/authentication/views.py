@@ -18,7 +18,7 @@ def login_page(request):
             user = authenticate(username=login_form.cleaned_data['username'], password=login_form.cleaned_data['password'])
             if user is not None:
                 login(request,user)
-                message = f'{user.username} connecté'
+                return redirect('food_selection:home')
             else:
                 message = 'Login ou mot de passe invalide'
     context ={
