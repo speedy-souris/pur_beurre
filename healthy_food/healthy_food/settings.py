@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authentification',
+    'authentication',
     'food_selection',
 ]
 
@@ -51,14 +51,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'healthy_food.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # new code that points to the location of the templates
-            BASE_DIR / 'food_selection' / 'templates'
+            BASE_DIR / 'food_selection' / 'templates',
+            BASE_DIR.joinpath('templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -73,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'healthy_food.wsgi.application'
-
+ROOT_URLCONF = 'healthy_food.urls'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -136,7 +135,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 MEDIA_URL = '/images/'
 
 # authenfication settings
-AUTH_USER_MODEL = 'authentification.User'
+AUTH_USER_MODEL = 'authentication.User'
 # ==================================================================
 # CUSTOM PROJECT SETTINGS
 # ==================================================================

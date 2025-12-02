@@ -1,0 +1,12 @@
+.form-container {
+  display: grid;
+  place-items: center; /* Raccourci pour centrer horizontalement et verticalement */
+  min-height: 80vh;
+}
+
+.form-container form {
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  }

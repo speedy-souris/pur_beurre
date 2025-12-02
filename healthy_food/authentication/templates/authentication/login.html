@@ -1,0 +1,11 @@
+{% extends 'food_selection/base.html' %}
+{% block content %}
+    <p>{{ message }}</p>
+    <div class="form-container">
+        <form method="post" action="{% url 'authentication:login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Se connecter</button>
+        </form>
+    </div>
+{% endblock content %}

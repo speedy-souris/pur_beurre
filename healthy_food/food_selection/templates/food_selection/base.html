@@ -1,4 +1,4 @@
-<!--{% load static %}-->
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -19,6 +19,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'food_selection/css/styles.css' %}" rel="stylesheet" />
+        <link href="{% static 'authentication/css/styles.css' %}" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -34,7 +35,7 @@
                                 <input type="submit" value="Chercher">
                             </form>
                         </li>
-                        <li class="navbar-brand my-1 nav-item"><a href="{% url 'food_selection:profile' %}"><img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil"></a></li>
+                        <li class="navbar-brand my-1 nav-item"><a href="{% url 'authentication:login' %}"><img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil"></a></li>
                         <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:saved-list' %}"><img src="{% static 'food_selection/assets/img/portfolio/carrot-29691.png' %}" alt="logo carrot"></a></li>
                         <li class="navbar-brand my-2 nav-item"><a href="{% url 'food_selection:home' %}"><img src="{% static 'food_selection/assets/img/portfolio/téléchargement.png' %}" alt="logo deconnection"></a></li>
                     </ul>
@@ -42,7 +43,9 @@
             </div>
         </nav>
         {% block content %}{% endblock %}
-
+        {% if user.is_authenticated %}
+            <p>{{ request.user }}. <a href="{% url 'authentication:logout' %}">Se déconnecter</a></p>
+        {% endif %}
         <!-- Footer-->
         <footer class="bg-light py-5">
             <div class="container px-4 px-lg-5">
