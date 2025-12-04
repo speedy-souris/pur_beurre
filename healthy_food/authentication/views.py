@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
+from django.views.generic import View
 
-from authentication.forms import LoginForm
-from food_selection.forms import SearchNewFood
+from . import forms as auth_forms
+from food_selection import forms as food_forms
 
 
 def logout_user(request):
@@ -11,21 +12,34 @@ def logout_user(request):
     messages.success(request, "Vous êtes déconnecté !")
     return redirect('food_selection:home')
 
-def login_page(request):
-    login_form = LoginForm()
-    if request.method == 'POST':
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
-            user = authenticate(username=login_form.cleaned_data['username'], password=login_form.cleaned_data['password'])
+class LoginPageView(View):
+    template_name = 'authentication/login.html'
+    login_form = auth_forms.LoginForm
+
+    def get(self, request):
+        form = self.login_form()
+        context = {
+            'search_form': food_forms.SearchNewFood(),
+            'form': form,
+            'message': messages,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = self.login_form(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
             if user is not None:
-                login(request,user)
-                messages.success(request, "Vous avez été connecté avec succès !")
+                login(request, user)
+                messages.success(request, "Vous avez été Connecté avec Succès !")
                 return redirect('food_selection:home')
-            else:
-                messages.error(request, "Login ou mot de passe invalide")
-    context ={
-        'search_form': SearchNewFood(),
-        'form': login_form,
-        'message': messages,
-    }
-    return render(request, 'authentication/login.html', context)
+        message = 'Login ou Mot de Passe Invalide.'
+        context = {
+            'search_form': food_forms.SearchNewFood(),
+            'form': form,
+            'message': messages,
+        }
+        return render(request, self.template_name, context)
