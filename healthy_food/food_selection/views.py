@@ -1,11 +1,14 @@
 # noinspection PyInterpreter
-from django.views.generic.detail import DetailView
-from django.shortcuts import render
-from food_selection.forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
-from django.views.generic.edit import FormView
-from food_selection.models import Product, Category
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
+
+from food_selection.forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
+from food_selection.models import Product, Category
 
 
 # Create your views here.
@@ -100,6 +103,7 @@ def disclaimer(request):
     return render(request, 'food_selection/legal_disclaimer.html', context)
 
 
+
 class SaveProductFormView(FormView):
     template_name = "food_selection/products.html"
     form_class = SaveProductForm
@@ -134,7 +138,7 @@ class TestFormView(FormView):
         return super().form_valid(form)
 
 
-class SavedProductsListView(ListView):
+class SavedProductsListView(LoginRequiredMixin, ListView):
     model = Product
     paginate_by = 6  # directly here, no need to recreate the paginator
     template_name = 'food_selection/saved_products.html'
@@ -151,3 +155,7 @@ class SavedProductsListView(ListView):
             'page_name': 'Mes Favoris',
         })
         return context
+
+    def handle_no_permission(self):
+        messages.error(self.request, "Vous devez être connecté pour voir les favoris.")
+        return super().handle_no_permission()

@@ -11459,3 +11459,19 @@ header.masthead h1, header.masthead .h1 {
 .container-fluid{
   padding: initial;
 }
+/* Nouvelle classe pour le fond global */
+.bg-global {
+    /* Le dégradé marron + l'image */
+    /* Note : ../assets remonte d'un dossier pour sortir de /css/ et aller dans /assets/ */
+    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("/static/food_selection/assets/img/photo2.jpg");
+
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* Important : couvre tout l'écran et reste fixe */
+    background-size: cover;
+    background-attachment: fixed;
+
+    /* S'assure que le fond prend au moins toute la hauteur */
+    min-height: 100vh;
+}

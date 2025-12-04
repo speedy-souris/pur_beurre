@@ -136,6 +136,8 @@ MEDIA_URL = '/images/'
 
 # authenfication settings
 AUTH_USER_MODEL = 'authentication.User'
+LOGIN_URL = 'authentication:login'
+LOGIN_REDIRECT_URL = 'food_selection:home'
 # ==================================================================
 # CUSTOM PROJECT SETTINGS
 # ==================================================================

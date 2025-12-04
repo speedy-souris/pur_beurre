@@ -1,6 +1,6 @@
+import authentication.views
 from django.urls import path
 
-import authentication.views
 
 app_name = 'authentication'
 urlpatterns = [
