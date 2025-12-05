@@ -9,49 +9,60 @@
                 <div class="container-fluid p-0">
                     <div class="row mt-5">
                         <h1 class="text-warning text-center mb-4">Produits Sauvegardés</h1>
-                        {% for general_product in page_obj %}
-                            <!-- Add mb-4 for vertical spacing between lines -->
-                            <div class="favorite_saved_products col-sm-4 mb-4">
-                                <!-- 1. Using a Bootstrap Card for uniform structure and height -->
-                                <div class="card h-100 d-flex flex-column">
 
-                                    <!-- 2. Fixed height container (e.g., 300px) with Flexbox to center the image -->
+                        <!-- 1. On boucle sur "page_obj" (qui contient des objets Favorite) -->
+                        {% for favorite in page_obj %}
+
+                            <div class="favorite_saved_products col-sm-4 mb-4">
+                                <!-- Using a Bootstrap Card for uniform structure and height -->
+                                <div class="card h-100 d-flex flex-column bg-transparent">
+
+                                    <!-- Fixed height container -->
                                     <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 300px;">
 
-                                        <!-- 3. The <a> link is the relative wrapper that adapts to the size of the image -->
-                                        <a href="{% url 'food_selection:product' general_product.product_id %}" class="position-relative d-inline-block">
+                                        <!-- 2. ATTENTION ICI : on utilise "favorite.product.product_id" -->
+                                        <a href="{% url 'food_selection:product' favorite.product.product_id %}" class="position-relative d-inline-block">
 
-                                            <!-- 4. The product image, undistorted, never exceeds its container -->
-                                            <img src="{% static 'food_selection/images/image_product/'|add:general_product.product_id|add:'.jpg' %}"
-                                                 style="max-width: 100%; max-height: 300px; display: block;"
-                                                 alt="Image du produit : {{ general_product.name }}" />
+                                            <!-- 3. Image du produit : "favorite.product.product_id" -->
+                                            <img src="{% static 'food_selection/images/image_product/'|add:favorite.product.product_id|add:'.jpg' %}"
+                                             style="max-width: 100%; max-height: 300px; display: block;"
+                                             alt="Image du produit : {{ favorite.product.name }}" />
 
-                                            <!-- 5. Nutri-Score, positioned in relation to the actual image -->
+                                            <!-- 4. Nutriscore : "favorite.product.nutriscore" -->
                                             <img class="position-absolute top-0 end-0 m-2" style="width: 60px; height: auto; z-index: 10;"
-                                                 src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
-                                                 alt="Nutriscore du produit : {{ general_product.name }}" />
+                                                 src="{% static 'food_selection/images/image_nutriscore/'|add:favorite.product.nutriscore|add:'.png' %}"
+                                                 alt="Nutriscore du produit : {{ favorite.product.name }}" />
                                         </a>
                                     </div>
 
-                                    <!-- 6. Text content is placed in the body of the card for proper alignment -->
+                                    <!-- Text content -->
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ general_product.name }}</h5>
+                                        <div class="text-white">
+                                            <!-- 5. Nom du produit -->
+                                            <h5 class="card-title">{{ favorite.product.name }}</h5>
+                                        </div>
 
-                                        <!-- Using an unordered list for categories -->
+                                        <!-- Categories -->
                                         <ul class="list-inline">
-                                            {% for category in general_product.categories.all %}
-                                                <li class="list-inline-item"><small class="text-muted">{{ category.name }}</small></li>
+                                            <!-- 6. Catégories : "favorite.product.categories.all" -->
+                                            {% for category in favorite.product.categories.all %}
+                                                <li class="list-inline-item"><small class="text-warning">{{ category.name }}</small></li>
                                             {% endfor %}
                                         </ul>
                                     </div>
                                 </div>
+                            </div>
+
+                        {% empty %}
+                            <div class="col-12 text-center text-white">
+                                <p>Vous n'avez pas encore enregistré de produits.</p>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
 
                 <!-- Pagination remains unchanged -->
-                <div class="text-center mt-4 text-white"> <!-- Adding a margin above the pagination -->
+                <div class="text-center mt-4 text-white">
                     <span class="step-links">
                         {% if page_obj.has_previous %}
                             <a href="?page=1">&laquo;</a>

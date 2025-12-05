@@ -15,7 +15,7 @@
             <!-- Wrap your content in a column to control the maximum width -->
             <div class="product_detail col-md-8 col-lg-6">
                 <!-- Start of Bootstrap map -->
-                <div class="card text-center shadow-sm">
+                <div class="card text-center shadow-sm bg-transparent">
                     <!-- The main product image becomes the header of the card -->
                     <img class="card-img-top"
                          style="width: 25%; height: auto; margin: 1rem auto 0;"
@@ -29,7 +29,10 @@
                              src="{% static 'food_selection/images/image_nutriscore/'|add:'Nutriscore_'|add:product.nutriscore|add:'.jpg' %}"
                              alt="nutriscore du produit selectionné" />
                         <div class="container mt-4">
-                            <h2 class="mb-4 h4">Informations nutritionnelles pour 100 g</h2>
+                            <div class="text-white">
+                                <h2 class="mb-4 h4">Informations nutritionnelles pour 100 g</h2>
+                            </div>
+
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover table-bordered align-middle">
                                     <thead class="table-primary">
@@ -40,36 +43,36 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Énergie</td>
-                                            <td>{{ product.nutriments.energy_100g|default:"?" }} kcal</td>
+                                            <td class="text-white">Énergie</td>
+                                            <td class="text-white">{{ product.nutriments.energy_100g|default:"?" }} kcal</td>
                                         </tr>
                                         <tr>
-                                            <td>Protéines</td>
-                                            <td>{{ product.nutriments.proteins_100g|default:"?" }} g</td>
+                                            <td class="text-white">Protéines</td>
+                                            <td class="text-white">{{ product.nutriments.proteins_100g|default:"?" }} g</td>
                                         </tr>
                                         <tr>
-                                            <td>Glucides</td>
-                                            <td>{{ product.nutriments.carbohydrates_100g|default:"?" }} g</td>
+                                            <td class="text-white">Glucides</td>
+                                            <td class="text-white"> {{ product.nutriments.carbohydrates_100g|default:"?" }} g</td>
                                         </tr>
                                         <tr>
-                                            <td>Dont sucres</td>
-                                            <td>{{ product.nutriments.sugars_100g|default:"?" }} g</td>
+                                            <td class="text-white">Dont sucres</td>
+                                            <td class="text-white">{{ product.nutriments.sugars_100g|default:"?" }} g</td>
                                         </tr>
                                         <tr>
-                                            <td>Fibres</td>
-                                            <td>{{ product.nutriments.fiber_100g|default:"?" }} g</td>
+                                            <td class="text-white">Fibres</td>
+                                            <td class="text-white">{{ product.nutriments.fiber_100g|default:"?" }} g</td>
                                         </tr>
                                         <tr>
-                                            <td>Sel</td>
-                                            <td>{{ product.nutriments.salt_100g|default:"?" }} g</td>
+                                            <td class="text-white">Sel</td>
+                                            <td class="text-white">{{ product.nutriments.salt_100g|default:"?" }} g</td>
                                         </tr>
                                         <tr>
-                                            <td>Matières grasses</td>
-                                            <td>{{ product.nutriments.fat_100g|default:"?" }} g</td>
+                                            <td class="text-white">Matières grasses</td>
+                                            <td class="text-white">{{ product.nutriments.fat_100g|default:"?" }} g</td>
                                         </tr>
                                         <tr>
-                                            <td>Dont acides gras saturés</td>
-                                            <td>{{ product.nutriments.saturated_fat_100g|default:"?" }} g</td>
+                                            <td class="text-white">Dont acides gras saturés</td>
+                                            <td class="text-white">{{ product.nutriments.saturated_fat_100g|default:"?" }} g</td>
                                         </tr>
                                     </tbody>
                                 </table>

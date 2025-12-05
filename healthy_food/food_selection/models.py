@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 class Category(models.Model):
@@ -14,9 +15,19 @@ class Product(models.Model):
     nutriments = models.JSONField(null=True)
     url = models.URLField(max_length=500)
     image_url = models.URLField(blank=True, null=True)
-    # image_nutrition_url = models.URLField(blank=True, null=True)
-    saved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
+class Favorite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        return f"{self.user} aime le produit {self.product.name}"

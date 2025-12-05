@@ -43,7 +43,7 @@
                         <div class="row">
                             {% for general_product in page_obj %}
                                 <div class="substitute_products col-sm-4 mb-4">
-                                    <div class="card h-100 d-flex flex-column">
+                                    <div class="card h-100 d-flex flex-column bg-transparent">
                                         <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 250px;">
                                             <a href="{% url 'food_selection:product' general_product.pk %}" class="position-relative d-inline-block">
                                                 <img src="{% static 'food_selection/images/image_product/'|add:general_product.pk|add:'.jpg' %}"
@@ -55,10 +55,13 @@
                                             </a>
                                         </div>
                                         <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title">{{ general_product.name }}</h5>
+                                            <div class="text-white">
+                                                <h5 class="card-title">{{ general_product.name }}</h5>
+                                            </div>
+
                                             <ul class="list-inline">
                                                 {% for category in general_product.categories.all %}
-                                                    <li class="list-inline-item"><small class="text-muted">{{ category.name }}{% if not forloop.last %},{% endif %}</small></li>
+                                                    <li class="list-inline-item"><small class="text-warning">{{ category.name }}{% if not forloop.last %},{% endif %}</small></li>
                                                 {% endfor %}
                                             </ul>
                                             <div class="mt-auto">

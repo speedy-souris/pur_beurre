@@ -48,7 +48,7 @@ class LoginPageView(View):
 def signup_page(request):
     signup_form = auth_forms.SignupForm()
     if request.method == 'POST':
-        signup.form = auth_forms.SignupForm(request.POST)
+        signup_form = auth_forms.SignupForm(request.POST)
         if signup_form.is_valid():
             user = signup_form.save()
             login(request, user)
