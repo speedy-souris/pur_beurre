@@ -20,7 +20,9 @@ class Command(BaseCommand):
         image_dir = os.path.join(settings.BASE_DIR, 'food_selection', 'static', 'food_selection', 'images', 'image_product')
         os.makedirs(image_dir, exist_ok=True)
 
-        products = Product.objects.exclude(image_url__isnull=True).exclude(image_url__exact='')
+        products = Product.objects.exclude(image_url__isnull=True)\
+                                  .exclude(image_url__exact='')\
+                                  .filter(image_url__startswith='http')
 
         if not silent:
             self.stdout.write(f"🔄 Démarrage du téléchargement de {products.count()} images produit...")
