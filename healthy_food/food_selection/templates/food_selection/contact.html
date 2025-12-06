@@ -1,11 +1,12 @@
 {% extends 'food_selection/base.html' %}
 {% block content %}
     <!-- contact form -->
-    <p>Nous sommes là pour vous aider.</p>
-
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ contact_form.as_p }}
-        <input type="submit" value="Envoyer">
-    </form>
+    <div class="d-flex flex-column justify-content-center align-items-center text-white" style="min-height: 80vh;">
+        <h2>Nous sommes là pour vous aider.</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ contact_form.as_p }}
+            <input type="submit" value="Envoyer">
+        </form>
+    </div>§
 {% endblock %}
