@@ -5,9 +5,9 @@
     <div id="portfolio">
         <div class="container-fluid p-5">
 
-            {% if error_message %}
-                <div class="alert alert-info text-center" role="alert">
-                    {{ error_message }}
+            {% if message_vide %}
+                <div class="text-center" style="margin-top: 150px;">
+                    {{ message_vide }}
                 </div>
             {% endif %}
 
@@ -86,7 +86,7 @@
                                 </div>
                             {% empty %}
                                 <div class="col-12 text-center">
-                                    <p class="text-muted">Aucun substitut avec un meilleur Nutri-Score n'a été trouvé dans les mêmes catégories.</p>
+                                    <p class="text-white">Aucun substitut avec un meilleur Nutri-Score n'a été trouvé dans les mêmes catégories.</p>
                                 </div>
                             {% endfor %}
                         </div>

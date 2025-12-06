@@ -2,14 +2,13 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
 from .forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
-# AJOUT DE FAVORITE DANS LES IMPORTS
-from .models import Product, Category, Favorite
+from .models import Product, Favorite
 
 
 # Create your views here.
@@ -70,7 +69,8 @@ def found(request):
 
     else:
         context['product_found'] = False
-        context['error_message'] = f"Aucun produit ne correspond à votre recherche '{product_name}'."
+        context['message_vide'] = messages.error(request, "Aucun produit ne correspond à votre recherche.")
+        return redirect('food_selection:home')
 
     return render(request, 'food_selection/products.html', context)
 

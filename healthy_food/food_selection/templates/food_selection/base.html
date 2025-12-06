@@ -37,10 +37,19 @@
                             </form>
                         </li>
                         <li class="navbar-brand my-1 nav-item">
-                            <a href="{% url 'authentication:login' %}">
+                            <!-- Si l'utilisateur est connecté, on change le lien vers le profil, sinon vers le login -->
+                            <a href="{% if user.is_authenticated %}{% url 'food_selection:profile' %}{% else %}{% url 'authentication:login' %}{% endif %}"
+                               class="d-flex align-items-center text-decoration-none">
+
                                 {% if user.is_authenticated %}
+                                    <!-- Affiche le nom de l'utilisateur en orange (ou text-black) -->
+                                    <span class="text-warning me-1" style="font-size: 1rem; font-weight: bold;">
+                                        Bonjour,  {{ user.username }}
+                                    </span>
                                     <img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil connecté">
                                 {% else %}
+                                    <!-- Optionnel : Ajouter "Se connecter" pour les visiteurs -->
+                                    <span class="text-muted me-2" style="font-size: 0.9rem;">Se connecter</span>
                                     <img src="{% static 'food_selection/assets/img/portfolio/marque-de-croix.png' %}" alt="logo profil déconnecté">
                                 {% endif %}
                             </a>
