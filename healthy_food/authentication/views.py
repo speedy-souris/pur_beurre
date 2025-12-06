@@ -13,6 +13,7 @@ def logout_user(request):
     messages.success(request, "Vous êtes déconnecté !")
     return redirect('food_selection:home')
 
+
 class LoginPageView(View):
     template_name = 'authentication/login.html'
     login_form = auth_forms.LoginForm
@@ -22,26 +23,40 @@ class LoginPageView(View):
         context = {
             'search_form': food_forms.SearchNewFood(),
             'form': form,
-            'message': messages,
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
         form = self.login_form(request.POST)
+
         if form.is_valid():
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
             )
+
             if user is not None:
                 login(request, user)
-                messages.success(request, "Vous avez été Connecté avec Succès !")
+                messages.success(request, "Vous avez été connecté avec succès !")
+
+                # Récupération de la redirection
+                redirect_to = request.POST.get('next')
+                if redirect_to:
+                    return redirect(redirect_to)
                 return redirect('food_selection:home')
-        message = 'Login ou Mot de Passe Invalide.'
+
+            else:
+                # Cas : Formulaire valide mais Mauvais mot de passe / utilisateur inconnu
+                messages.error(request, 'Identifiant ou mot de passe invalide.')
+
+        else:
+            # Cas : Formulaire invalide (champs vides, format incorrect)
+            messages.error(request, 'Veuillez vérifier les champs du formulaire.')
+
+        # Si on arrive ici, c'est que le login a échoué.
         context = {
             'search_form': food_forms.SearchNewFood(),
             'form': form,
-            'message': messages,
         }
         return render(request, self.template_name, context)
 

@@ -1,9 +1,10 @@
 {% extends 'food_selection/base.html' %}
 {% block content %}
     <div class="form-container text-center text-white">
-        <form method="post" action="{% url 'authentication:login' %}" class="bg-transparent">
+        <form method="post" class="bg-transparent">
             {% csrf_token %}
             {{ form.as_p }}
+            <input type="hidden" name="next" value="{{ request.POST.next|default:request.GET.next }}">
             <div class="mt-3">
                 <button type="submit">Se connecter</button>
             </div>
