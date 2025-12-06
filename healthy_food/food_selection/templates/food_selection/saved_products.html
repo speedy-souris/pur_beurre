@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<!-- Configuring the display of products saved by the logged-in user -->
     <div id="portfolio">
         <div class="container-fluid p-5">
             <div class="row g-0">
@@ -10,7 +11,7 @@
                     <div class="row mt-5">
                         <h1 class="text-warning text-center mb-4">Produits Sauvegardés</h1>
 
-                        <!-- 1. On boucle sur "page_obj" (qui contient des objets Favorite) -->
+                        <!-- 1. Loop containing Favorite items (Saved products) -->
                         {% for favorite in page_obj %}
 
                             <div class="favorite_saved_products col-sm-4 mb-4">
@@ -20,10 +21,10 @@
                                     <!-- Fixed height container -->
                                     <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 300px;">
 
-                                        <!-- 2. ATTENTION ICI : on utilise "favorite.product.product_id" -->
+                                        <!-- 2. ATTENTION HERE: we use “favorite.product.product_id” -->
                                         <a href="{% url 'food_selection:product' favorite.product.product_id %}" class="position-relative d-inline-block">
 
-                                            <!-- 3. Image du produit : "favorite.product.product_id" -->
+                                            <!-- 3. Product image: “favorite.product.product_id” -->
                                             <img src="{% static 'food_selection/images/image_product/'|add:favorite.product.product_id|add:'.jpg' %}"
                                              style="max-width: 100%; max-height: 300px; display: block;"
                                              alt="Image du produit : {{ favorite.product.name }}" />
@@ -38,7 +39,7 @@
                                     <!-- Text content -->
                                     <div class="card-body">
                                         <div class="text-white">
-                                            <!-- 5. Nom du produit -->
+                                            <!-- 5. Product name -->
                                             <h5 class="card-title">{{ favorite.product.name }}</h5>
                                         </div>
 
@@ -54,6 +55,7 @@
                             </div>
 
                         {% empty %}
+                        <!-- Message for empty page -->
                             <div class="col-12 text-center text-white">
                                 <p>Vous n'avez pas encore enregistré de produits.</p>
                             </div>

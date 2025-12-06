@@ -4,7 +4,7 @@
 {% block content %}
     <div id="portfolio">
         <div class="container-fluid p-5">
-
+            <!-- Product not found popup -->
             {% if message_vide %}
                 <div class="text-center" style="margin-top: 150px;">
                     {{ message_vide }}
@@ -12,8 +12,9 @@
             {% endif %}
 
             <div class="row g-0">
+            <!-- display configuration for all products -->
                 {% if product_found %}
-                    <!-- 1. Affichage du produit recherché -->
+                    <!-- 1. Display of the searched product -->
                     <div class="col-12 text-center text-white mt-5">
                         <h1 class="text-warning mb-4">{{ required_product.name }}</h1>
                         <div class="d-flex justify-content-center align-items-center mx-auto" style="height: 450px; max-width: 280px;">
@@ -38,7 +39,8 @@
                             <p class="mt-4">Vous pouvez remplacer cet aliment par :</p>
                         {% endif %}
                     </div>
-                    <!-- 2. Affichage des produits de substitution -->
+
+                    <!-- 2. Display of substitute products -->
                     <div class="container-fluid p-0 mt-5">
                         <div class="row">
                             {% for general_product in page_obj %}
@@ -85,6 +87,7 @@
                                     </div>
                                 </div>
                             {% empty %}
+                                <!-- Substitute product message not found -->
                                 <div class="col-12 text-center">
                                     <p class="text-white">Aucun substitut avec un meilleur Nutri-Score n'a été trouvé dans les mêmes catégories.</p>
                                 </div>
@@ -94,22 +97,22 @@
                 {% endif %}
             </div>
 
-            <!-- BLOC DE PAGINATION -->
+            <!-- General Organization of Pagination -->
             {% if page_obj and page_obj.has_other_pages %}
                 <div class="text-center text-white mt-4">
                     <span class="step-links">
-                        <!-- Liens vers la page précédente et la première page -->
+                        <!-- Links to the previous page and the first page -->
                         {% if page_obj.has_previous %}
                             <a href="?product={{ name|urlencode }}&page=1">&laquo;</a>
                             <a href="?product={{ name|urlencode }}&page={{ page_obj.previous_page_number }}">&lt;</a>
                         {% endif %}
 
-                        <!-- Affichage du numéro de page actuel -->
+                        <!-- Displaying the current page number -->
                         <span class="current">
                             Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
                         </span>
 
-                        <!-- Liens vers la page suivante et la dernière page -->
+                        <!-- Links to the next page and the last page -->
                         {% if page_obj.has_next %}
                             <a href="?product={{ name|urlencode }}&page={{ page_obj.next_page_number }}">&gt;</a>
                             <a href="?product={{ name|urlencode }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>

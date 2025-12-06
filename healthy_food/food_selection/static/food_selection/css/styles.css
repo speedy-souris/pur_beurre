@@ -438,14 +438,6 @@ legend + * {
   -webkit-appearance: textfield;
 }
 
-/* rtl:raw:
-[type="tel"],
-[type="url"],
-[type="email"],
-[type="number"] {
-  direction: ltr;
-}
-*/
 ::-webkit-search-decoration {
   -webkit-appearance: none;
 }
@@ -11459,19 +11451,19 @@ header.masthead h1, header.masthead .h1 {
 .container-fluid{
   padding: initial;
 }
-/* Nouvelle classe pour le fond global */
+/* New class for the global fund */
 .bg-global {
-    /* Le dégradé marron + l'image */
-    /* Note : ../assets remonte d'un dossier pour sortir de /css/ et aller dans /assets/ */
+    /* The brown gradient + the image */
+    /* Note: ../assets goes up one folder to leave /css/ and go to /assets/ */
     background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("/static/food_selection/assets/img/photo2.jpg");
 
     background-position: center;
     background-repeat: no-repeat;
 
-    /* Important : couvre tout l'écran et reste fixe */
+    /* Important: covers the entire screen and remains fixed */
     background-size: cover;
     background-attachment: fixed;
 
-    /* S'assure que le fond prend au moins toute la hauteur */
+    /* Ensures that the bottom covers at least the entire height */
     min-height: 100vh;
 }

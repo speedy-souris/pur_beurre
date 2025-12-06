@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
+<!-- general structure of the site -->
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -21,7 +22,7 @@
         <link href="{% static 'food_selection/css/styles.css' %}" rel="stylesheet" />
         <link href="{% static 'authentication/css/styles.css' %}" rel="stylesheet" />
     </head>
-    <!-- Ajoutez les classes : d-flex flex-column min-vh-100 -->
+    <!-- Add the classes : d-flex flex-column min-vh-100 -->
     <body id="page-top" class="bg-global d-flex flex-column min-vh-100">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
@@ -37,18 +38,18 @@
                             </form>
                         </li>
                         <li class="navbar-brand my-1 nav-item">
-                            <!-- Si l'utilisateur est connecté, on change le lien vers le profil, sinon vers le login -->
+                            <!-- If the user is logged in, change the link to the profile; otherwise, change it to the login page. -->
                             <a href="{% if user.is_authenticated %}{% url 'food_selection:profile' %}{% else %}{% url 'authentication:login' %}{% endif %}"
                                class="d-flex align-items-center text-decoration-none">
 
                                 {% if user.is_authenticated %}
-                                    <!-- Affiche le nom de l'utilisateur en orange (ou text-black) -->
+                                    <!-- Displays the user name in orange (or text-black) -->
                                     <span class="text-warning me-1" style="font-size: 1rem; font-weight: bold;">
                                         Bonjour,  {{ user.username }}
                                     </span>
                                     <img src="{% static 'food_selection/assets/img/portfolio/icon-profile.png' %}" alt="logo profil connecté">
                                 {% else %}
-                                    <!-- Optionnel : Ajouter "Se connecter" pour les visiteurs -->
+                                    <!-- Optional: Add “Sign in” for visitors -->
                                     <span class="text-muted me-2" style="font-size: 0.9rem;">Se connecter</span>
                                     <img src="{% static 'food_selection/assets/img/portfolio/marque-de-croix.png' %}" alt="logo profil déconnecté">
                                 {% endif %}
@@ -60,12 +61,12 @@
                 </div>
             </div>
         </nav>
-         <!-- Il faut envelopper le contenu dans une div qui va "grandir" (flex-grow-1) -->
+         <!-- The content must be wrapped in a div that will “grow” (flex-grow-1). -->
         <div class="flex-grow-1">
             {% block content %}{% endblock %}
         </div>
         <!-- Footer-->
-        <footer class="bg-light py-5 mt-auto"> <!-- mt-auto aide aussi -->
+        <footer class="bg-light py-5 mt-auto"> <!-- mt-auto also helps -->
             <div class="container px-4 px-lg-5">
                 <div class="small text-center text-muted">
                     <a href="{% url 'food_selection:disclaimer' %}"> Mentions légales</a> |
@@ -86,7 +87,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- 1. Import de SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <!-- 2. Script pour détecter les messages Django et lancer la popup -->
+        <!-- 2. Script to detect Django messages and launch the popup -->
         {% if messages %}
             <script>
                 // On crée une variable globale accessible par le fichier externe
