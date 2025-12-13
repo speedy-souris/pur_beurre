@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
@@ -57,10 +58,10 @@ def found(request):
             ).exclude(pk=original_product.pk).distinct().order_by('nutriscore')
 
             paginator = Paginator(alternative_products, 6)
-            page_number = request.GET.get("page", 1)
+            page_number = request.GET.get('page', 1)
             page_obj = paginator.get_page(page_number)
 
-            # On prépare le formulaire pour chaque produit
+            # We prepare the form for each product.
             for product_in_page in page_obj:
                 initial_data = {'product_id': product_in_page.pk}
                 product_in_page.form = SaveProductForm(initial=initial_data)
@@ -69,7 +70,7 @@ def found(request):
 
     else:
         context['product_found'] = False
-        context['message_vide'] = messages.error(request, "Aucun produit ne correspond à votre recherche.")
+        context['message_vide'] = messages.error(request, 'Aucun produit ne correspond à votre recherche.')
         return redirect('food_selection:home')
 
     return render(request, 'food_selection/products.html', context)
@@ -79,8 +80,8 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'food_selection/product_detail.html'
     context_object_name = 'product'
-    slug_field = "product_id"
-    slug_url_kwarg = "product_id"
+    slug_field = 'product_id'
+    slug_url_kwarg = 'product_id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,33 +108,33 @@ def disclaimer(request):
     return render(request, 'food_selection/legal_disclaimer.html', context)
 
 
-# MODIFICATION IMPORTANTE ICI : Utilisation de Favorite et LoginRequiredMixin
+# IMPORTANT CHANGE HERE: Use of Favorite and LoginRequiredMixin
 class SaveProductFormView(LoginRequiredMixin, FormView):
-    template_name = "food_selection/products.html"
+    template_name = 'food_selection/products.html'
     form_class = SaveProductForm
-    success_url = "/saved_products_list/"
+    success_url = reverse_lazy('food_selection:saved-list')
 
     def form_valid(self, form):
         product_id = form.cleaned_data.get('product_id')
 
-        # On récupère le produit de manière sécurisée
+        # We collect the product securely.
         product = get_object_or_404(Product, pk=product_id)
 
-        # On crée le lien Favori entre l'utilisateur connecté et le produit
-        # get_or_create évite les doublons si l'utilisateur clique 2 fois
+        # We create the Favorite link between the logged-in user and the product.
+        # get_or_create avoids duplicates if the user clicks twice
         Favorite.objects.get_or_create(user=self.request.user, product=product)
 
         return super().form_valid(form)
 
-    # Si l'utilisateur n'est pas connecté, on lui dit
+    # If the user is not logged in, they are told
     def handle_no_permission(self):
-        messages.error(self.request, "Vous devez être connecté pour sauvegarder un produit.")
+        messages.error(self.request, 'Vous devez être connecté pour sauvegarder un produit.')
         return super().handle_no_permission()
 
 
-# MÊME LOGIQUE POUR LE TEST
+# SAME LOGIC FOR THE TEST
 class TestFormView(LoginRequiredMixin, FormView):
-    template_name = "food_selection/test_form.html"
+    template_name = 'food_selection/test_form.html'
     form_class = TestForm
     success_url = '/saved_products_list/'
 
@@ -146,16 +147,16 @@ class TestFormView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-# MODIFICATION IMPORTANTE ICI : On liste les Favoris, pas les Produits
+# IMPORTANT CHANGE HERE: We list Favorites, not Products.
 class SavedProductsListView(LoginRequiredMixin, ListView):
-    model = Favorite  # On change le modèle de base
+    model = Favorite  # We are changing the basic model.
     paginate_by = 6
     template_name = 'food_selection/saved_products.html'
-    context_object_name = 'favorites'  # On renomme pour être clair dans le template
+    context_object_name = 'favorites'  # Rename for clarity in the template
 
     def get_queryset(self):
-        # On retourne uniquement les favoris de l'utilisateur connecté
-        # select_related('product') optimise la requête SQL (évite de requêter le produit pour chaque ligne)
+        # Only the favorites of the logged-in user are returned.
+        # select_related(‘product’) optimizes the SQL query (avoids querying the product for each row)
         return Favorite.objects.filter(user=self.request.user).select_related('product').order_by('-id')
 
     def get_context_data(self, **kwargs):
@@ -167,5 +168,5 @@ class SavedProductsListView(LoginRequiredMixin, ListView):
         return context
 
     def handle_no_permission(self):
-        messages.error(self.request, "Vous devez être connecté pour voir les favoris.")
+        messages.error(self.request, 'Vous devez être connecté pour voir les favoris.')
         return super().handle_no_permission()

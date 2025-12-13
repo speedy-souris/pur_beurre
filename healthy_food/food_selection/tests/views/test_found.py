@@ -1,5 +1,7 @@
+from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
+
 from food_selection.models import Product, Category
 
 
@@ -8,7 +10,7 @@ class FoundViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         """
-        Crée les données une seule fois pour toute la classe de test.
+        Creates the data once for the entire test class.
         """
         # --- Categories ---
         cls.cat_plats = Category.objects.create(name="Plats Préparés")
@@ -73,24 +75,24 @@ class FoundViewTest(TestCase):
 
 class EmptyDBFoundViewTest(TestCase):
     """
-    Cette classe de test est dédiée à la vérification du comportement
-    de la vue 'found' lorsque la base de données est vide.
+    This test class is dedicated to verifying the behavior
+    of the ‘found’ view when the database is empty.
     """
 
     def test_search_on_empty_database(self):
         """
-        Vérifie que la recherche d'un produit sur une base de données vide
-        se déroule sans erreur et ne retourne aucun résultat.
+        Verify that searching for a product in an empty database
+        runs without errors and returns no results..
         """
-        # On effectue une requête GET pour un produit quelconque
+        # We perform a GET request for any product.
         response = self.client.get(reverse('food_selection:found'), {'product': 'confiture de fraise'})
 
-        # 1. On vérifie que la page est accessible et ne génère pas d'erreur serveur (ex: Erreur 500)
-        self.assertEqual(response.status_code, 200)
+        # 1. CORRECTION: We check for a redirect (302) and not for code 200.
+        # assertRedirects checks both the 302 code and the destination URL
+        self.assertRedirects(response, reverse('food_selection:home'))
 
-        # 2. On s'assure qu'aucun produit initial n'a été trouvé et passé au contexte
-        # (Cette assertion dépend de l'implémentation de votre vue)
-        self.assertIsNone(response.context.get('product'))
-
-        # 3. On vérifie que la liste des substituts est vide
-        self.assertEqual(len(response.context['page_obj']), 0)
+        # 2. Checking the error message (Optional but recommended)
+        # We retrieve the messages stored in the query.
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Aucun produit ne correspond à votre recherche.')

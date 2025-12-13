@@ -6,14 +6,14 @@ from food_selection.models import Product
 
 class ProductDetailViewTest(TestCase):
     """
-    Série de tests pour la vue et le template affichant les détails d'un produit.
+    Series of tests for the view and template displaying product details.
     """
 
     @classmethod
     def setUpTestData(cls):
         """
-        Cette méthode est exécutée une seule fois pour la classe de test.
-        Nous créons un produit factice pour nos tests.
+        This method is executed only once for the test class.
+        We create a dummy product for our tests..
         """
         cls.product = Product.objects.create(
             product_id='12345',
@@ -34,22 +34,22 @@ class ProductDetailViewTest(TestCase):
 
     def setUp(self):
         """
-        Cette méthode est exécutée avant chaque test.
-        Nous effectuons une requête GET sur la page de détail du produit.
+        This method is executed before each test.
+        We perform a GET request on the product detail page.
         """
-        # Remplacez 'product-detail' par le nom de votre URL
+        # Replace ‘product-detail’ with the name of your URL.
         url = reverse('food_selection:product', args=[self.product.product_id])
         self.response = self.client.get(url)
-        # Nous utilisons BeautifulSoup pour analyser le contenu HTML de la réponse
+        # We use BeautifulSoup to parse the HTML content of the response.
         self.soup = BeautifulSoup(self.response.content, 'html.parser')
 
     def test_page_title_is_correct(self):
         """
-        Vérifie que le titre du template.
+        Check that the template title is correct.
         """
-        # le titre du template == page_name
+        # the template title == page_name
         expected_title = 'Détails du produit'
-        # On recherche la balise <title> dans le HTML.
+        # We search for the <title> tag in the HTML.
         page_title = self.soup.find('title')
 
         self.assertIsNotNone(page_title, "Pas de Titre")
@@ -57,42 +57,42 @@ class ProductDetailViewTest(TestCase):
 
     def test_view_uses_the_correct_template(self):
         """
-        Vérifie que la vue utilise le bon fichier de template.
+        Verify that the view uses the correct template file.
         """
-        self.assertTemplateUsed(self.response, 'food_selection/product_detail.html') # Adaptez le chemin
+        self.assertTemplateUsed(self.response, 'food_selection/product_detail.html')
 
     def test_the_page_contains_general_product_information(self):
         """
-        Vérifie la présence du nom, de l'image du produit et du Nutri-Score.
+        Check that the name, product image, and Nutri-Score are present.
         """
-        # Vérifie que le titre (h1) contient le nom du produit
+        # Verify that the title (h1) contains the product name.
         titre_h1 = self.soup.find('h1', class_='card-title')
         self.assertIsNotNone(titre_h1, "La balise h1 avec la classe 'card-title' est manquante.")
         self.assertEqual(titre_h1.string.strip(), self.product.name)
 
-        # Vérifie que l'image principale du produit est correcte
+        # Verify that the main product image is correct.
         image_produit = self.soup.find('img', class_='card-img-top')
         self.assertIsNotNone(image_produit, "L'image principale du produit est manquante.")
-        # On vérifie qu'une partie du chemin de l'image est correcte
+        # We verify that part of the image path is correct.
         self.assertIn(f'images/image_product/{self.product.product_id}.jpg', image_produit['src'])
 
-        # Vérifie que l'image du Nutri-Score est correcte
+        # Check that the Nutri-Score image is correct.
         image_nutriscore = self.soup.find('img', alt="nutriscore du produit selectionné")
         self.assertIsNotNone(image_nutriscore, "L'image du Nutri-Score est manquante.")
         self.assertIn(f'images/image_nutriscore/Nutriscore_{self.product.nutriscore}.jpg', image_nutriscore['src'])
 
     def test_the_nutrition_table_contains_the_correct_values(self):
         """
-        Vérifie que les valeurs dans le tableau nutritionnel sont correctes.
+        Check that the values in the nutrition table are correct.
         """
-        # On recherche le tableau
+        # We are looking for the painting
         table = self.soup.find('table', class_='table')
         self.assertIsNotNone(table, "Le tableau des informations nutritionnelles est manquant.")
 
-        # On récupère toutes les lignes du corps du tableau (tbody)
+        # We retrieve all the rows from the table body (tbody).
         lignes = table.find('tbody').find_all('tr')
 
-        # Dictionnaire des valeurs attendues pour une vérification facile
+        # Dictionary of expected values for easy verification
         valeurs_attendues = {
             'Énergie': "450 kcal",
             'Protéines': "8,5 g",
@@ -104,7 +104,7 @@ class ProductDetailViewTest(TestCase):
             'Dont acides gras saturés': "9,8 g",
         }
 
-        # On parcourt chaque ligne du tableau pour vérifier son contenu
+        # We go through each row of the table to check its contents.
         for ligne in lignes:
             cellules = ligne.find_all('td')
             nom_nutriment = cellules[0].string.strip()
@@ -115,7 +115,7 @@ class ProductDetailViewTest(TestCase):
 
     def test_the_link_to_openfoodfacts_is_correct(self):
         """
-        Vérifie que le lien vers la fiche produit OpenFoodFacts est présent et correct.
+        Check that the link to the OpenFoodFacts product page is present and correct.
         """
         lien = self.soup.find('a', class_='btn-primary')
         self.assertIsNotNone(lien, "Le lien vers OpenFoodFacts est manquant.")

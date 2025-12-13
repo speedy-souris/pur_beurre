@@ -15,8 +15,8 @@ urlpatterns = [
     path('disclaimer/', views.disclaimer, name='disclaimer'),
 
     path('test_form/', views.TestFormView.as_view(), name='test-form'),
-    path("save_products/", views.SaveProductFormView.as_view(), name="save_products"),
-    path("saved_products_list/", views.SavedProductsListView.as_view(), name="saved-list"),
+    path('save_products/', views.SaveProductFormView.as_view(), name='save_products'),
+    path('saved_products_list/', views.SavedProductsListView.as_view(), name='saved-list'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

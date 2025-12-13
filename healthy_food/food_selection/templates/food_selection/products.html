@@ -2,90 +2,90 @@
 {% load static %}
 
 {% block content %}
-    <div id="portfolio">
-        <div class="container-fluid p-5">
+    <div id='portfolio'>
+        <div class='container-fluid p-5'>
             <!-- Product not found popup -->
             {% if message_vide %}
-                <div class="text-center" style="margin-top: 150px;">
+                <div class='text-center' style='margin-top: 150px;'>
                     {{ message_vide }}
                 </div>
             {% endif %}
 
-            <div class="row g-0">
+            <div class='row g-0'>
             <!-- display configuration for all products -->
                 {% if product_found %}
                     <!-- 1. Display of the searched product -->
-                    <div class="col-12 text-center text-white mt-5">
-                        <h1 class="text-warning mb-4">{{ required_product.name }}</h1>
-                        <div class="d-flex justify-content-center align-items-center mx-auto" style="height: 450px; max-width: 280px;">
-                            <a href="{% url 'food_selection:product' required_product.pk %}" class="position-relative d-inline-block">
-                                <img src="{% static 'food_selection/images/image_product/'|add:required_product.pk|add:'.jpg' %}"
-                                     style="max-width: 100%; max-height: 450px; display: block;"
-                                     alt="Image du produit : {{ required_product.name }}" />
-                                <img class="position-absolute top-0 end-0 m-2" style="width: 80px; height: auto; z-index: 10;"
-                                     src="{% static 'food_selection/images/image_nutriscore/'|add:required_product.nutriscore|add:'.png' %}"
-                                     alt="Nutriscore du produit : {{ required_product.name }}" />
+                    <div class='col-12 text-center text-white mt-5'>
+                        <h1 class='text-warning mb-4'>{{ required_product.name }}</h1>
+                        <div class='d-flex justify-content-center align-items-center mx-auto' style='height: 450px; max-width: 280px;'>
+                            <a href='{% url "food_selection:product" required_product.pk %}' class='position-relative d-inline-block'>
+                                <img src='{% static "food_selection/images/image_product/"|add:required_product.pk|add:".jpg" %}'
+                                     style='max-width: 100%; max-height: 450px; display: block;'
+                                     alt='Image du produit : {{ required_product.name }}' />
+                                <img class='position-absolute top-0 end-0 m-2' style='width: 80px; height: auto; z-index: 10;'
+                                     src='{% static "food_selection/images/image_nutriscore/"|add:required_product.nutriscore|add:".png" %}'
+                                     alt='utriscore du produit : {{ required_product.name }}' />
                             </a>
                         </div>
-                        <div class="text-center">
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><strong>Catégories :</strong></li>
+                        <div class='text-center'>
+                            <ul class='list-inline'>
+                                <li class='list-inline-item'><strong>Catégories :</strong></li>
                                 {% for category in required_product.categories.all %}
-                                    <li class="list-inline-item">{{ category.name }}{% if not forloop.last %},{% endif %}</li>
+                                    <li class='list-inline-item'>{{ category.name }}{% if not forloop.last %},{% endif %}</li>
                                 {% endfor %}
                             </ul>
                         </div>
                         {% if page_obj %}
-                            <p class="mt-4">Vous pouvez remplacer cet aliment par :</p>
+                            <p class='mt-4'>Vous pouvez remplacer cet aliment par :</p>
                         {% endif %}
                     </div>
 
                     <!-- 2. Display of substitute products -->
-                    <div class="container-fluid p-0 mt-5">
-                        <div class="row">
+                    <div class='container-fluid p-0 mt-5'>
+                        <div class='row'>
                             {% for general_product in page_obj %}
-                                <div class="substitute_products col-sm-4 mb-4">
-                                    <div class="card h-100 d-flex flex-column bg-transparent">
-                                        <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 250px;">
-                                            <a href="{% url 'food_selection:product' general_product.pk %}" class="position-relative d-inline-block">
-                                                <img src="{% static 'food_selection/images/image_product/'|add:general_product.pk|add:'.jpg' %}"
-                                                     class="product-image" style="max-width: 100%; max-height: 250px; display: block;"
-                                                     alt="image produit de substitution" />
-                                                <img class="position-absolute top-0 end-0 m-2" style="width: 60px; height: auto; z-index: 10;"
-                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
-                                                     alt="nutriscore du produit de substitution" />
+                                <div class='substitute_products col-sm-4 mb-4'>
+                                    <div class='card h-100 d-flex flex-column bg-transparent'>
+                                        <div class='card-img-container d-flex justify-content-center align-items-center' style='height: 250px;'>
+                                            <a href='{% url "food_selection:product" general_product.pk %}' class='position-relative d-inline-block'>
+                                                <img src='{% static "food_selection/images/image_product/"|add:general_product.pk|add:".jpg" %}'
+                                                     class='product-image' style='max-width: 100%; max-height: 250px; display: block;'
+                                                     alt='image produit de substitution' />
+                                                <img class='position-absolute top-0 end-0 m-2' style='width: 60px; height: auto; z-index: 10;'
+                                                     src='{% static "food_selection/images/image_nutriscore/"|add:general_product.nutriscore|add:".png" %}'
+                                                     alt='nutriscore du produit de substitution' />
                                             </a>
                                         </div>
-                                        <div class="card-body d-flex flex-column">
-                                            <div class="text-white">
-                                                <h5 class="card-title">{{ general_product.name }}</h5>
+                                        <div class='card-body d-flex flex-column'>
+                                            <div class='text-white'>
+                                                <h5 class='card-title'>{{ general_product.name }}</h5>
                                             </div>
 
-                                            <ul class="list-inline">
+                                            <ul class='list-inline'>
                                                 {% for category in general_product.categories.all %}
-                                                    <li class="list-inline-item"><small class="text-warning">{{ category.name }}{% if not forloop.last %},{% endif %}</small></li>
+                                                    <li class='list-inline-item'><small class='text-warning'>{{ category.name }}{% if not forloop.last %},{% endif %}</small></li>
                                                 {% endfor %}
                                             </ul>
-                                            <div class="mt-auto">
+                                            <div class='mt-auto'>
                                                 {% if user.is_authenticated %}
                                                     {% if not general_product.saved %}
-                                                        <form method="post" action="{% url 'food_selection:save_products' %}">
+                                                        <form method='post' action='{% url "food_selection:save_products" %}'>
                                                             {% csrf_token %}
                                                             {{ general_product.form.as_p }}
-                                                            <button type="submit" class="btn btn-light mt-2">
-                                                                <img src="{% static 'food_selection/images/sauver.png' %}"
-                                                                     alt="Enregistrer" style="width:30px; height:30px; margin-right:5px;" />
+                                                            <button type='submit' class='btn btn-light mt-2'>
+                                                                <img src='{% static "food_selection/images/sauver.png" %}'
+                                                                     alt='Enregistrer' style='width:30px; height:30px; margin-right:5px;' />
                                                                 Favoris
                                                             </button>
                                                         </form>
                                                     {% else %}
-                                                        <p class="mt-3 text-success"><strong>Déjà Sauvegardé en Favoris</strong></p>
+                                                        <p class='mt-3 text-success'><strong>Déjà Sauvegardé en Favoris</strong></p>
                                                     {% endif %}
                                                 {% else %}
-                                                     <a href="{% url 'authentication:login' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-light mt-2">
-                                                        <img src="{% static 'food_selection/images/sauver.png' %}"
-                                                             alt="Connexion requise" style="width:30px; height:30px; margin-right:5px; opacity: 0.5;" />
-                                                        <span style="font-size: 0.9em;">Se connecter pour les Favoris</span>
+                                                     <a href='{% url "authentication:login" %}?next={{ request.get_full_path|urlencode }}' class='btn btn-light mt-2'>
+                                                        <img src='{% static "food_selection/images/sauver.png" %}'
+                                                             alt='Connexion requise' style='width:30px; height:30px; margin-right:5px; opacity: 0.5;' />
+                                                        <span style='font-size: 0.9em;'>Se connecter pour les Favoris</span>
                                                      </a>
                                                 {% endif %}
                                             </div>
@@ -94,8 +94,8 @@
                                 </div>
                             {% empty %}
                                 <!-- Substitute product message not found -->
-                                <div class="col-12 text-center">
-                                    <p class="text-white">Aucun substitut avec un meilleur Nutri-Score n'a été trouvé dans les mêmes catégories.</p>
+                                <div class='col-12 text-center'>
+                                    <p class='text-white'>Aucun substitut avec un meilleur Nutri-Score n'a été trouvé dans les mêmes catégories.</p>
                                 </div>
                             {% endfor %}
                         </div>
@@ -105,23 +105,23 @@
 
             <!-- General Organization of Pagination -->
             {% if page_obj and page_obj.has_other_pages %}
-                <div class="text-center text-white mt-4">
-                    <span class="step-links">
+                <div class='text-center text-white mt-4'>
+                    <span class='step-links'>
                         <!-- Links to the previous page and the first page -->
                         {% if page_obj.has_previous %}
-                            <a href="?product={{ name|urlencode }}&page=1">&laquo;</a>
-                            <a href="?product={{ name|urlencode }}&page={{ page_obj.previous_page_number }}">&lt;</a>
+                            <a href='?product={{ name|urlencode }}&page=1'>&laquo;</a>
+                            <a href='?product={{ name|urlencode }}&page={{ page_obj.previous_page_number }}'>&lt;</a>
                         {% endif %}
 
                         <!-- Displaying the current page number -->
-                        <span class="current">
+                        <span class='current'>
                             Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
                         </span>
 
                         <!-- Links to the next page and the last page -->
                         {% if page_obj.has_next %}
-                            <a href="?product={{ name|urlencode }}&page={{ page_obj.next_page_number }}">&gt;</a>
-                            <a href="?product={{ name|urlencode }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                            <a href='?product={{ name|urlencode }}&page={{ page_obj.next_page_number }}'>&gt;</a>
+                            <a href='?product={{ name|urlencode }}&page={{ page_obj.paginator.num_pages }}'>&raquo;</a>
                         {% endif %}
                     </span>
                 </div>

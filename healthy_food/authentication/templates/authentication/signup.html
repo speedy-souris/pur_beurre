@@ -1,15 +1,15 @@
 {% extends 'food_selection/base.html' %}
 
 {% block content %}
-    <div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
-        <h2 class="text-white text-center">Inscription</h2>
+    <div class='d-flex flex-column justify-content-center align-items-center' style='min-height: 80vh;'>
+        <h2 class='text-white text-center'>Inscription</h2>
         {% if form.errors %}
             {{ form.errors }}
         {% endif %}
-        <form method="post" class="text-white">
+        <form method='post' class='text-white'>
             {{ form.as_p }}
             {% csrf_token %}
-            <button type="submit" >S’inscrire</button>
+            <button type='submit' >S’inscrire</button>
         </form>
     </div>
 {% endblock content %}

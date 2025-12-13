@@ -1,7 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+
 from bs4 import BeautifulSoup
-from food_selection.models import Product, Category
+from food_selection.models import Product, Category, Favorite
 
 
 class SavedTemplateWithFavoritesTest(TestCase):
@@ -13,6 +15,10 @@ class SavedTemplateWithFavoritesTest(TestCase):
         """
         Crée les données initiales pour les tests de produits enregistrés
         """
+        User = get_user_model()
+        # user creation
+        cls.user = User.objects.create_user(username='testuser', password='password')
+
         # 1. Création des catégories
         category_confiture = Category.objects.create(name="Confitures")
         category_pate_a_tartiner = Category.objects.create(name="Pâtes à tartiner")
@@ -21,10 +27,14 @@ class SavedTemplateWithFavoritesTest(TestCase):
             favorites_product = Product.objects.create(
                 product_id=f"0000{i}",
                 name=f"Confiture Allégée {i + 1}",
-                nutriscore="a",
-                saved=True
+                nutriscore="a"
             )
             favorites_product.categories.add(category_confiture, category_pate_a_tartiner)
+
+            Favorite.objects.create(user=cls.user, product=favorites_product)
+
+    def setUp(self):
+        self.client.force_login(self.user)
 
     def test_count_favorites_products_on_page(self):
         """

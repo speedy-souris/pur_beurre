@@ -3,51 +3,51 @@
 
 {% block content %}
 <!-- Configuring the display of products saved by the logged-in user -->
-    <div id="portfolio">
-        <div class="container-fluid p-5">
-            <div class="row g-0">
+    <div id='portfolio'>
+        <div class='container-fluid p-5'>
+            <div class='row g-0'>
                 <!-- common display for searched and favourite products -->
-                <div class="container-fluid p-0">
-                    <div class="row mt-5">
-                        <h1 class="text-warning text-center mb-4">Produits Sauvegardés</h1>
+                <div class='container-fluid p-0'>
+                    <div class='row mt-5'>
+                        <h1 class='text-warning text-center mb-4'>Produits Sauvegardés</h1>
 
                         <!-- 1. Loop containing Favorite items (Saved products) -->
                         {% for favorite in page_obj %}
 
-                            <div class="favorite_saved_products col-sm-4 mb-4">
+                            <div class='favorite_saved_products col-sm-4 mb-4'>
                                 <!-- Using a Bootstrap Card for uniform structure and height -->
-                                <div class="card h-100 d-flex flex-column bg-transparent">
+                                <div class='card h-100 d-flex flex-column bg-transparent'>
 
                                     <!-- Fixed height container -->
-                                    <div class="card-img-container d-flex justify-content-center align-items-center" style="height: 300px;">
+                                    <div class='card-img-container d-flex justify-content-center align-items-center' style='eight: 300px;'
 
                                         <!-- 2. ATTENTION HERE: we use “favorite.product.product_id” -->
-                                        <a href="{% url 'food_selection:product' favorite.product.product_id %}" class="position-relative d-inline-block">
+                                        <a href='{% url "food_selection:product" favorite.product.product_id %}' class='position-relative d-inline-block'>
 
                                             <!-- 3. Product image: “favorite.product.product_id” -->
-                                            <img src="{% static 'food_selection/images/image_product/'|add:favorite.product.product_id|add:'.jpg' %}"
-                                             style="max-width: 100%; max-height: 300px; display: block;"
-                                             alt="Image du produit : {{ favorite.product.name }}" />
+                                            <img src='{% static "food_selection/images/image_product/"|add:favorite.product.product_id|add:".jpg" %}'
+                                             style='max-width: 100%; max-height: 300px; display: block;'
+                                             alt='Image du produit : {{ favorite.product.name }}' />
 
                                             <!-- 4. Nutriscore : "favorite.product.nutriscore" -->
-                                            <img class="position-absolute top-0 end-0 m-2" style="width: 60px; height: auto; z-index: 10;"
-                                                 src="{% static 'food_selection/images/image_nutriscore/'|add:favorite.product.nutriscore|add:'.png' %}"
-                                                 alt="Nutriscore du produit : {{ favorite.product.name }}" />
+                                            <img class='position-absolute top-0 end-0 m-2' style='width: 60px; height: auto; z-index: 10;'
+                                                 src='{% static "food_selection/images/image_nutriscore/"|add:favorite.product.nutriscore|add:".png" %}'
+                                                 alt='Nutriscore du produit : {{ favorite.product.name }}' />
                                         </a>
                                     </div>
 
                                     <!-- Text content -->
-                                    <div class="card-body">
-                                        <div class="text-white">
+                                    <div class='card-body'>
+                                        <div class='text-white'>
                                             <!-- 5. Product name -->
-                                            <h5 class="card-title">{{ favorite.product.name }}</h5>
+                                            <h5 class='card-title'>{{ favorite.product.name }}</h5>
                                         </div>
 
                                         <!-- Categories -->
-                                        <ul class="list-inline">
+                                        <ul class='list-inline'>
                                             <!-- 6. Catégories : "favorite.product.categories.all" -->
                                             {% for category in favorite.product.categories.all %}
-                                                <li class="list-inline-item"><small class="text-warning">{{ category.name }}</small></li>
+                                                <li class='list-inline-item'><small class='text-warning'>{{ category.name }}</small></li>
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -56,7 +56,7 @@
 
                         {% empty %}
                         <!-- Message for empty page -->
-                            <div class="col-12 text-center text-white">
+                            <div class='col-12 text-center text-white'>
                                 <p>Vous n'avez pas encore enregistré de produits.</p>
                             </div>
                         {% endfor %}
@@ -64,18 +64,18 @@
                 </div>
 
                 <!-- Pagination remains unchanged -->
-                <div class="text-center mt-4 text-white">
-                    <span class="step-links">
+                <div class='text-center mt-4 text-white'>
+                    <span class='step-links'>
                         {% if page_obj.has_previous %}
-                            <a href="?page=1">&laquo;</a>
-                            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                            <a href='?page=1'>&laquo;</a>
+                            <a href='?page={{ page_obj.previous_page_number }}'>&lt;</a>
                         {% endif %}
-                        <span class="current">
+                        <span class='current'>
                             Page {{ page_obj.number }} à {{ page_obj.paginator.num_pages }}.
                         </span>
                         {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
-                            <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                            <a href='?page={{ page_obj.next_page_number }}'>&gt;</a>
+                            <a href='?page={{ page_obj.paginator.num_pages }}'>&raquo;</a>
                         {% endif %}
                     </span>
                 </div>
