@@ -9,27 +9,25 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os.path
+import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4a1hit-69edvgau@i)p_o9x-auc_go)qc4=n3(^owy$0s_64r$'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-4a1hit-69edvgau@i)p_o9x-auc_go)qc4=n3(^owy$0s_64r$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS =  os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,6 +41,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,8 +55,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # new code that points to the location of the templates
-            BASE_DIR / 'food_selection' / 'templates',
-            BASE_DIR.joinpath('templates'),
+            BASE_DIR / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,16 +76,11 @@ ROOT_URLCONF = 'healthy_food.urls'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'purbeurre',
-        'USER': 'purbeurre',
-        'PASSWORD': '@DB15pm12perso2024@',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
+    'default':  dj_database_url.config(
+        default='postgresql://purbeurre:@DB15pm12perso2024@@localhost:5432/purbeurre',
+        conn_max_age=600
+    )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -107,37 +100,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
-LANGUAGE_CODE = 'fr-FR'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Default image root
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 MEDIA_URL = '/images/'
+MEDIA_ROOT = BASE_DIR / 'images'
 
 # authenfication settings
 AUTH_USER_MODEL = 'authentication.User'
 LOGIN_URL = 'authentication:login'
 LOGIN_REDIRECT_URL = 'food_selection:home'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Internationalization
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
+LANGUAGE_CODE = 'fr-FR'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
 # ==================================================================
 # CUSTOM PROJECT SETTINGS
 # ==================================================================
