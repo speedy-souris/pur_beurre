@@ -13,7 +13,7 @@ DATABASES = {
     )
 }
 
-# Optimisation WhiteNoise pour la production (compression des fichiers statiques)
+# WhiteNoise optimization for production (static file compression)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Production-specific security

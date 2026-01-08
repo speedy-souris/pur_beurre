@@ -43,7 +43,6 @@ class Command(BaseCommand):
                 url=prod['url'],
                 image_url=prod['image_url'],
             ))
-            # print(f'nutriments = {prod["nutriments"]}')
         Product.objects.bulk_create(new_products)
 
     @staticmethod

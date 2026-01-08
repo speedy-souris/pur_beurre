@@ -24,7 +24,7 @@ MOCK_API_RESPONSE = {
                 "salt_100g": 0.01,
                 "fat_100g": 0.5,
                 "satured_fat_100g": 0.1,
-                "une_cle_inutile": "valeur" # Doit être filtrée
+                "une_cle_inutile": "valeur" # Must be filtered
             }
         },
         # Case 2: Valid product WITHOUT image (should receive default image)
@@ -33,7 +33,7 @@ MOCK_API_RESPONSE = {
             "product_name_fr": "Eau Minérale",
             "nutriscore_grade": "a",
             "url": "https://fr.openfoodfacts.org/produit/987654321",
-            "image_url": None, # URL invalide/manquante
+            "image_url": None, # Invalid/missing URL
             "categories_tags_fr": ["boissons"],
             "nutriments": {"salt_100g": 0.0}
         },
@@ -41,14 +41,14 @@ MOCK_API_RESPONSE = {
         {
             "code": "555555555",
             "product_name_fr": "Soda",
-            "nutriscore_grade": "Z", # Nutriscore invalide
+            "nutriscore_grade": "Z", # Nutriscore invalid
             "categories_tags_fr": ["boissons"],
             "nutriments": {}
         },
         # Case 4: Invalid product (should be ignored)
         {
             "code": "555555555",
-            "product_name_fr": None, # Nom manquant
+            "product_name_fr": None, # Name missing
             "nutriscore_grade": "b",
             "categories_tags_fr": ["boissons"],
             "nutriments": {}

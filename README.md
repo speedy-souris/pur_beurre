@@ -62,20 +62,20 @@ python manage.py createsuperuser
 ## II. Création de la base donnée de deux manières distincts
 ### 1. Initialisé chaque commande dans l'ordre
 ```shell
-# 1. Effacer les anciennes données
+# 1. Delete old data
 python manage.py delete_all_data
 
-# 2. Effacer le repertoire image_product avec toutes les anciennes images produits
+# 2. Delete the image_product directory with all old product images
 python manage.py delete_image_dir
 
-# 3. Creation de la nouvelle base de données de produits
+# 3. Creation of the new product database
 python manage.py create_product
 
-# 4. Creation du nouveau répertoire image_product avec les nouvelles images de chaque produit
+# 4. Creation of the new image_product directory with the new images for each product
 python manage.py image_product
 ```
 ### 2. Initialisé une unique commande
 ```shell
-# 1. Réalise toutes les commandes de la méthode 1 dans l'ordre
+# 1. Perform all commands in method 1 in order.
 python manage.py full_import
 ```

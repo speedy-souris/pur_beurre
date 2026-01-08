@@ -37,18 +37,18 @@ class LoginPageView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, "Vous avez été connecté avec succès !")
-                # Récupération de la redirection
+                # Redirection recovery
                 redirect_to = request.POST.get('next')
                 if redirect_to:
                     return redirect(redirect_to)
                 return redirect('food_selection:home')
             else:
-                # Cas : Formulaire valide mais Mauvais mot de passe / utilisateur inconnu
+                # Case: Valid form but incorrect password/unknown user
                 messages.error(request, 'Identifiant ou mot de passe invalide.')
         else:
-            # Cas : Formulaire invalide (champs vides, format incorrect)
+            # Case: Invalid form (empty fields, incorrect format)
             messages.error(request, 'Veuillez vérifier les champs du formulaire.')
-        # Si on arrive ici, c'est que le login a échoué.
+        # If you've arrived here, it means that the login has failed.
         next_url = request.POST.get('next', '')
         context = {
             'search_form': food_forms.SearchNewFood(),

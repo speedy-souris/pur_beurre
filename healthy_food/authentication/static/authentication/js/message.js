@@ -3,11 +3,11 @@ for login, logout, incorrect authentication, etc.
 */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // On vérifie si la variable 'djangoMessages' existe
+    // We check if the variable ‘djangoMessages’ exists.
     if (typeof djangoMessages !== 'undefined' && djangoMessages.length > 0) {
 
         djangoMessages.forEach(function(msg) {
-            // Mapper les tags Django vers les icônes SweetAlert
+            // Mapping Django tags to SweetAlert icons
             // Django: debug, info, success, warning, error
             // SweetAlert: info, success, warning, error, question
             let iconType = msg.tag;

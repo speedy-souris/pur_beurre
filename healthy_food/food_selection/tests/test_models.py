@@ -76,7 +76,7 @@ class FavoriteModelTest(TestCase):
 
     def setUp(self):
         """
-        On doit créer un utilisateur, un produit pour tous les tests
+        We need to create a user and a product for all tests.
         """
         User = get_user_model()
         self.user = User.objects.create_user('testuser', password='password')
@@ -89,11 +89,11 @@ class FavoriteModelTest(TestCase):
 
     def test_favorite_creation_and_str(self):
         """
-        Test 1: Vérifie la création normale et la méthode __str__
+        Test 1: Verify normal creation and the __str__ method
         """
         favorite = Favorite.objects.create(user=self.user, product=self.product)
 
-        # Vérifie que l'objet est bien créé
+        # Verify that the object has been created correctly.
         self.assertTrue(isinstance(favorite, Favorite))
         self.assertIsNotNone(favorite.created_at)
 
@@ -102,42 +102,42 @@ class FavoriteModelTest(TestCase):
 
     def test_unique_together_constraint(self):
         """
-        Test 2: Vérifie qu'on ne peut pas avoir de doublons (Même User + Même Produit)
+        Test 2: Verify that there can be no duplicates (same user + same product).
         """
-        # 1. On crée le premier favori
+        # 1. We create the first favorite
         Favorite.objects.create(user=self.user, product=self.product)
 
-        # 2. On essaie de créer EXACTEMENT le même favori
-        # Cela doit lever une erreur d'intégrité (IntegrityError) au niveau de la base de données
+        # 2. We try to create EXACTLY the same favorite
+        # This should raise an IntegrityError in the database.
         with self.assertRaises(IntegrityError):
             Favorite.objects.create(user=self.user, product=self.product)
 
     def test_cascade_delete_user(self):
         """
-        Test 3: Si l'utilisateur est supprimé, le favori doit disparaître
+        Test 3: If the user is deleted, the bookmark should disappear.
         """
         Favorite.objects.create(user=self.user, product=self.product)
 
-        # Vérification pré-suppression
+        # Pre-deletion verification
         self.assertEqual(Favorite.objects.count(), 1)
 
-        # Action : Suppression de l'utilisateur
+        # Action: Delete user
         self.user.delete()
 
-        # Vérification : Le favori doit avoir été supprimé automatiquement
+        # Verification: The favorite must have been automatically deleted.
         self.assertEqual(Favorite.objects.count(), 0)
 
     def test_cascade_delete_product(self):
         """
-        Test 4: Si le produit est supprimé, le favori doit disparaître
+        Test 4: If the product is deleted, the favorite should disappear.
         """
         Favorite.objects.create(user=self.user, product=self.product)
 
-        # Vérification pré-suppression
+        # Pre-deletion verification
         self.assertEqual(Favorite.objects.count(), 1)
 
-        # Action : Suppression du produit
+        # Action: Product removal
         self.product.delete()
 
-        # Vérification : Le favori doit avoir été supprimé
+        # Verification: The favorite must have been deleted.
         self.assertEqual(Favorite.objects.count(), 0)

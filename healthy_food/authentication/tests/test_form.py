@@ -11,7 +11,7 @@ class LoginFormTest(SimpleTestCase):
 
     def test_login_form_valid_data(self):
         """
-        Test 1: Vérifie que le formulaire est valide avec des données correctes.
+        Test 1: Verify that the form is valid with correct data.
         """
         form_data = {
             'username': 'testuser',
@@ -25,20 +25,20 @@ class LoginFormTest(SimpleTestCase):
 
     def test_login_form_empty_data(self):
         """
-        Test 2: Vérifie que le formulaire génère des erreurs si les champs sont vides.
+        Test 2: Verifies that the form generates errors if the fields are empty.
         """
         form = LoginForm(data={})
 
         self.assertFalse(form.is_valid())
-        self.assertEqual(len(form.errors), 2)  # On attend une erreur pour username et une pour password
+        self.assertEqual(len(form.errors), 2)  # We expect one error for username and one for password.
         self.assertIn('username', form.errors)
         self.assertIn('password', form.errors)
 
     def test_login_form_max_length(self):
         """
-        Test 3: Vérifie la contrainte max_length=63.
+        Test 3: Checks the constraint max_length=63.
         """
-        # On crée un pseudo de 64 caractères (donc trop long)
+        # We create a 64-character username (which is too long).
         long_username = 'a' * 64
 
         form_data = {
@@ -48,11 +48,11 @@ class LoginFormTest(SimpleTestCase):
         form = LoginForm(data=form_data)
 
         self.assertFalse(form.is_valid())
-        self.assertIn('username', form.errors)  # Doit contenir une erreur sur le username
+        self.assertIn('username', form.errors)  # Must contain an error in the username
 
     def test_login_form_labels(self):
         """
-        Test 4: Vérifie que les étiquettes (labels) sont correctes (pour l'affichage HTML).
+        Test 4: Verifies that the labels are correct (for HTML display).
         """
         form = LoginForm()
         self.assertEqual(form.fields['username'].label, 'Nom d’utilisateur')
@@ -60,7 +60,7 @@ class LoginFormTest(SimpleTestCase):
 
     def test_login_form_widget(self):
         """
-        Test 5: Vérifie que le champ password est bien caché (widget PasswordInput).
+        Test 5: Verify that the password field is hidden (PasswordInput widget).
         """
         form = LoginForm()
         self.assertIsInstance(form.fields['password'].widget, forms.PasswordInput)
@@ -69,56 +69,56 @@ class LoginFormTest(SimpleTestCase):
 class SignupFormTest(TestCase):
 
     def setUp(self):
-        # On récupère le modèle utilisateur actif
+        # We retrieve the active user model.
         self.User = get_user_model()
 
     def test_signup_form_valid(self):
         """
-        Test 1: Cas nominal. Les données sont correctes, l'utilisateur doit être créé.
+        Test 1: Nominal case. The data is correct, the user must be created.
         """
         form_data = {
             'username': 'nouveau_user',
             'email': 'test@example.com',
-            'password1': 'MonMotDePasseSecret123!',  # Champ requis par UserCreationForm
-            'password2': 'MonMotDePasseSecret123!',  # Confirmation requise
+            'password1': 'MonMotDePasseSecret123!',  # Field required by UserCreationForm
+            'password2': 'MonMotDePasseSecret123!',  # Confirmation required
         }
         form = SignupForm(data=form_data)
 
         self.assertTrue(form.is_valid())
 
-        # On vérifie que la sauvegarde fonctionne
+        # We verify that the backup is working.
         user = form.save()
         self.assertEqual(user.username, 'nouveau_user')
         self.assertEqual(user.email, 'test@example.com')
-        # On vérifie que le mot de passe est bien haché (pas en clair)
+        # We verify that the password is hashed (not in plain text).
         self.assertTrue(user.check_password('MonMotDePasseSecret123!'))
 
     def test_signup_form_password_mismatch(self):
         """
-        Test 2: Les mots de passe ne correspondent pas.
+        Test 2: Passwords do not match.
         """
         form_data = {
             'username': 'user_fail',
             'email': 'fail@example.com',
             'password1': 'MotDePasseA',
-            'password2': 'MotDePasseB',  # Différent
+            'password2': 'MotDePasseB',  # Different
         }
         form = SignupForm(data=form_data)
 
         self.assertFalse(form.is_valid())
-        # L'erreur est généralement associée au champ password2 ou non-field errors
+        # The error is usually associated with the password2 field or non-field errors.
         self.assertIn('password2', form.errors)
 
     def test_signup_form_username_already_exists(self):
         """
-        Test 3: Le nom d'utilisateur est déjà pris (Test d'unicité).
+        Test 3: The username is already taken (Uniqueness test).
         """
-        # On crée d'abord un utilisateur en base
+        # First, create a user in the database.
         self.User.objects.create_user(username='doublon', email='old@test.com', password='pwd')
 
-        # On essaie de créer le même
+        # We try to create the same
         form_data = {
-            'username': 'doublon',  # Déjà pris
+            'username': 'doublon',  # Already taken
             'email': 'new@test.com',
             'password1': 'password123',
             'password2': 'password123',
@@ -131,11 +131,11 @@ class SignupFormTest(TestCase):
 
     def test_signup_form_invalid_email(self):
         """
-        Test 4: Validation du format de l'email.
+        Test 4: Email format validation.
         """
         form_data = {
             'username': 'user_email_fail',
-            'email': 'ceci-n-est-pas-un-email',  # Format invalide
+            'email': 'ceci-n-est-pas-un-email',  # Invalid format
             'password1': 'password123',
             'password2': 'password123',
         }
@@ -146,8 +146,8 @@ class SignupFormTest(TestCase):
 
     def test_signup_form_fields_list(self):
         """
-        Test 5: Vérifie que seuls username et email sont exposés (hors mots de passe).
+        Test 5: Verify that only the username and email address are exposed (excluding passwords)...
         """
         form = SignupForm()
-        # On vérifie la liste 'fields' définie dans Meta
+        # We check the ‘fields’ list defined in Meta.
         self.assertEqual(list(form.Meta.fields), ['username', 'email'])

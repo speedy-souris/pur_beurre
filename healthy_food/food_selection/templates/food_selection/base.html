@@ -90,7 +90,7 @@
         <!-- 2. Script to detect Django messages and launch the popup -->
         {% if messages %}
             <script>
-                // On crée une variable globale accessible par le fichier externe
+                // We create a global variable accessible by the external file.
                 window.djangoMessages = [
                     {% for message in messages %}
                         {

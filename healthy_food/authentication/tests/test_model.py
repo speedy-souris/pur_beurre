@@ -6,13 +6,13 @@ from django.test import TestCase
 class UserModelTest(TestCase):
 
     def setUp(self):
-        # On récupère toujours le modèle via get_user_model()
-        # pour être sûr d'utiliser celui défini dans settings.AUTH_USER_MODEL
+        # We always retrieve the model via get_user_model()
+        # to ensure that the one defined in settings.AUTH_USER_MODEL is used
         self.User = get_user_model()
 
     def test_create_user_with_valid_data(self):
         """
-        Test 1: Vérifie qu'on peut créer un utilisateur standard.
+        Test 1: Verify that a standard user can be created.
         """
         user = self.User.objects.create_user(
             username='testuser',
@@ -23,32 +23,32 @@ class UserModelTest(TestCase):
         self.assertEqual(user.username, 'testuser')
         self.assertEqual(user.email, 'test@example.com')
         self.assertTrue(user.check_password('password123'))
-        self.assertTrue(user.is_active)  # Par défaut True dans AbstractUser
+        self.assertTrue(user.is_active)  # Default True in AbstractUser
 
     def test_email_is_unique(self):
         """
-        Test 2: Vérifie que la contrainte unique=True sur l'email fonctionne.
-        C'est le test le plus important car AbstractUser ne l'impose pas par défaut.
+        Test 2: Verify that the single constraint=True on the email is working.
+        This is the most important test because AbstractUser does not impose it by default.
         """
-        # Création du premier utilisateur
+        # Creating the first user
         self.User.objects.create_user(
             username='user1',
             email='unique@example.com',
             password='pwd'
         )
 
-        # Tentative de création d'un second utilisateur avec le MEME email
-        # Cela doit lever une erreur d'intégrité (IntegrityError) au niveau de la DB
+        # Attempt to create a second user with the SAME email address
+        # This should raise an IntegrityError in the database.
         with self.assertRaises(IntegrityError):
             self.User.objects.create_user(
                 username='user2',
-                email='unique@example.com',  # Doublon
+                email='unique@example.com',  # Duplicate
                 password='pwd'
             )
 
     def test_role_default_value(self):
         """
-        Test 3: Vérifie que le rôle par défaut est bien 'SUBSCRIBER'.
+        Test 3: Verify that the default role is ‘SUBSCRIBER’.
         """
         user = self.User.objects.create_user(
             username='roleuser',
@@ -60,16 +60,16 @@ class UserModelTest(TestCase):
 
     def test_str_method(self):
         """
-        Test 4: Vérifie la méthode __str__.
+        Test 4: Check the __str__ method.
         """
         user = self.User.objects.create_user(username='my_name', email='s@t.com')
         self.assertEqual(str(user), 'my_name')
 
     def test_required_fields_configuration(self):
         """
-        Test 5: Vérifie la configuration des champs requis (utile pour createsuperuser).
+        Test 5: Verify the configuration of the required fields (useful for createsuperuser).
         """
-        # USERNAME_FIELD doit être 'username'
+        # USERNAME_FIELD must be 'username'
         self.assertEqual(self.User.USERNAME_FIELD, 'username')
-        # REQUIRED_FIELDS doit contenir 'email'
+        # REQUIRED_FIELDS must contain 'email'
         self.assertIn('email', self.User.REQUIRED_FIELDS)

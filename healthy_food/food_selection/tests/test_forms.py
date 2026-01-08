@@ -11,16 +11,16 @@ class SearchNewFoodFormTest(TestCase):
 
     def test_valid_form_when_empty(self):
         """
-        Teste que le formulaire de recherche est bien VALIDE même quand il est vide,
-        car le champ 'product' est correctement configuré avec required=False.
+        Test that the search form is VALID even when it is empty,
+        because the ‘product’ field is correctly configured with required=False.
         """
-        # On crée un formulaire avec des données vides
+        # We create a form with empty data
         form = SearchNewFood(data={})
 
-        # On s'assure que le formulaire est considéré comme valide
+        # We ensure that the form is considered valid.
         self.assertTrue(form.is_valid())
 
-        # On peut aussi vérifier explicitement que le dictionnaire d'erreurs est vide
+        # We can also explicitly check that the error dictionary is empty
         self.assertEqual(form.errors, {})
 
     def test_field_label(self):

@@ -7,27 +7,27 @@ from django.urls import reverse
 class LoginPageViewTest(TestCase):
 
     def setUp(self):
-        # Création d'un utilisateur pour tester la connexion réussie
+        # Creating a user to test the successful connection
         User = get_user_model()
         self.user = User.objects.create_user(username='testuser', password='password123')
         self.url = reverse('authentication:login')
 
     def test_login_page_display(self):
         """
-        Test GET: Vérifie que la page s'affiche avec les bons contextes.
+        GET test: Verifies that the page displays with the correct contexts.
         """
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'authentication/login.html')
 
-        # Vérifie la présence des formulaires dans le contexte
+        # Checks for the presence of forms in the context
         self.assertIn('form', response.context)  # LoginForm
         self.assertIn('search_form', response.context)  # SearchNewFood
 
     def test_login_success_redirects_home(self):
         """
-        Test POST: Connexion réussie -> Redirection vers l'accueil.
+        POST test: Successful login -> Redirect to home page.
         """
         data = {
             'username': 'testuser',
@@ -35,21 +35,21 @@ class LoginPageViewTest(TestCase):
         }
         response = self.client.post(self.url, data)
 
-        # Vérifie la redirection vers 'food_selection:home'
+        # Check the redirect to 'food_selection:home'
         self.assertRedirects(response, reverse('food_selection:home'))
 
-        # Vérifie que l'utilisateur est bien connecté (session active)
+        # Verify that the user is logged in (active session)
         self.assertIn('_auth_user_id', self.client.session)
 
-        # Vérifie le message de succès
+        # Check the success message
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(str(messages[0]), "Vous avez été connecté avec succès !")
 
     def test_login_success_redirects_next(self):
         """
-        Test POST: Connexion réussie avec paramètre 'next' -> Redirection vers 'next'.
+        POST test: Successful connection with ‘next’ parameter -> Redirection to 'next'.
         """
-        # On simule un champ caché 'next' dans le formulaire
+        # We simulate a hidden ‘next’ field in the form.
         data = {
             'username': 'testuser',
             'password': 'password123',
@@ -57,12 +57,12 @@ class LoginPageViewTest(TestCase):
         }
         response = self.client.post(self.url, data)
 
-        # Note: assertRedirects vérifie le code 302 et l'URL cible
+        # Note: assertRedirects checks for code 302 and the target URL.
         self.assertRedirects(response, '/some/protected/url/', fetch_redirect_response=False)
 
     def test_login_failed_invalid_credentials(self):
         """
-        Test POST: Mauvais mot de passe -> Reste sur la page + Message erreur.
+        POST test: Incorrect password -> Remains on the page + Error message.
         """
         data = {
             'username': 'testuser',
@@ -70,19 +70,19 @@ class LoginPageViewTest(TestCase):
         }
         response = self.client.post(self.url, data)
 
-        # Code 200 attendu (pas de redirection, on réaffiche la page avec l'erreur)
+        # Expected code 200 (no redirection, the page with the error is displayed again)
         self.assertEqual(response.status_code, 200)
 
-        # Vérifie que l'utilisateur n'est PAS connecté
+        # Verify that the user is NOT logged in
         self.assertNotIn('_auth_user_id', self.client.session)
 
-        # Vérifie le message d'erreur spécifique défini dans votre vue
+        # Check the specific error message defined in your view.
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(str(messages[0]), 'Identifiant ou mot de passe invalide.')
 
     def test_login_failed_invalid_form(self):
         """
-        Test POST: Champs vides -> Message erreur spécifique 'Veuillez vérifier...'.
+        POST test: Empty fields -> Specific error message 'Please check...'.
         """
         data = {
             'username': '',
@@ -92,6 +92,6 @@ class LoginPageViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        # Vérifie le message d'erreur pour formulaire invalide
+        # Check the error message for invalid form
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(str(messages[0]), 'Veuillez vérifier les champs du formulaire.')

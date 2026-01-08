@@ -1,6 +1,6 @@
 .form-container {
   display: grid;
-  place-items: center; /* Raccourci pour centrer horizontalement et verticalement */
+  place-items: center; /* Shortcut to center horizontally and vertically */
   min-height: 80vh;
 }
 
