@@ -13,6 +13,9 @@ DATABASES = {
     )
 }
 
+# Optimisation WhiteNoise pour la production (compression des fichiers statiques)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Production-specific security
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
