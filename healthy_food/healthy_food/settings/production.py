@@ -1,7 +1,6 @@
 from .base import *
 import dj_database_url
 
-DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
