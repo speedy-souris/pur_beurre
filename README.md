@@ -1,4 +1,21 @@
-# Installation du projet pur_beurre sur PC équipé de linux a partir de github
+# Moteur de recherche de substituts alimentaires via OpenFoodFacts
+## Description
+```
+Application permettant de trouver des produits de substitution 
+plus sains en se basant sur le Nutri-Score. 
+Le projet interagit avec l'API publique d'OpenFoodFacts
+ pour extraire et comparer les données nutritionnelles.
+```
+## Périmètre du test :
+```
+Pour les besoins de la démonstration et des tests de performance, 
+le projet se limite actuellement à un jeu de données de 1 000 produits, 
+segmentés en 10 catégories majeures:
+'pâtes alimentaires de céréales', 'boissons', 'mélanges de légumes frais',
+'fruits secs', 'poissons', 'biscottes', 'pâtisseries', 'fromages',
+'charcuteries', 'confitures'
+
+```
 ## I. Créé un environnement de travail pour ce projet
 Dans un terminal (console pour ligne de commande)
 créer un environnement virtuel avec la commande :
@@ -107,5 +124,41 @@ Dans Projet
             - Ajout de .env
                 - DATABASE_URL=Connexion URL Interne
                 - DEBUG=False
+```
+## IV. Parcours Utilisateur
+### 1. Connexion en ligne 
+```
+Dans le navigateur renseigner l'adresse suivante
+https://nom_du_projet.onrender.com
 
-```         
+Chaque page se compose des parties suivantes :
+    - Bandeau de Navigation Superieur de Gauche à Droite
+        - Icône De retour à l'Accueil => lien page d'accueil
+        - Barre de recherche (Produit Recherché)
+        - Icône de Profil Connecté / Déconnecté => lien page profil
+        - Icône des produits Favoris (Carotte) => lien page des produits favoris
+        - Icône de Déconnexion => deconnexion et lien retour page d'accueil
+    - Partie Centrale differe sur chaque page
+    - Pied de page (footer)
+        - Bouton des Mentions Légales => lien page mentions légales
+        - Bouton pour Formulaire de contact => lien page de contact
+```
+### 2. la page d'Accueil
+```
+- Formulaire de recherche (Peoduit Recherchés)    
+````
+### 3. la page Produit Trouvés
+```
+- Affichage du produit recherché 
+- Affichage des produits de substitutions sur 3 colonnes et sur 2 lignes Par page
+```
+### 4. la page Produits favoris
+```
+- Affichage des produits Favoris sur 3 colonnes et sur 2 lignes Par page
+```
+### 5. la page détail produit
+```
+Chaque photo des produits sert de lien pour cette page
+- Informations Nutritionnells du produit pour 100 gr
+- lien page produit OpenFoodFact    
+```
