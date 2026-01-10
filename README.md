@@ -120,10 +120,13 @@ Dans Projet
             - start Command = $ gunicorn ton_application.wsgi
             - Type d'instance : Gratuit / Payant
         - Variables d'Environnement
-            - SECRET_KEY= génération de clé sur Render
-            - Ajout de .env
+            - Ajout de .env (valide toutes les variables en une seule fois)
                 - DATABASE_URL=Connexion URL Interne
+                - SECRET_KEY= génération de clé sur Render
                 - DEBUG=False
+                _ ALLOWED_HOSTS=ton_application.onrender.com
+                
+               
 ```
 ## IV. Parcours Utilisateur
 ### 1. Connexion en ligne 
