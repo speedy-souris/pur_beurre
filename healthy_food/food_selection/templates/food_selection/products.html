@@ -19,9 +19,16 @@
                         <h1 class='text-warning mb-4'>{{ required_product.name }}</h1>
                         <div class='d-flex justify-content-center align-items-center mx-auto' style='height: 450px; max-width: 280px;'>
                             <a href='{% url "food_selection:product" required_product.pk %}' class='position-relative d-inline-block'>
-                                <img src='{% static "food_selection/images/image_product/"|add:required_product.pk|add:".jpg" %}'
-                                     style='max-width: 100%; max-height: 450px; display: block;'
-                                     alt='Image du produit : {{ required_product.name }}' />
+                                {% if required_product.image_url %}
+                                    <img src='{{ required_product.image_url }}'
+                                         style='max-width: 100%; max-height: 450px; display: block;'
+                                         alt='Image du produit : {{ required_product.name }}' />
+                                {% else %}
+                                    <img src='{% static "food_selection/assets/img/default_product.png" %}'
+                                         style='max-width: 100%; max-height: 450px; display: block;'
+                                         alt='Image par défaut' />
+                                {% endif %}
+
                                 <img class='position-absolute top-0 end-0 m-2' style='width: 80px; height: auto; z-index: 10;'
                                      src='{% static "food_selection/images/image_nutriscore/"|add:required_product.nutriscore|add:".png" %}'
                                      alt='utriscore du produit : {{ required_product.name }}' />
@@ -48,9 +55,18 @@
                                     <div class='card h-100 d-flex flex-column bg-transparent'>
                                         <div class='card-img-container d-flex justify-content-center align-items-center' style='height: 250px;'>
                                             <a href='{% url "food_selection:product" general_product.pk %}' class='position-relative d-inline-block'>
-                                                <img src='{% static "food_selection/images/image_product/"|add:general_product.pk|add:".jpg" %}'
-                                                     class='product-image' style='max-width: 100%; max-height: 250px; display: block;'
-                                                     alt='image produit de substitution' />
+                                                {% if general_product.image_url %}
+                                                    <img src='{{ general_product.image_url }}'
+                                                         class='product-image'
+                                                         style='max-width: 100%; max-height: 250px; display: block;'
+                                                         alt='Image du produit {{ general_product.name }}' />
+                                                {% else %}
+                                                    <img src='{% static "food_selection/assets/img/default_product.png" %}'
+                                                         class='product-image'
+                                                         style='max-width: 100%; max-height: 250px; display: block;'
+                                                         alt='Image par défaut' />
+                                                {% endif %}
+
                                                 <img class='position-absolute top-0 end-0 m-2' style='width: 60px; height: auto; z-index: 10;'
                                                      src='{% static "food_selection/images/image_nutriscore/"|add:general_product.nutriscore|add:".png" %}'
                                                      alt='nutriscore du produit de substitution' />
