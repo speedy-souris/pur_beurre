@@ -1,4 +1,4 @@
-# Python
+ Python
 __pycache__/
 *.py[cod]
 *.pyo
@@ -17,7 +17,6 @@ db.sqlite3
 db.sqlite3-journal
 
 # Ignore migration files
-**/migrations/
 !**/migrations/__init__.py
 
 # Virtual environments
