@@ -1,8 +1,7 @@
 from .base import *
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
-DEBUG = os.environ.get('DEBUG')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 DATABASES = {
