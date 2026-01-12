@@ -1,7 +1,7 @@
 from .base import *
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'pure-beurre.onrender.com').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'pur-beurre.onrender.com').split(',')
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 
