@@ -15,8 +15,11 @@ if db_from_env:
 #     )
 # }
 
-# WhiteNoise optimization for production (static file compression)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if not DEBUG:
+    # WhiteNoise optimization for production (static file compression)
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    pass
 
 # Production-specific security
 SECURE_SSL_REDIRECT = True
