@@ -1,13 +1,14 @@
 from .base import *
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'pur-beurre.onrender.com').split(',')
+DEBUG = False
+ALLOWED_HOSTS = ['pur-beurre.onrender.com','localhost','127.0.0.1']
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 
 # Use the Render DB
 if db_from_env:
-    DATABASES['default'].update(db_from_env)
+    DATABASES['default'] = db_from_env
 # DATABASES = {
 #     'default': dj_database_url.config(
 #         default=os.environ.get('DATABASE_URL','sqlite:///db.sqlite3'),
@@ -15,11 +16,8 @@ if db_from_env:
 #     )
 # }
 
-if not DEBUG:
-    # WhiteNoise optimization for production (static file compression)
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    pass
+# WhiteNoise optimization for production (static file compression)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Production-specific security
 SECURE_SSL_REDIRECT = True
