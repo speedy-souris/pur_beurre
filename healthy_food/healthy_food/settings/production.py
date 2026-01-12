@@ -1,15 +1,19 @@
 from .base import *
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+db_from_env = dj_database_url.config(conn_max_age=600)
 
 # Use the Render DB
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL','sqlite:///db.sqlite3'),
-        conn_max_age=600
-    )
-}
+if db_from_env:
+    DATABASES['default'].update(db_from_env)
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.environ.get('DATABASE_URL','sqlite:///db.sqlite3'),
+#         conn_max_age=600
+#     )
+# }
 
 # WhiteNoise optimization for production (static file compression)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
