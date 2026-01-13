@@ -17,7 +17,7 @@
                     <!-- The main product image becomes the header of the card -->
                     <img
                         class="card-img-top"
-                        style="width: 25%; height: auto; margin: 1rem auto 0;"
+                        style="width: 25%; height: auto; margin: 1rem auto 0;  object-fit: contain;"
                         src="{{ product.image_url|default_if_none:'' }}"
                         data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                         alt="Image du produit : {{ product.name }}"

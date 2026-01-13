@@ -22,7 +22,7 @@
                                 <img
                                     src="{{ required_product.image_url|default_if_none:'' }}"
                                     data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
-                                    style="max-width: 100%; max-height: 450px; display: block;"
+                                    style="max-width: 100%; max-height: 450px; display: block;  object-fit: contain;"
                                     alt="Image du produit : {{ required_product.name }}"
                                 >
                                 <img class='position-absolute top-0 end-0 m-2' style='width: 80px; height: auto; z-index: 10;'
@@ -55,7 +55,7 @@
                                                     src="{{ general_product.image_url|default_if_none:'' }}"
                                                     data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                                                     class="product-image"
-                                                    style="max-width: 100%; max-height: 250px; display: block;"
+                                                    style="max-width: 100%; max-height: 250px; display: block;  object-fit: contain;"
                                                     alt="Image du produit : {{ general_product.name }}"
                                                 >
                                                 <img class='position-absolute top-0 end-0 m-2' style='width: 60px; height: auto; z-index: 10;'
