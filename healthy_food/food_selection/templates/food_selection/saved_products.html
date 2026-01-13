@@ -28,7 +28,7 @@
                                             <img
                                                     src='{% static "food_selection/images/image_product/"|add:favorite.product.product_id|add:".jpg" %}'
                                                     data-fallback="{% static 'food_selection/images/image_product/default.jpg' %}"
-                                                    class="product-image"
+                                                    style="max-width: 100%; max-height: 100%; object-fit: contain;"
                                                     alt='Image du produit : {{ favorite.product.name }}'/>
 
                                             <!-- 4. Nutriscore : "favorite.product.nutriscore" -->
