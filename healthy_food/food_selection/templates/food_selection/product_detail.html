@@ -17,10 +17,13 @@
                 <!-- Start of Bootstrap map -->
                 <div class="card text-center shadow-sm bg-transparent">
                     <!-- The main product image becomes the header of the card -->
-                    <img class="card-img-top"
-                         style="width: 25%; height: auto; margin: 1rem auto 0;"
-                         src="{% static 'food_selection/images/image_product/'|add:product.product_id|add:'.jpg' %}"
-                         alt="image produit selectionné" />
+                    <img
+                        class="card-img-top"
+                        style="width: 25%; height: auto; margin: 1rem auto 0;"
+                        src="{{ product.image_url|default_if_none:'' }}"
+                        data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
+                        alt="Image du produit : {{ product.name }}"
+                    >
                     <!-- The body of the card contains the rest of the information -->
                     <div class="card-body">
                         <!-- The product name becomes the title of the card -->
