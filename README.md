@@ -122,12 +122,26 @@ Dans Projet
         - Variables d'Environnement
             - Ajout de .env (valide toutes les variables en une seule fois)
                 - DATABASE_URL=Connexion URL Interne
-                - SECRET_KEY= génération de clé sur Render
+                - SECRET_KEY= génération de clé sur <https://djecrety.ir/>
                 - DEBUG=False
                 _ ALLOWED_HOSTS=ton_application.onrender.com
                 
                
 ```
+### 3. Remplissage de la base de données sur Render (dump local / render)
+```shell
+# Se connecté à la base de données distante
+psql "votre_external_database_url_render"
+# Supprimmer Toutes la base de Données
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO purbeurre;
+GRANT ALL ON SCHEMA public TO public;
+\q
+# Copie de la Base de données Locale
+pg_dump -h localhost -U nom_utilisateur -d nom_database --clean --if-exists > dump_db.sql
+psql "votre_external_database_url_render" < dump_db.sql
+````
 ## IV. Parcours Utilisateur
 ### 1. Connexion en ligne 
 ```
