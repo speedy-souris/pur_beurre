@@ -10,6 +10,13 @@ from django.views.generic.list import ListView
 
 from .forms import SearchNewFood, ContactUsForm, SaveProductForm, TestForm
 from .models import Product, Favorite
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+def home(request):
+    context = {'search_form': SearchNewFood(),}
 
 
 # Create your views here.
@@ -157,7 +164,13 @@ class SavedProductsListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # Only the favorites of the logged-in user are returned.
         # select_related(‘product’) optimizes the SQL query (avoids querying the product for each row)
-        return Favorite.objects.filter(user=self.request.user).select_related('product').order_by('-id')
+        qs = Favorite.objects.filter(user=self.request.user).select_related('product')
+        for f in qs:
+            if f.product is None:
+                logger.warning("Favorite %s n'a plus de produit lié!", f.id)
+            else:
+                logger.warning("Favorite %s OK: product %s", f.id, f.product.id)
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
