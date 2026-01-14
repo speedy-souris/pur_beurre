@@ -25,12 +25,20 @@
                                         <a href='{% url "food_selection:product" favorite.product.product_id %}'
                                            class='position-relative d-inline-block'>
                                             <!-- 3. Product image: “favorite.product.product_id” -->
-                                            <img
-                                                src="{{ favorite.product.image_url|default:'' }}"
-                                                data-fallback="{% static 'food_selection/images/image_product/default.jpg' %}"
-                                                class="product-image"
-                                                alt='Image du produit : {{ favorite.product.name }}'
-                                            />
+                                            {% if favorite.product %}
+                                                <img
+                                                    src="{{ favorite.product.image_url|default:'' }}"
+                                                    data-fallback="{% static 'food_selection/images/image_product/default.jpg' %}"
+                                                    class="product-image"
+                                                    alt='Image du produit : {{ favorite.product.name }}'
+                                                />
+                                            {% else %}
+                                                <img
+                                                    src="{% static 'food_selection/images/image_product/default.jpg' %}"
+                                                    class="product-image"
+                                                    alt="Produit indisponible"
+                                                />
+                                            {% endif %}
                                             <!-- 4. Nutriscore : "favorite.product.nutriscore" -->
                                             <img class='position-absolute top-0 end-0 m-2 nutriscore-badge'
                                                  src='{% static "food_selection/images/image_nutriscore/"|add:favorite.product.nutriscore|add:".png" %}'
