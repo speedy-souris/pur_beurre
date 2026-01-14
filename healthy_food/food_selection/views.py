@@ -110,7 +110,7 @@ def disclaimer(request):
 
 # IMPORTANT CHANGE HERE: Use of Favorite and LoginRequiredMixin
 class SaveProductFormView(LoginRequiredMixin, FormView):
-    template_name = 'food_selection/products.html'
+    template_name = 'food_selection/saved_products.html'
     form_class = SaveProductForm
     success_url = reverse_lazy('food_selection:saved-list')
 

@@ -1,7 +1,8 @@
 from .base import *
 
 
-DEBUG = os.environ.get('DEBUG') == 'True'
+# DEBUG = os.environ.get('DEBUG') == 'True'
+DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
