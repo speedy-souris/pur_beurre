@@ -85,8 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = []
-
+STATICFILES_DIRS = [BASE_DIR / 'food_selection' / 'static']
 MEDIA_URL = '/images/'
 MEDIA_ROOT = BASE_DIR / 'images'
 
