@@ -20,7 +20,7 @@
                         <div class='product-main-image'>
                             <a href='{% url "food_selection:product" required_product.pk %}' class='position-relative d-inline-block'>
                                 <img
-                                    src="{{ required_product.image_url|default:'' }}"
+                                    src="{{ required_product.image_url|default_if_none:'' }}"
                                     data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                                     class="product-image"
                                     alt="Image du produit : {{ required_product.name }}"
@@ -54,7 +54,7 @@
                                             <a href="{% url 'food_selection:product' general_product.pk %}"
                                                class="position-relative d-inline-block">
                                                 <img
-                                                    src="{{ general_product.image_url|default:'' }}"
+                                                    src="{{ general_product.image_url|default_if_none:'' }}"
                                                     data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                                                     class="product-image"
                                                     alt="Image du produit : {{ general_product.name }}"
