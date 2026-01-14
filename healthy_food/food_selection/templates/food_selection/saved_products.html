@@ -10,17 +10,13 @@
                 <div class='container-fluid p-0'>
                     <div class='row mt-5'>
                         <h1 class='text-warning text-center mb-4'>Produits Sauvegardés</h1>
-
                         <!-- 1. Loop containing Favorite items (Saved products) -->
                         {% for favorite in page_obj %}
-
                             <div class='favorite_saved_products col-sm-4 mb-4'>
                                 <!-- Using a Bootstrap Card for uniform structure and height -->
                                 <div class='card h-100 d-flex flex-column bg-transparent'>
-
                                     <!-- Fixed height container -->
                                     <div class='card-img-container'>
-
                                         <!-- 2. ATTENTION HERE: we use “favorite.product.product_id” -->
                                         <a href='{% url "food_selection:product" favorite.product.product_id %}'
                                            class='position-relative d-inline-block'>
@@ -52,7 +48,6 @@
                                             <!-- 5. Product name -->
                                             <h5 class='card-title'>{{ favorite.product.name }}</h5>
                                         </div>
-
                                         <!-- Categories -->
                                         <ul class='list-inline'>
                                             <!-- 6. Catégories : "favorite.product.categories.all" -->
@@ -63,7 +58,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         {% empty %}
                         <!-- Message for empty page -->
                             <div class='col-12 text-center text-white'>
@@ -72,7 +66,6 @@
                         {% endfor %}
                     </div>
                 </div>
-
                 <!-- Pagination remains unchanged -->
                 <div class='text-center mt-4 text-white'>
                     <span class='step-links'>

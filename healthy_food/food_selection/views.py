@@ -168,6 +168,7 @@ class SavedProductsListView(LoginRequiredMixin, ListView):
         for f in qs:
             if f.product is None:
                 logger.warning("Favorite %s n'a plus de produit lié!", f.id)
+                print(f"Favorite {f.id} n'a plus de produit lié")
             else:
                 logger.warning("Favorite %s OK: product %s", f.id, f.product.id)
         return qs
