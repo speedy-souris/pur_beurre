@@ -2,7 +2,7 @@ from .base import *
 
 
 DEBUG = os.environ.get('DEBUG') == 'True'
-ALLOWED_HOSTS = ['pur-beurre.onrender.com','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['pur-beurre.onrender.com','*']
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 
