@@ -19,25 +19,25 @@
                                 <div class='card h-100 d-flex flex-column bg-transparent'>
 
                                     <!-- Fixed height container -->
-                                    <div class='card-img-container d-flex justify-content-center align-items-center' style='height: 300px;'>
+                                    <div class='card-img-container'>
 
                                         <!-- 2. ATTENTION HERE: we use “favorite.product.product_id” -->
-                                        <a href='{% url "food_selection:product" favorite.product.product_id %}' class='position-relative d-inline-block'>
-
+                                        <a href='{% url "food_selection:product" favorite.product.product_id %}'
+                                           class='position-relative d-inline-block'>
                                             <!-- 3. Product image: “favorite.product.product_id” -->
                                             <img
                                                     src='{% static "food_selection/images/image_product/"|add:favorite.product.product_id|add:".jpg" %}'
                                                     data-fallback="{% static 'food_selection/images/image_product/default.jpg' %}"
-                                                    style="max-width: 100%; max-height: 100%; object-fit: contain;"
-                                                    alt='Image du produit : {{ favorite.product.name }}'/>
-
+                                                    class="product-image"
+                                                    alt='Image du produit : {{ favorite.product.name }}'
+                                            />
                                             <!-- 4. Nutriscore : "favorite.product.nutriscore" -->
-                                            <img class='position-absolute top-0 end-0 m-2' style='width: 60px; height: auto; z-index: 10;'
+                                            <img class='position-absolute top-0 end-0 m-2 nutriscore-badge'
                                                  src='{% static "food_selection/images/image_nutriscore/"|add:favorite.product.nutriscore|add:".png" %}'
-                                                 alt='Nutriscore du produit : {{ favorite.product.name }}' />
+                                                 alt='Nutriscore du produit : {{ favorite.product.name }}'
+                                            />
                                         </a>
                                     </div>
-
                                     <!-- Text content -->
                                     <div class='card-body'>
                                         <div class='text-white'>

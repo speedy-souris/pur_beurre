@@ -16,17 +16,20 @@
                 <div class="card text-center shadow-sm bg-transparent">
                     <!-- The main product image becomes the header of the card -->
                     <img
-                        class="card-img-top"
-                        style="width: 25%; height: auto; margin: 1rem auto 0;  object-fit: contain;"
-                        src="{{ product.image_url|default_if_none:'' }}"
+                        class="card-img-top product-image"
+                       {% if product.image_url %}
+                            src="{{ product.image_url }}"
+                        {% else %}
+                            src="{% static 'food_selection/assets/img/default.jpg' %}"
+                        {% endif %}
                         data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                         alt="Image du produit : {{ product.name }}"
-                    >
+                    />
                     <!-- The body of the card contains the rest of the information -->
                     <div class="card-body">
                         <!-- The product name becomes the title of the card -->
                         <h1 class="card-title mt-2 text-warning">{{ product.name }}</h1>
-                        <img class="mt-3" style="width: 100px; height: 50px;"
+                        <img class="mt-3 nutriscore-large"
                              src="{% static 'food_selection/images/image_nutriscore/'|add:'Nutriscore_'|add:product.nutriscore|add:'.jpg' %}"
                              alt="nutriscore du produit selectionné" />
 
