@@ -26,7 +26,7 @@
                                            class='position-relative d-inline-block'>
                                             <!-- 3. Product image: “favorite.product.product_id” -->
                                             <img
-                                                src='{{ favorite.product.image_url|default:'' }}'
+                                                src="{{ favorite.product.image_url|default:'' }}"
                                                 data-fallback="{% static 'food_selection/images/image_product/default.jpg' %}"
                                                 class="product-image"
                                                 alt='Image du produit : {{ favorite.product.name }}'
