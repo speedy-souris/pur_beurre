@@ -20,11 +20,7 @@
                         <div class='product-main-image'>
                             <a href='{% url "food_selection:product" required_product.pk %}' class='position-relative d-inline-block'>
                                 <img
-                                    {% if required_product.image_url %}
-                                        src="{{ required_product.image_url }}"
-                                    {% else %}
-                                        src="{% static 'food_selection/assets/img/default.jpg' %}"
-                                    {% endif %}
+                                    src="{{ required_product.image_url|default: '' }}"
                                     data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                                     class="product-image"
                                     alt="Image du produit : {{ required_product.name }}"
@@ -58,16 +54,11 @@
                                             <a href="{% url 'food_selection:product' general_product.pk %}"
                                                class="position-relative d-inline-block">
                                                 <img
-                                                    {% if general_product.image_url %}
-                                                        src="{{ general_product.image_url }}"
-                                                    {% else %}
-                                                        src="{% static 'food_selection/assets/img/default.jpg' %}"
-                                                    {% endif %}
+                                                    src="{{ general_product.image_url|default: '' }}"
                                                     data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                                                     class="product-image"
                                                     alt="Image du produit : {{ general_product.name }}"
                                                 />
-
                                                 <img
                                                     class="position-absolute top-0 end-0 m-2 nutriscore-badge"
                                                     src="{% static 'food_selection/images/image_nutriscore/'|add:general_product.nutriscore|add:'.png' %}"
