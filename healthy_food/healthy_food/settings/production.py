@@ -5,20 +5,15 @@ DEBUG = os.environ.get('DEBUG') == 'True'
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['pur-beurre.onrender.com']
-
-db_from_env = dj_database_url.config(conn_max_age=600)
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split()
 
 # Use the Render DB
-if db_from_env:
-    DATABASES['default'] = db_from_env
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.environ.get('DATABASE_URL','sqlite:///db.sqlite3'),
-#         conn_max_age=600
-#     )
-# }
-STATIC_URL = '/static/'
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600
+    )
+}
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise optimization for production (static file compression)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'

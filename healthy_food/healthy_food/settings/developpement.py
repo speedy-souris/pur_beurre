@@ -1,6 +1,6 @@
 from .base import *
 
-
+DEBUG = True
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 # SECURITY WARNING: keep the secret key used in production secret!
 
