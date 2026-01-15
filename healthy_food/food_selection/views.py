@@ -67,11 +67,21 @@ def found(request):
             paginator = Paginator(alternative_products, 6)
             page_number = request.GET.get('page', 1)
             page_obj = paginator.get_page(page_number)
-
+            # Favorites of the current user
+            if request.user.is_authenticated:
+                saved_product_ids = set(
+                    Favorite.objects
+                    .filter(user=request.user)
+                    .values_list('product_id', flat=True)
+                )
+            else:
+                saved_product_ids = set()
             # We prepare the form for each product.
             for product_in_page in page_obj:
                 initial_data = {'product_id': product_in_page.pk}
                 product_in_page.form = SaveProductForm(initial=initial_data)
+                # product saved for each user
+                product_in_page.saved = product_in_page.pk in saved_product_ids
 
             context['page_obj'] = page_obj
 
