@@ -165,12 +165,9 @@ class SavedProductsListView(LoginRequiredMixin, ListView):
         # Only the favorites of the logged-in user are returned.
         # select_related(‘product’) optimizes the SQL query (avoids querying the product for each row)
         qs = Favorite.objects.filter(user=self.request.user).select_related('product')
+        print("QS favorites:", qs)
         for f in qs:
-            if f.product is None:
-                logger.warning("Favorite %s n'a plus de produit lié!", f.id)
-                print(f"Favorite {f.id} n'a plus de produit lié")
-            else:
-                logger.warning("Favorite %s OK: product %s", f.id, f.product.id)
+            print(f"Favorite",{f}, "production", {f.product} )
         return qs
 
     def get_context_data(self, **kwargs):
