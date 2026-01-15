@@ -5,7 +5,7 @@ DEBUG = os.environ.get('DEBUG') == 'True'
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['pur-beurre.onrender.com', 'localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ['pur-beurre.onrender.com']
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 
@@ -18,9 +18,8 @@ if db_from_env:
 #         conn_max_age=600
 #     )
 # }
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise optimization for production (static file compression)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Production-specific security
 SECURE_SSL_REDIRECT = True
