@@ -18,8 +18,10 @@ if db_from_env:
 #         conn_max_age=600
 #     )
 # }
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise optimization for production (static file compression)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Production-specific security
 SECURE_SSL_REDIRECT = True

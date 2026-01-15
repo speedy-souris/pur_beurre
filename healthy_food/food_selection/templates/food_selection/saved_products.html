@@ -24,13 +24,13 @@
                                             {% if favorite.product %}
                                                 <img
                                                     src="{{ favorite.product.image_url|default_if_none:'' }}"
-                                                    data-fallback="{% static 'food_selection/images/image_product/default.jpg' %}"
+                                                    data-fallback="{% static 'food_selection/assets/img/default.jpg' %}"
                                                     class="product-image"
                                                     alt='Image du produit : {{ favorite.product.name }}'
                                                 />
                                             {% else %}
                                                 <img
-                                                    src="{% static 'food_selection/images/image_product/default.jpg' %}"
+                                                    src="{% static 'food_selection/assets/img/default.jpg' %}"
                                                     class="product-image"
                                                     alt="Produit indisponible"
                                                 />
