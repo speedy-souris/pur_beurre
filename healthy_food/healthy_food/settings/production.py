@@ -21,7 +21,7 @@ if db_from_env:
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise optimization for production (static file compression)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Production-specific security
 SECURE_SSL_REDIRECT = True
