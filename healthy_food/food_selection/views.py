@@ -15,10 +15,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def home(request):
-    context = {'search_form': SearchNewFood(),}
-
-
 # Create your views here.
 def home(request):
     context = {'search_form': SearchNewFood(),
