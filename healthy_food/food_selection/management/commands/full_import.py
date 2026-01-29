@@ -1,45 +1,51 @@
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 
+
 class Command(BaseCommand):
-    help = "Deletes old data and imports products from OpenFoodFacts"
+    help = "Réinitialise la base Produits et importe les données OpenFoodFacts"
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--silent',
             action='store_true',
-            help='Mode silencieux, supprime les logs détaillés'
+            help='Mode silencieux (moins de logs)'
         )
+
+    def log(self, message, style=None, silent=False):
+        if silent:
+            return
+        if style:
+            self.stdout.write(style(message))
+        else:
+            self.stdout.write(message)
 
     def handle(self, *args, **options):
         silent = options['silent']
 
-        if not silent:
-            self.stdout.write("🧹 Suppression des anciennes données en cours ...")
-        # deletes products from the database
-        call_command('delete_all_data', silent=silent)
+        steps = [
+            ("🧹 Suppression des anciennes données ...",
+             lambda: call_command('delete_all_data', silent=silent),
+             "✅ Produits supprimés"),
 
-        if not silent:
-            self.stdout.write(self.style.SUCCESS("✅ Suppressions complète des produits terminée !"))
+            ("🧹 Suppression des anciennes images ...",
+             lambda: call_command('delete_image_dir', silent=silent),
+             "✅ Images supprimées"),
 
-        if not silent:
-            self.stdout.write("🧹 Suppression des anciennes images en cours ...")
-        # deletes images from the directory
-        call_command('delete_image_dir', silent=silent)
+            ("📦 Importation des produits ...",
+             lambda: call_command('create_product', silent=silent),
+             "✅ Produits importés"),
 
-        if not silent:
-            self.stdout.write(self.style.SUCCESS("✅ Suppressions complète des images terminée !"))
+            ("🖼️ Importation des images ...",
+             lambda: call_command('image_product', silent=silent),
+             "✅ Images importées"),
+        ]
 
-        if not silent:
-            self.stdout.write("📦 Importation des produits en cours ...")
-        call_command('create_product', silent=silent)
-
-        if not silent:
-            self.stdout.write(self.style.SUCCESS("✅ Importation complète des produits terminée !"))
-
-        if not silent:
-            self.stdout.write("🖼️ Importation des images des produits en cours ...")
-        call_command('image_product', silent=silent)
-
-        if not silent:
-            self.stdout.write(self.style.SUCCESS("✅ Importation complète des images terminée !"))
+        for start_msg, action, success_msg in steps:
+            self.log(start_msg, silent=silent)
+            try:
+                action()
+                self.log(success_msg, self.style.SUCCESS, silent)
+            except Exception as e:
+                self.log(f"❌ Erreur : {e}", self.style.ERROR, silent)
+                break
